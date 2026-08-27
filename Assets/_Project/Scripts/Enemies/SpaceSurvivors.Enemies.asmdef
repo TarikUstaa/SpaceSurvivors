@@ -1,0 +1,19 @@
+{
+    "name": "SpaceSurvivors.Enemies",
+    "rootNamespace": "SpaceSurvivors.Enemies",
+    "references": [
+        "SpaceSurvivors.Core",
+        "SpaceSurvivors.Data",
+        "SpaceSurvivors.Stats",
+        "SpaceSurvivors.Combat"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

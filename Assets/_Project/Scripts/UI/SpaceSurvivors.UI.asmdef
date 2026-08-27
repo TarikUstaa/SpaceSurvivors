@@ -1,0 +1,23 @@
+{
+    "name": "SpaceSurvivors.UI",
+    "rootNamespace": "SpaceSurvivors.UI",
+    "references": [
+        "SpaceSurvivors.Core",
+        "SpaceSurvivors.Data",
+        "SpaceSurvivors.Stats",
+        "SpaceSurvivors.Combat",
+        "SpaceSurvivors.Enemies",
+        "SpaceSurvivors.Progression",
+        "SpaceSurvivors.Game",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

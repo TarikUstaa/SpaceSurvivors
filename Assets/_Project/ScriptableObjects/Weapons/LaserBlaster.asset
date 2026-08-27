@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae83f18b894c46de8891320271e669c, type: 3}
+  m_Name: LaserBlaster
+  m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.WeaponData
+  displayName: Laser Blaster
+  projectilePrefab: {fileID: 884662056660416809, guid: 383b3243bb93949959337e2e61cc2f55, type: 3}
+  projectileSpeed: 42
+  projectileLifetime: 1.8
+  impactVfxPrefab: {fileID: 4782339784006803847, guid: 93b71bfb7025a4c12a2e798d50029907, type: 3}
+  cooldown: 1
+  damage: 10
+  projectilesPerShot: 1
+  spreadAngle: 18
+  pierce: 0
+  aimRange: 14
+  evolvesInto: {fileID: 11400000, guid: 28213704c09614b7a94ba8b4c4942dc0, type: 2}
+  evolutionCatalyst: {fileID: 11400000, guid: 7d208f580406e44a3bd168591d4cdf9e, type: 2}

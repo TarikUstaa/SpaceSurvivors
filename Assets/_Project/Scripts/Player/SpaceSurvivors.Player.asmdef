@@ -1,0 +1,19 @@
+{
+    "name": "SpaceSurvivors.Player",
+    "rootNamespace": "SpaceSurvivors.Player",
+    "references": [
+        "SpaceSurvivors.Core",
+        "SpaceSurvivors.Data",
+        "SpaceSurvivors.Stats",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

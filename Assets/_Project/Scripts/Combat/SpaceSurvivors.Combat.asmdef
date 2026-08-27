@@ -1,0 +1,18 @@
+{
+    "name": "SpaceSurvivors.Combat",
+    "rootNamespace": "SpaceSurvivors.Combat",
+    "references": [
+        "SpaceSurvivors.Core",
+        "SpaceSurvivors.Data",
+        "SpaceSurvivors.Stats"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

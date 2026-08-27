@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf635bf9bc73b4821b10086089475400, type: 3}
+  m_Name: GetMissiles
+  m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.UpgradeData
+  title: Missile Launcher
+  description: Adds a slow, hard-hitting piercing missile
+  icon: {fileID: 0}
+  modifiers: []
+  special: 1
+  weaponToGrant: {fileID: 11400000, guid: f4c06a813b6fc4f1dbbbdb3615ab3c31, type: 2}
+  weight: 0.8
+  maxStacks: 1

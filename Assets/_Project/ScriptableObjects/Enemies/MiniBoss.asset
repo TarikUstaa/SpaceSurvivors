@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59c99dff3ba694b31b2fce8262232488, type: 3}
+  m_Name: MiniBoss
+  m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.EnemyData
+  displayName: Mini-Boss
+  prefab: {fileID: 5439157389020474755, guid: 3e57c6b74b9d647bf88f86651feca545, type: 3}
+  deathVfxPrefab: {fileID: 3182996874433942192, guid: 18131f4385b86496c9b1826b986dceb5, type: 3}
+  baseHealth: 650
+  moveSpeed: 1.7
+  contactDamage: 20
+  contactInterval: 0.6
+  scrapValue: 60
+  earliestSpawnTime: 99999
+  spawnWeight: 0

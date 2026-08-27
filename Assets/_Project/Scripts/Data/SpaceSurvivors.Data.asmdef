@@ -1,0 +1,16 @@
+{
+    "name": "SpaceSurvivors.Data",
+    "rootNamespace": "SpaceSurvivors.Data",
+    "references": [
+        "SpaceSurvivors.Stats"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,21 @@
+{
+    "name": "SpaceSurvivors.Progression",
+    "rootNamespace": "SpaceSurvivors.Progression",
+    "references": [
+        "SpaceSurvivors.Core",
+        "SpaceSurvivors.Data",
+        "SpaceSurvivors.Stats",
+        "SpaceSurvivors.Combat",
+        "SpaceSurvivors.Enemies",
+        "SpaceSurvivors.Player"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
