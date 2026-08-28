@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae83f18b894c46de8891320271e669c, type: 3}
+  m_Name: PlasmaOrb
+  m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.WeaponData
+  displayName: Plasma Orb
+  kind: 0
+  projectilePrefab: {fileID: 6096417419290807909, guid: ca256b4471ff443de82aeb5bf4f10037, type: 3}
+  projectileSpeed: 9
+  projectileLifetime: 3
+  impactVfxPrefab: {fileID: 0}
+  cooldown: 1.5
+  damage: 20
+  projectilesPerShot: 1
+  spreadAngle: 0
+  pierce: 0
+  explosionRadius: 2.6
+  splashDamageFraction: 0.7
+  explosionVfxPrefab: {fileID: 7160457626168240192, guid: 62c84034749884f56a6338599ee68016, type: 3}
+  orbitRadius: 2.2
+  orbitDegreesPerSecond: 200
+  orbitHitInterval: 0.4
+  aimRange: 11
+  evolvesInto: {fileID: 11400000, guid: 2dc049e10bd734fb7b89dcec08df4ea5, type: 2}
+  evolutionCatalyst: {fileID: 11400000, guid: 2168385692f834f67aecb266fa1351a8, type: 2}

@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fae83f18b894c46de8891320271e669c, type: 3}
-  m_Name: Missile
-  m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.WeaponData
-  displayName: Missile
+  m_Name: ClusterMissile
+  m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.WeaponData
+  displayName: Cluster Missile
   kind: 0
   projectilePrefab: {fileID: 3591483356676906937, guid: 3334315342df24dc59b99afbede056c9, type: 3}
   projectileSpeed: 22
   projectileLifetime: 3
   impactVfxPrefab: {fileID: 880833947769362508, guid: ce7dc3b2176344e44b9b888f3f4cb426, type: 3}
-  cooldown: 1.5
-  damage: 30
-  projectilesPerShot: 1
-  spreadAngle: 14
-  pierce: 1
-  explosionRadius: 0
+  cooldown: 1.4
+  damage: 26
+  projectilesPerShot: 3
+  spreadAngle: 26
+  pierce: 0
+  explosionRadius: 1.8
   splashDamageFraction: 0.6
-  explosionVfxPrefab: {fileID: 0}
+  explosionVfxPrefab: {fileID: 880833947769362508, guid: ce7dc3b2176344e44b9b888f3f4cb426, type: 3}
   orbitRadius: 2.2
   orbitDegreesPerSecond: 200
   orbitHitInterval: 0.4
   aimRange: 12
-  evolvesInto: {fileID: 11400000, guid: 2000f2ca625e5411ea470b5f09b45a34, type: 2}
-  evolutionCatalyst: {fileID: 11400000, guid: 1e0e7cb6478b64651a1e032a55cecd7b, type: 2}
+  evolvesInto: {fileID: 0}
+  evolutionCatalyst: {fileID: 0}

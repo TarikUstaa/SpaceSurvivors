@@ -34,7 +34,7 @@ driven by emergent build synergies.
 | M8 | Main menu + game modes | ✅ Menu scene, mode selection, Campaign + Infinite modes, Victory/Defeat screens |
 | M9 | Open arena + camera | ✅ VS-style scrolling arena: camera follows player, no screen clamp, ring spawning, far-cull, parallax starfield |
 | M10 | Juice & UX | Audio (SFX + music), settings menu, run-stats + high score, "STAGE 1/3" HUD, visual pass on level-up / HUD / end screens (CraftPix kit) |
-| M11 | Combat content | New weapons incl. an area-of-effect weapon; weapon evolution tree (extends M6 evolutions) |
+| M11 | Combat content | ✅ New weapons (Plasma Orb AoE, Scatter Shot, Rail Spike, Orbiter), AoE splash, 5-branch weapon evolution tree, Pierce + Haste passives |
 | M12 | Enemy variety | New enemy archetypes; ranged enemies (enemy projectile system) |
 | M13 | Persistent meta core | Save system + currency wallet; scrap carries run → profile. Foundation for M14. |
 | M14 | Meta screens | Permanent upgrade shop (buy stat upgrades with scrap), ship shop + buyable ships, achievements. All on top of M13; may split. |

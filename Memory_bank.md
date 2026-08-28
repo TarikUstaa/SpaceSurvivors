@@ -3,7 +3,8 @@
 > Working memory log. Update after every major milestone. Newest entry on top.
 
 ## Current State
-**M1–M6 approved (+ many follow-ups). M7 (Difficulty Director + mini-boss) built + play-tested by Claude, awaiting user sign-off.**
+**M1–M10 approved (2026-08-28). Now on M11 — combat content: new weapons + AoE weapon + weapon evolution tree.**
+Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is in its section below.
 
 ### M7 — Mini-boss / boss schedule (built, play-tested OK)
 - `DifficultyConfig` +`List<BossEntry> bossSchedule` (`{triggerTime, bossData, count, warningLead}`). Default entry at 180s. Wired: [{180s, MiniBoss, ×1, lead 4s}, {360s, MiniBoss, ×2, lead 4s}].
@@ -183,7 +184,9 @@
 | 2026-08-27 | M6 — stat pipeline + weapons | ✅ DONE. Approved (+ missile fixes, damage vignette, hit flash, enemy death VFX, solid enemies, shield, laser speed bug). |
 | 2026-08-27 | M7 — difficulty director + mini-boss | ✅ APPROVED 2026-08-28 (with M8). |
 | 2026-08-28 | M8 — main menu + 2 game modes | ✅ APPROVED 2026-08-28. All 3 paths play-tested. |
-| 2026-08-28 | M9 — open arena + camera follow | Built + Claude play-tested (follow, ring-spawn, far-cull, parallax). Awaiting user sign-off. |
+| 2026-08-28 | M9 — open arena + camera | ✅ APPROVED 2026-08-28. |
+| 2026-08-28 | M10 — juice & UX (pause, settings, HUD retheme, SFX) | ✅ APPROVED 2026-08-28. Music deferred. |
+| 2026-08-28 | M11 — combat content | Built + Claude play-tested (4 new weapons, AoE splash, orbital weapon, 5-branch evolution tree). Awaiting user sign-off. |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -344,6 +347,47 @@ User dropped the 4 Kenney SFX packs into `Audio/SFX/{Kenney_SciFi,Kenney_UI,Kenn
 Blocked on a CC0 audio pack (like the UI kit was). Kenney Sci-Fi Sounds / Space Kit suggested.
 Then build `AudioDirector` + `SfxEvent` hooks (shoot, hit, enemy death, level-up, boss warning,
 pickup, player hurt, win/lose) reading `SettingsService` volumes.
+
+## M11 — Combat content (built 2026-08-28)
+**AoE:** `WeaponData` gained `explosionRadius` + `splashDamageFraction` + `explosionVfxPrefab`.
+`Projectile` — on a landed hit, if `explosionRadius > 0` it runs `Physics2D.OverlapCircleNonAlloc`
+and deals `damage × splashFraction` to every other live `IDamageable` in range (skips owner +
+the direct-hit target), spawns the explosion VFX, then despawns (AoE never pierces). Verified:
+one Plasma Orb into a 3-grunt cluster → direct hit dead, other two −14 each.
+
+**Orbital weapon type:** `WeaponData.kind` = {Projectile, Orbital} + orbit fields
+(`orbitRadius`, `orbitDegreesPerSecond`, `orbitHitInterval`). `Combat/OrbHit.cs` — one orb,
+trigger collider, per-enemy hit cooldown (like ContactDamage, player-owned). `Combat/OrbitalWeapon.cs`
+— a child of the player per equipped orbital weapon; keeps N pooled orbs evenly spaced on a
+circle and spins them, count follows `ProjectileCount` stat, damage follows `Damage` stat.
+`WeaponController` skips Orbital weapons in the fire loop and calls `SyncOrbitals()` on
+`AddWeapon` / `EvolveWeapon` (tears down + rebuilds the `Orbital_*` children; **destroys the
+GameObject, not just the component**).
+
+**New weapons + evolution tree** (assets in `ScriptableObjects/Weapons/`, prefabs in
+`Prefabs/Projectiles/`):
+| Weapon | Evolves to | Catalyst (max stacks) |
+|--------|-----------|-----------------------|
+| Laser Blaster | Prism Laser | Damage *(pre-existing)* |
+| Missile | Cluster Missile (AoE, 3-way) | MultiShot |
+| Plasma Orb (slow AoE lob) | Nova Core | FireRate |
+| Scatter Shot (5-pellet shotgun) | Buckshot Storm | Pierce *(new passive)* |
+| Rail Spike (fast, pierce 8) | Void Lance | Haste *(new passive)* |
+| Orbiter (2 orbs) | Event Horizon (4 orbs, r 3.2) | PickupRadius |
+New passives: **Pierce** (`Upgrades/Pierce.asset`, +1 ProjectilePierce Flat, max 4),
+**Haste** (`Upgrades/Haste.asset`, +15% ProjectileSpeed, max 5).
+New GrantWeapon upgrades: `GetPlasmaOrb / GetScatterShot / GetRailSpike / GetOrbiter`.
+`Missile.asset.evolvesInto/evolutionCatalyst` wired.
+UpgradeService catalogue in Game.unity: 8 → 14 entries (added the 4 grants + Pierce + Haste).
+New prefabs: `PlasmaOrb`, `ScatterPellet`, `RailShard`, `OrbitOrb` (all cloned from Laser.prefab;
+OrbitOrb swaps Projectile→OrbHit, kinematic, trigger circle, star1 sprite), `PlasmaBoom`
+(scaled MissileImpact — Kenney has no real explosion sheet).
+New events used: `WeaponController.WeaponFired` (added M10 for audio), `SpawnDirector.BossDefeated`.
+
+**Play-tested:** all 4 new weapons fire; Orbiter → 2 orbs at r2.2 opposite sides; Plasma splash
+hits a cluster; PickupRadius×5 → "EVOLVE: Event Horizon" offered → applied → 4 orbs at r3.2,
+old rig cleaned up. Note: PlasmaBoom VFX is a weak stand-in (blobby); orb sprite is `star1`
+tinted cyan — both open to an art pass.
 
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in

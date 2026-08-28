@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae83f18b894c46de8891320271e669c, type: 3}
+  m_Name: Orbiter
+  m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.WeaponData
+  displayName: Orbiter
+  kind: 1
+  projectilePrefab: {fileID: 922210939790612854, guid: 66ff3db8df16b4d8292e3923cbb71c87, type: 3}
+  projectileSpeed: 12
+  projectileLifetime: 2
+  impactVfxPrefab: {fileID: 0}
+  cooldown: 1
+  damage: 10
+  projectilesPerShot: 2
+  spreadAngle: 0
+  pierce: 0
+  explosionRadius: 0
+  splashDamageFraction: 0.6
+  explosionVfxPrefab: {fileID: 0}
+  orbitRadius: 2.2
+  orbitDegreesPerSecond: 220
+  orbitHitInterval: 0.4
+  aimRange: 8
+  evolvesInto: {fileID: 11400000, guid: 04104f2af32e74dcca53203d0be57028, type: 2}
+  evolutionCatalyst: {fileID: 11400000, guid: db5a01707333d4a69a29250760e496b3, type: 2}

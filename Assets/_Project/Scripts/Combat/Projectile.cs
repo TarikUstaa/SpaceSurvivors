@@ -36,6 +36,11 @@ namespace SpaceSurvivors.Combat
         private PoolManager _pool;
         private GameObject _impactVfx;
 
+        private float _explosionRadius;
+        private float _splashFraction;
+        private GameObject _explosionVfx;
+        private static readonly Collider2D[] _splashHits = new Collider2D[48];
+
         private void Awake()
         {
             _body = GetComponent<Rigidbody2D>();
@@ -64,6 +69,9 @@ namespace SpaceSurvivors.Combat
             _owner = owner;
             _pool = pool;
             _impactVfx = data.impactVfxPrefab;
+            _explosionRadius = data.explosionRadius;
+            _splashFraction = data.splashDamageFraction;
+            _explosionVfx = data.explosionVfxPrefab != null ? data.explosionVfxPrefab : data.impactVfxPrefab;
 
             // Set velocity once — the 2D solver moves the body at a constant rate.
             _body.linearVelocity = _velocity;
@@ -110,13 +118,43 @@ namespace SpaceSurvivors.Combat
 
             SpawnImpact();
 
+            if (_explosionRadius > 0f)
+            {
+                Explode(target);
+                _handle.Despawn();   // AoE shots don't pierce
+                return;
+            }
+
             if (_pierceLeft > 0) _pierceLeft--;
             else _handle.Despawn();
         }
 
+        /// <summary>Deal splash damage to every other live target within the blast radius.</summary>
+        private void Explode(IDamageable directHit)
+        {
+            float splash = _damage * _splashFraction;
+            if (splash > 0f)
+            {
+                int n = Physics2D.OverlapCircleNonAlloc(transform.position, _explosionRadius, _splashHits);
+                for (int i = 0; i < n; i++)
+                {
+                    var col = _splashHits[i];
+                    if (col.attachedRigidbody != null && col.attachedRigidbody.gameObject == _owner) continue;
+
+                    var d = col.GetComponentInParent<IDamageable>();
+                    if (d == null || ReferenceEquals(d, directHit) || !d.IsAlive) continue;
+
+                    d.TakeDamage(new DamageInfo(splash, _owner, transform.position, Vector2.zero));
+                }
+            }
+
+            if (_explosionVfx != null && _pool != null)
+                _pool.Spawn(_explosionVfx, transform.position, Quaternion.identity);
+        }
+
         private void SpawnImpact()
         {
-            if (_impactVfx == null || _pool == null) return;
+            if (_impactVfx == null || _pool == null || _explosionRadius > 0f) return; // AoE spawns its own
             _pool.Spawn(_impactVfx, transform.position, Quaternion.identity);
         }
     }

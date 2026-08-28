@@ -7,11 +7,21 @@ namespace SpaceSurvivors.Data
     /// these at runtime; upgrades will later layer modifiers on top (M6). One asset per
     /// weapon archetype — Laser, Missile, ShieldPulse… (AI_Guidelines §3, zero magic numbers).
     /// </summary>
+    /// <summary>How a weapon delivers its damage.</summary>
+    public enum WeaponKind
+    {
+        /// <summary>Fires projectiles at the auto-aim target (Laser, Missile, …).</summary>
+        Projectile,
+        /// <summary>Orbs circle the ship and hurt whatever they touch (no firing).</summary>
+        Orbital,
+    }
+
     [CreateAssetMenu(menuName = "SpaceSurvivors/Combat/Weapon Data", fileName = "WeaponData")]
     public class WeaponData : ScriptableObject
     {
         [Header("Identity")]
         public string displayName = "Laser";
+        public WeaponKind kind = WeaponKind.Projectile;
 
         [Header("Projectile")]
         [Tooltip("Prefab must have a Projectile + Collider2D + Rigidbody2D + PoolHandle.")]
@@ -33,6 +43,22 @@ namespace SpaceSurvivors.Data
         [Min(0f)] public float spreadAngle = 0f;
         [Tooltip("Extra targets a projectile passes through before despawning. 0 = hits one.")]
         [Min(0)] public int pierce = 0;
+
+        [Header("Area of effect")]
+        [Tooltip("On hit, also damage everything within this radius of the impact. 0 = no splash.")]
+        [Min(0f)] public float explosionRadius = 0f;
+        [Tooltip("Splash damage as a fraction of the direct-hit damage.")]
+        [Range(0f, 1f)] public float splashDamageFraction = 0.6f;
+        [Tooltip("Optional pooled VFX for the explosion (falls back to impactVfxPrefab).")]
+        public GameObject explosionVfxPrefab;
+
+        [Header("Orbital (kind = Orbital)")]
+        [Tooltip("Orbs circle the ship at this radius (world units).")]
+        [Min(0.5f)] public float orbitRadius = 2.2f;
+        [Tooltip("Orbit angular speed, degrees per second (sign = direction).")]
+        public float orbitDegreesPerSecond = 200f;
+        [Tooltip("Seconds before an orb can hit the same enemy again.")]
+        [Min(0.05f)] public float orbitHitInterval = 0.4f;
 
         [Header("Targeting")]
         [Tooltip("Radius the auto-aim searches for enemies. Also the projectile cull range guide.")]

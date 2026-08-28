@@ -59,6 +59,7 @@ namespace SpaceSurvivors.Combat
 
         private readonly List<Slot> _slots = new();
         private IAimStrategy _aim;
+        private readonly List<OrbitalWeapon> _orbitals = new();
 
         /// <summary>Raised each time a weapon actually fires (for audio / VFX). Carries the weapon.</summary>
         public event System.Action<WeaponData> WeaponFired;
@@ -95,6 +96,7 @@ namespace SpaceSurvivors.Combat
         {
             if (data == null || _slots.Exists(s => s.Data == data)) return;
             _slots.Add(new Slot { Data = data, CooldownLeft = 0f });
+            SyncOrbitals();
         }
 
         public bool HasWeapon(WeaponData data) => _slots.Exists(s => s.Data == data);
@@ -105,6 +107,31 @@ namespace SpaceSurvivors.Combat
             if (from == null || to == null) return;
             var slot = _slots.Find(s => s.Data == from);
             if (slot != null) slot.Data = to;
+            SyncOrbitals();
+        }
+
+        /// <summary>Rebuild the <see cref="OrbitalWeapon"/> children to match the equipped orbital weapons.</summary>
+        private void SyncOrbitals()
+        {
+            if (_pool == null) return;
+
+            foreach (var o in _orbitals)
+            {
+                if (o == null) continue;
+                o.Clear();
+                Destroy(o.gameObject);
+            }
+            _orbitals.Clear();
+
+            foreach (var slot in _slots)
+            {
+                if (slot.Data == null || slot.Data.kind != WeaponKind.Orbital) continue;
+                var go = new GameObject($"Orbital_{slot.Data.displayName}");
+                go.transform.SetParent(transform, false);
+                var orbital = go.AddComponent<OrbitalWeapon>();
+                orbital.Configure(slot.Data, _pool, _stats, transform, gameObject);
+                _orbitals.Add(orbital);
+            }
         }
 
         private void Update()
@@ -118,6 +145,8 @@ namespace SpaceSurvivors.Combat
             for (int i = 0; i < _slots.Count; i++)
             {
                 var slot = _slots[i];
+                if (slot.Data.kind == WeaponKind.Orbital) continue; // driven by OrbitalWeapon
+
                 slot.CooldownLeft -= dt;
                 if (slot.CooldownLeft > 0f) continue;
 

@@ -1312,7 +1312,7 @@ MonoBehaviour:
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 52
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -2267,7 +2267,7 @@ MonoBehaviour:
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 46
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -8768,6 +8768,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e0e7cb6478b64651a1e032a55cecd7b, type: 2}
   - {fileID: 11400000, guid: db5a01707333d4a69a29250760e496b3, type: 2}
   - {fileID: 11400000, guid: d3e4fdde69a184709b166fce691cf72d, type: 2}
+  - {fileID: 11400000, guid: 2d7023f1a5d534d62a630667c1afde66, type: 2}
+  - {fileID: 11400000, guid: c33b6267bb5384fd096ea33bc5e263e9, type: 2}
+  - {fileID: 11400000, guid: 1e2101036031c4470963504d449194bf, type: 2}
+  - {fileID: 11400000, guid: 899f49d819daf4cd9b06d4a8ee4cd370, type: 2}
+  - {fileID: 11400000, guid: 768c48573d2c9407ba949053b1feb6f7, type: 2}
+  - {fileID: 11400000, guid: 8817c176052474d08a320aaa57ded7d5, type: 2}
 --- !u!114 &2065986493
 MonoBehaviour:
   m_ObjectHideFlags: 0
