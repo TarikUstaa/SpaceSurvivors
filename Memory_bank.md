@@ -281,10 +281,22 @@ Three waves. **Wave 1 done + Claude-tested; waves 2–3 pending.**
 - Visual screenshot of the pause/settings UI not captured (ScreenSpaceOverlay doesn't render in
   scene-view capture) — layout is a first pass, tune in wave 2.
 
-### Wave 2 — visual pass (pending)
-Convert `RunHud` / `LevelUpScreen` / `BossHud` / `DamageVignette` from code-built (`UiBuilder`)
-to scene UI with the CraftPix kit; polish the pause/settings layout; add a Settings entry to the
-main menu.
+### Wave 2 — visual pass (partial, 2026-08-28)
+- `RunHud.cs` + `LevelUpScreen.cs` rewritten prefab-style (serialized widget refs, no
+  `UiBuilder`). `RunHud` gained a scrap counter (`ScrapCollector.ScrapCollected`).
+- `Editor/HudBuilder.cs` (menu `SpaceSurvivors/Build/M10 HUD + Level-Up (Game scene)`) builds
+  both with the CraftPix kit: `HudCanvas` (XP bar = `Loading_Bar/Table` + `Loading_Bar_1_2`
+  Filled fill; level pill; `Clock_Icon` + timer; `Health_Bar_Table` + green Filled fill + HP
+  text; `Armor_Bar_Table` shield row; `Cristal_Icon` + scrap count) and `LevelUpCanvas`
+  (`Level_Menu/Window` sliced + `Shop/Prise_BTN_Table` choice slabs). 9-slice borders set on
+  those sprites.
+- `DamageVignette` — baked a real radial-gradient sprite `Art/Sprites/Generated/DamageVignette.png`
+  (was a full-screen flat flash because `Resources.Load("DamageVignette")` returned null);
+  HudBuilder wires it into the `_vignetteSprite` field.
+- **Level-up modal looks great** (screenshot-verified). HUD is themed + functional but rough:
+  XP bar is low-contrast against dark space, clock icon barely visible — needs a polish round.
+- **Still pending:** main-menu Settings button/panel, pause+settings layout polish, BossHud
+  re-theme, HUD contrast tweaks — hand to the user for feedback first.
 
 ### Wave 3 — audio (pending, needs asset pack)
 Blocked on a CC0 audio pack (like the UI kit was). Kenney Sci-Fi Sounds / Space Kit suggested.

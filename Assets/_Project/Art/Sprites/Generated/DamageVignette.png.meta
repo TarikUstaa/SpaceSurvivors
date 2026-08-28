@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3276617aa88f14521accd7679968c07c
+guid: 3e086a5b2b8ca4e6d9bd1a80147e3ac9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6622502539160081400
-    second: Health_Bar_Table_0
+      213: 5438715101400015426
+    second: DamageVignette_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,11 +48,11 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 26, y: 26, z: 60, w: 26}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Health_Bar_Table_0
+      name: DamageVignette_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 400
-        height: 70
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8f352cac8fad7eb50800000000000000
-      internalID: 6622502539160081400
+      spriteID: 2422085b1923a7b40800000000000000
+      internalID: 5438715101400015426
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Health_Bar_Table_0: 6622502539160081400
+      DamageVignette_0: 5438715101400015426
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
