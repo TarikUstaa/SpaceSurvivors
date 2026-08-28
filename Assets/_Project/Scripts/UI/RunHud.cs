@@ -66,7 +66,7 @@ namespace SpaceSurvivors.UI
         private void HandleXpChanged(int into, int needed)
         {
             if (_xpFill != null) _xpFill.fillAmount = needed > 0 ? Mathf.Clamp01((float)into / needed) : 0f;
-            if (_levelLabel != null && _levelSystem != null) _levelLabel.text = _levelSystem.CurrentLevel.ToString();
+            if (_levelLabel != null && _levelSystem != null) _levelLabel.text = $"LV {_levelSystem.CurrentLevel}";
         }
 
         private void HandleScrap(int _)

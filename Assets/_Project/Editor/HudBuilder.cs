@@ -60,13 +60,13 @@ namespace SpaceSurvivors.EditorTools
             var canvas = Canvas("HudCanvas", ui.transform, 100);
             var root = canvas.transform;
 
-            // --- XP bar across the top
-            var xpBar = Img("XpBar", root, S("Loading_Bar/Table.png"), Color.white);
+            // --- ROW 0: XP bar across the very top, level number inside its left end
+            var xpBar = Img("XpBar", root, S("Loading_Bar/Table.png"), new Color(0.72f, 0.82f, 0.98f));
             xpBar.type = Image.Type.Sliced;
             var xpRt = xpBar.rectTransform;
             xpRt.anchorMin = new Vector2(0f, 1f); xpRt.anchorMax = new Vector2(1f, 1f);
             xpRt.pivot = new Vector2(0.5f, 1f);
-            xpRt.offsetMin = new Vector2(150, -50); xpRt.offsetMax = new Vector2(-70, -10);
+            xpRt.offsetMin = new Vector2(28, -46); xpRt.offsetMax = new Vector2(-28, -8);
 
             var xpFill = Img("Fill", xpBar.transform, S("Loading_Bar/Loading_Bar_1_2.png"), Color.white);
             xpFill.type = Image.Type.Filled;
@@ -77,27 +77,29 @@ namespace SpaceSurvivors.EditorTools
             fRt.anchorMin = Vector2.zero; fRt.anchorMax = Vector2.one;
             fRt.offsetMin = new Vector2(8, 7); fRt.offsetMax = new Vector2(-8, -7);
 
-            var levelBadge = Img("LevelBadge", root, S("Loading_Bar/Table.png"), Color.white);
-            levelBadge.type = Image.Type.Sliced;
-            Place(levelBadge, new Vector2(0f, 1f), new Vector2(96, 44), new Vector2(96, -30));
-            var levelLabel = Label("Level", levelBadge.transform, "1", 26, new Color(1f, 0.9f, 0.55f));
-            Stretch(levelLabel.rectTransform);
+            var levelLabel = Label("Level", xpBar.transform, "LV 1", 22, new Color(1f, 0.94f, 0.65f));
             levelLabel.fontStyle = FontStyle.Bold;
+            levelLabel.alignment = TextAnchor.MiddleLeft;
+            var llRt = levelLabel.rectTransform;
+            llRt.anchorMin = new Vector2(0f, 0f); llRt.anchorMax = new Vector2(0f, 1f);
+            llRt.pivot = new Vector2(0f, 0.5f);
+            llRt.sizeDelta = new Vector2(90, 0);
+            llRt.anchoredPosition = new Vector2(16, 0);
 
-            // --- timer, centre top
+            // --- ROW 1: timer (centre), health (left), scrap (right) — all clear of the XP bar
             var timerGroup = new GameObject("TimerGroup", typeof(RectTransform));
             timerGroup.transform.SetParent(root, false);
-            Place(timerGroup.transform, new Vector2(0.5f, 1f), new Vector2(240, 56), new Vector2(0, -58));
-            var clock = Img("ClockIcon", timerGroup.transform, S("Main_UI/Clock_Icon.png"), Color.white);
-            Place(clock, new Vector2(0f, 0.5f), new Vector2(40, 44), new Vector2(0, 0));
-            var timer = Label("Timer", timerGroup.transform, "00:00", 34, new Color(0.92f, 0.97f, 1f));
+            Place(timerGroup.transform, new Vector2(0.5f, 1f), new Vector2(220, 52), new Vector2(0, -80));
+            var clock = Img("ClockIcon", timerGroup.transform, S("Main_UI/Clock_Icon.png"), new Color(0.8f, 0.92f, 1f));
+            Place(clock, new Vector2(0.5f, 0.5f), new Vector2(34, 38), new Vector2(-66, 0));
+            var timer = Label("Timer", timerGroup.transform, "00:00", 32, new Color(0.92f, 0.97f, 1f));
             timer.alignment = TextAnchor.MiddleLeft;
-            Place(timer, new Vector2(0f, 0.5f), new Vector2(170, 50), new Vector2(52, 0));
+            Place(timer, new Vector2(0.5f, 0.5f), new Vector2(150, 48), new Vector2(6, 0));
 
-            // --- health bar, top-left below XP
+            // --- health bar (left)
             var healthBar = Img("HealthBar", root, S("Main_UI/Health_Bar_Table.png"), Color.white);
             healthBar.type = Image.Type.Sliced;
-            Place(healthBar, new Vector2(0f, 1f), new Vector2(320, 52), new Vector2(190, -86));
+            Place(healthBar, new Vector2(0f, 1f), new Vector2(320, 50), new Vector2(190, -80));
             var hpFill = Img("Fill", healthBar.transform, UiSprite(), new Color(0.35f, 0.85f, 0.4f, 1f));
             hpFill.type = Image.Type.Filled;
             hpFill.fillMethod = Image.FillMethod.Horizontal;
@@ -113,7 +115,7 @@ namespace SpaceSurvivors.EditorTools
             // --- shield, below health
             var shieldGroup = new GameObject("ShieldGroup", typeof(RectTransform));
             shieldGroup.transform.SetParent(root, false);
-            Place(shieldGroup.transform, new Vector2(0f, 1f), new Vector2(300, 44), new Vector2(180, -132));
+            Place(shieldGroup.transform, new Vector2(0f, 1f), new Vector2(300, 42), new Vector2(180, -128));
             var shieldBar = Img("ShieldBar", shieldGroup.transform, S("Main_UI/Armor_Bar_Table.png"), Color.white);
             shieldBar.type = Image.Type.Sliced;
             Stretch(shieldBar.rectTransform);
@@ -126,7 +128,7 @@ namespace SpaceSurvivors.EditorTools
             // --- scrap counter, top-right
             var scrapGroup = new GameObject("ScrapGroup", typeof(RectTransform));
             scrapGroup.transform.SetParent(root, false);
-            Place(scrapGroup.transform, new Vector2(1f, 1f), new Vector2(180, 52), new Vector2(-40, -60));
+            Place(scrapGroup.transform, new Vector2(1f, 1f), new Vector2(180, 52), new Vector2(-40, -80));
             var crys = Img("Crystal", scrapGroup.transform, S("Main_UI/Cristal_Icon.png"), Color.white);
             Place(crys, new Vector2(1f, 0.5f), new Vector2(34, 48), new Vector2(0, 0));
             var scrapText = Label("Scrap", scrapGroup.transform, "0", 28, new Color(0.7f, 1f, 0.78f));
