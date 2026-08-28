@@ -248,6 +248,49 @@ infinitely scrolling arena — the *map/camera* concern the user raised.
   CraftPix `Main_UI/Cristal_Icon` (green crystal), mint tint `(0.65,1,0.75)`, scale 0.6 → 1.3,
   sortingOrder 6, slow spin 45°/s. Reads clearly against dark space + red enemies.
 
+## M10 — Juice & UX (in progress, 2026-08-28)
+Three waves. **Wave 1 done + Claude-tested; waves 2–3 pending.**
+
+### Wave 1 — pause, settings, run-stats, stage indicator
+- `Core/SettingsService.cs` — static PlayerPrefs wrapper (master/music/sfx volume, fullscreen),
+  `Apply()` (AudioListener.volume + Screen fullscreen), `Changed` event, `[RuntimeInitializeOnLoadMethod]`.
+  Music/Sfx values are stored now; the wave-3 audio players will read them.
+- `Core/HighScoreService.cs` — static PlayerPrefs, `BestSeconds(modeId)` / `Submit(modeId, secs)`
+  keyed by `GameModeData.name`. The local stand-in the backend will later shadow (§8) — writes
+  funnel through `Submit` for a future leaderboard seam.
+- `Progression/RunStats.cs` — on Systems; counts `SpawnDirector.EnemyKilled`, exposes
+  `Kills / Level / Scrap / Seconds` (reads LevelSystem, ScrapCollector, RunClock).
+- `SpawnDirector.ScheduledBossCount` added.
+- `UI/PauseScreen.cs` — Esc (`Keyboard.current`) or `TogglePause()` toggles a panel + `Time.timeScale`.
+  Guards: no-op while RunOver or while another screen owns the freeze (`!_paused && timeScale==0`).
+  Buttons: Resume / Settings (swaps to settings sub-panel) / Main Menu.
+- `UI/SettingsPanel.cs` — binds 3 volume `Slider`s + a fullscreen `Toggle` to `SettingsService`
+  (+ optional % labels). Reused by pause now, main menu later.
+- `UI/StageIndicator.cs` — Campaign-only "STAGE n/N" (N = `ScheduledBossCount + 1`,
+  n = `BossesDefeated + 1`). Hidden entirely in endless modes.
+- `UI/RunEndScreen.cs` extended — now also shows `KILLS/LEVEL/SCRAP` (from `RunStats`) and
+  `BEST / NEW BEST m:ss` (from `HighScoreService`).
+- `Editor/M10UiBuilder.cs` (menu `SpaceSurvivors/Build/M10 UI (Game scene)`) — idempotent; builds
+  `PauseCanvas` (Dim > MainGroup{Pause window + Resume/Settings/Menu} + SettingsGroup{Setting
+  window + slider/toggle rows + Back}) with the CraftPix Pause/Setting art, `StageCanvas`, adds
+  `RunStats` to Systems, and appends `StatsValue`/`BestValue` to the RunEnd window. Sets 9-slice
+  borders on `Pause/Window.png` + `Setting/Window.png`.
+- Tested (Infinite + Campaign): pause freezes/resumes, settings sub-panel swaps, sliders write
+  `SettingsService` + move `AudioListener.volume`, % labels update, STAGE shows "1/3"→"2/3" as
+  bosses die (hidden in Infinite), victory screen shows stats + writes/reads the best time.
+- Visual screenshot of the pause/settings UI not captured (ScreenSpaceOverlay doesn't render in
+  scene-view capture) — layout is a first pass, tune in wave 2.
+
+### Wave 2 — visual pass (pending)
+Convert `RunHud` / `LevelUpScreen` / `BossHud` / `DamageVignette` from code-built (`UiBuilder`)
+to scene UI with the CraftPix kit; polish the pause/settings layout; add a Settings entry to the
+main menu.
+
+### Wave 3 — audio (pending, needs asset pack)
+Blocked on a CC0 audio pack (like the UI kit was). Kenney Sci-Fi Sounds / Space Kit suggested.
+Then build `AudioDirector` + `SfxEvent` hooks (shoot, hit, enemy death, level-up, boss warning,
+pickup, player hurt, win/lose) reading `SettingsService` volumes.
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,

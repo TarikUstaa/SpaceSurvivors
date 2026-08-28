@@ -43,6 +43,10 @@ namespace SpaceSurvivors.Enemies
         /// <summary>How many scheduled bosses the player has killed this run.</summary>
         public int BossesDefeated { get; private set; }
 
+        /// <summary>Total bosses in this run's schedule (0 for endless configs with none).</summary>
+        public int ScheduledBossCount =>
+            _config != null && _config.bossSchedule != null ? _config.bossSchedule.Count : 0;
+
         /// <summary>
         /// True once every entry in the boss schedule has spawned AND no boss is still alive.
         /// The Campaign win condition (ignored by endless modes, which have recurring bosses).
