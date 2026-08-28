@@ -182,6 +182,7 @@
 | 2026-08-27 | M5 — scrap/xp/levelup | ✅ DONE. Approved (+ XP bar fix, multishot fan, no-overkill projectiles, laser impact VFX). |
 | 2026-08-27 | M6 — stat pipeline + weapons | ✅ DONE. Approved (+ missile fixes, damage vignette, hit flash, enemy death VFX, solid enemies, shield, laser speed bug). |
 | 2026-08-27 | M7 — difficulty director + mini-boss | Built + Claude play-tested (boss schedule, warning, health bar, arrival pop, death). Awaiting user sign-off. |
+| 2026-08-28 | M8 — main menu + 2 game modes | Built + Claude play-tested all 3 paths (Infinite defeat, Campaign defeat, Campaign victory). Awaiting user sign-off. |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -209,18 +210,49 @@ enforced by the compiler → cannot become spaghetti. Layout + deps in `AI_Guide
 - AI_Guidelines.md gained §6 (assembly boundaries), §7 (no new statics, bootstrap-UI rule),
   §9 (continuity / resume procedure / RunCommand gotchas).
 
-## Next milestone — M8: Main Menu + Game Modes (user-requested, 2026-08-27)
-- Main menu scene + mode selection.
-- **Campaign mode:** finite run, scripted stages with timed countdowns → mini-boss partway
-  → **final boss as stage 3** → kill it to complete the mode (Victory screen). "STAGE 1/3" HUD.
-- **Infinite mode:** endless survival, difficulty climbs forever, recurring bosses, score = time.
-- Impl sketch: `GameModeData` SO (`DifficultyConfig` + `endless` bool + victory condition +
-  stage schedule). Static `SelectedMode` set by menu → load Game scene. `RunController` checks
-  victory condition (all scheduled bosses dead) → Victory. Extend `GameOverScreen` → Victory/Defeat
-  + "Back to Menu".
-- Need a Campaign `DifficultyConfig` (bosses ~1:00 mini + ~2:30 final) and an Infinite one
-  (recurring bosses 2:00/4:00/6:00…, curves extended).
-- Audio / parallax starfield / settings / persistent high score → pushed to M9.
+## M8 — Main Menu + 2 Game Modes (built 2026-08-28)
+**Two scenes:** `MainMenu.unity` (build 0) + `Game.unity` (build 1, was `Assets/Scenes/SampleScene`).
+`SceneManager.LoadScene` between them; `GameSession.SelectedMode` (static, reset on play) carries the choice.
+
+**Data**
+- `Data/GameModeData.cs` — SO: `displayName`, `description`, `DifficultyConfig difficulty`, `bool endless`.
+- `Data/GameSession.cs` — static `SelectedMode`; `IsEndless => SelectedMode == null || endless`.
+- `Config/Mode_Campaign.asset` (endless=false, → `CampaignDifficulty.asset`),
+  `Config/Mode_Infinite.asset` (endless=true, → `DifficultyConfig.asset`).
+- `CampaignDifficulty.asset` — bossSchedule = MiniBoss @ 60s (lead 4), FinalBoss @ 150s (lead 5);
+  curves peak ~160s, healthMult 1→2.4, speedMult 1→1.3, maxAlive 200.
+- `DifficultyConfig.asset` (= Infinite) — bossSchedule 180/360/540/720s (last = FinalBoss).
+- `Enemies/FinalBoss.asset` — EnemyData, MiniBoss prefab + BossDeath VFX, 1800 HP, weight 0 /
+  earliestSpawnTime 99999 (schedule-only, never random-spawns).
+
+**Victory / defeat**
+- `Enemies/SpawnDirector.cs` — added `BossesDefeated`, `AllScheduledBossesDefeated`
+  (`_bossEntriesSpawned >= schedule.Count && _bossesAlive == 0`). `Awake` pulls `_config` from
+  `GameSession.SelectedMode.difficulty` when set.
+- `Game/RunController.cs` — `Update()` fires `EndRun(won:true)` when `AllScheduledBossesDefeated`
+  (only if `!GameSession.IsEndless`). Player death → `EndRun(won:false)`. `EndRun` stops the clock,
+  disables `_disableOnEnd` behaviours, ramps `Time.timeScale`→0 over 0.6s, fires `RunEnded(won, secs)`.
+- `UI/RunEndScreen.cs` — real prefab-style component (no self-build). On `RunEnded`: swaps header
+  sprite (win/lose), shows `m:ss`, toggles `_root`. Replay = reload scene; Menu = load `MainMenu`.
+  Replaces the deleted `GameOverScreen.cs`.
+- `UI/MainMenuScreen.cs` — `ModeButton[] {Button, GameModeData}`; click → `GameSession.SelectedMode = mode`
+  → load `Game`. Hover → description label. Quit button.
+
+**Scene UI built by `Editor/M8UiBuilder.cs`** (menu: `SpaceSurvivors/Build/…`). Editor-only, uses the
+CraftPix kit (`You_Win/Window|Header|Score|Replay_BTN`, `Buttons/BTNs/Menu_BTN`, `Main_Menu/BG|Exit_BTN`,
+`Shop/Prise_BTN_Table` slab for mode buttons). 9-slice borders set on `Prise_BTN_Table` + `Window`.
+Lives in `Assembly-CSharp-Editor` because the RunCommand dynamic assembly can't reference `UnityEngine.UI`.
+
+**Play-test (Claude, all 3 paths):**
+- Infinite → defeat: menu→Infinite→GameSession set→play→death→RunEndScreen (lose header, "0:20"), timeScale 0, Menu returns.
+- Campaign → defeat: same, non-endless config loads.
+- Campaign → victory: killed both scheduled bosses → `RunOver=True Won=True`, RunEndCanvas+Dim active,
+  win header sprite set, ScoreValue "0:24", timeScale 0. (Tested with temp 5s/12s schedule — REVERTED to 60/150.)
+- Layout checked numerically (no overlaps in either scene). Visual screenshot NOT done —
+  Scene View capture doesn't render ScreenSpaceOverlay UI; deferred to M9 polish pass.
+
+**Deferred to M9:** "STAGE 1/3" HUD indicator, audio, parallax starfield, settings, persistent high score,
+run-stats screen, TMP conversion, converting the rest of the bootstrap-code UI to prefabs.
 
 ## Open Decisions / TODO
 - [ ] Confirm Input System package is installed (Package Manager) before M1 wiring.

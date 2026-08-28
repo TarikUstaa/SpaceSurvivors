@@ -34,9 +34,23 @@ namespace SpaceSurvivors.Enemies
         private float _accumulator;
         private int _aliveCount;
         private bool[] _bossFired;
+        private int _bossEntriesSpawned;
+        private int _bossesAlive;
 
         public int AliveCount => _aliveCount;
         public float CurrentSpawnRate => _config != null ? _config.SpawnRateAt(Now) : 0f;
+
+        /// <summary>How many scheduled bosses the player has killed this run.</summary>
+        public int BossesDefeated { get; private set; }
+
+        /// <summary>
+        /// True once every entry in the boss schedule has spawned AND no boss is still alive.
+        /// The Campaign win condition (ignored by endless modes, which have recurring bosses).
+        /// </summary>
+        public bool AllScheduledBossesDefeated =>
+            _config != null && _config.bossSchedule != null && _config.bossSchedule.Count > 0
+            && _bossEntriesSpawned >= _config.bossSchedule.Count
+            && _bossesAlive == 0;
 
         /// <summary>(killed enemy, world position at death, its data). For loot / kill-count / VFX.</summary>
         public event System.Action<EnemyBrain, Vector2, Data.EnemyData> EnemyKilled;
@@ -50,6 +64,11 @@ namespace SpaceSurvivors.Enemies
         private void Awake()
         {
             if (_camera == null) _camera = Camera.main;
+
+            // A mode picked in the menu overrides the serialized config; pressing Play
+            // directly in the editor falls back to whatever is wired in the Inspector.
+            if (GameSession.SelectedMode != null && GameSession.SelectedMode.difficulty != null)
+                _config = GameSession.SelectedMode.difficulty;
         }
 
         private void Update()
@@ -127,13 +146,20 @@ namespace SpaceSurvivors.Enemies
                 GameObject go = _pool.Spawn(data.prefab, GetOffscreenPosition(), Quaternion.identity);
                 if (go == null || !go.TryGetComponent(out EnemyBrain brain)) continue;
 
+                _bossesAlive++;
                 brain.Killed += HandleEnemyKilled;
                 brain.Initialize(_player, data, hp, speedMul, OnBossReleased);
                 BossSpawned?.Invoke(brain);
             }
+            _bossEntriesSpawned++;
         }
 
-        private void OnBossReleased(EnemyBrain brain) => brain.Killed -= HandleEnemyKilled;
+        private void OnBossReleased(EnemyBrain brain)
+        {
+            brain.Killed -= HandleEnemyKilled;
+            _bossesAlive = Mathf.Max(0, _bossesAlive - 1);
+            BossesDefeated++;
+        }
 
         private void HandleEnemyKilled(EnemyBrain brain, DamageInfo _)
             => EnemyKilled?.Invoke(brain, brain.transform.position, brain.Data);

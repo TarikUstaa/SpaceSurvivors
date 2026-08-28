@@ -3,7 +3,9 @@
     "rootNamespace": "SpaceSurvivors.Game",
     "references": [
         "SpaceSurvivors.Core",
-        "SpaceSurvivors.Combat"
+        "SpaceSurvivors.Data",
+        "SpaceSurvivors.Combat",
+        "SpaceSurvivors.Enemies"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
