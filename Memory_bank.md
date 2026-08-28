@@ -185,6 +185,15 @@
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
+- Imported CraftPix "Free Space Shooter GUI" pack → `Art/UI/PNG/` (244 sprites, glossy blue
+  sci-fi, cyan glow, hex-fill). All batch-configured: Sprite / FullRect / uncompressed / clamp.
+  Subfolders: Main_Menu, You_Win, You_Lose, Buttons (BTNs + BTNs_Active states), Main_UI
+  (Boss_HP_Bar 3-state, Boss_Name_Table, Health_Bar_Table, Health_Dot, Armor_Bar→shield,
+  Stats_Bar, Clock_Icon, Cristal_Icon→scrap, Pause_BTN), Loading_Bar (→XP bar), Setting,
+  Pause, Level_Menu, Shop/Upgrade/Hangar/Ship_* (future meta-progression).
+  License: CraftPix free — commercial OK, no attribution, but NO redistributing source PNGs
+  separately. If the repo ever goes PUBLIC, gitignore `Art/UI/PNG/` and ship only in builds.
+  M8 menu + M9 polish will use this kit (replaces the code-built bootstrap UI over time).
 
 ## Architecture pass — Assembly Definitions (2026-08-27, before M8)
 Split the ~45 scripts into 9 compiler-enforced assemblies. Dependency direction is now
