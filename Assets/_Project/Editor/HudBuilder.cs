@@ -1,5 +1,6 @@
 using SpaceSurvivors.Combat;
 using SpaceSurvivors.Core;
+using SpaceSurvivors.Enemies;
 using SpaceSurvivors.Game;
 using SpaceSurvivors.Progression;
 using SpaceSurvivors.UI;
@@ -39,9 +40,13 @@ namespace SpaceSurvivors.EditorTools
             Border("Main_UI/Armor_Bar_Table.png", 26, 26, 60, 26);
             Border("Level_Menu/Window.png", 34, 96, 34, 150);
 
+            Border("Main_UI/Boss_HP_Table.png", 30, 20, 30, 20);
+            Border("Main_UI/Boss_Name_Table.png", 24, 16, 24, 16);
+
             BakeVignette();
             BuildHud(ui);
             BuildLevelUp(ui);
+            BuildBossHud(ui);
             WireVignette(ui);
 
             EditorSceneManager.MarkSceneDirty(scene);
@@ -226,6 +231,63 @@ namespace SpaceSurvivors.EditorTools
                 lp.GetArrayElementAtIndex(i).objectReferenceValue = labels[i];
             }
             so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        // ---------------------------------------------------------------- Boss HUD
+
+        private static void BuildBossHud(GameObject ui)
+        {
+            var prior = ui.transform.Find("BossHudCanvas");
+            if (prior != null) Object.DestroyImmediate(prior.gameObject);
+
+            var hud = ui.GetComponent<BossHud>() ?? ui.AddComponent<BossHud>();
+            var canvas = Canvas("BossHudCanvas", ui.transform, 300);
+            var root = canvas.transform;
+
+            // warning banner
+            var warning = new GameObject("WarningRoot", typeof(RectTransform));
+            warning.transform.SetParent(root, false);
+            Place(warning.transform, new Vector2(0.5f, 0.74f), new Vector2(1500, 130), Vector2.zero);
+            var wText = Label("WarningText", warning.transform, "!!  MINI-BOSS  APPROACHING  !!", 52, new Color(1f, 0.32f, 0.26f));
+            wText.fontStyle = FontStyle.Bold;
+            Stretch(wText.rectTransform);
+
+            // bottom health bar
+            var bar = Img("BarRoot", root, S("Main_UI/Boss_HP_Table.png"), Color.white);
+            bar.type = Image.Type.Sliced;
+            var brt = bar.rectTransform;
+            brt.anchorMin = new Vector2(0.14f, 0f); brt.anchorMax = new Vector2(0.86f, 0f);
+            brt.pivot = new Vector2(0.5f, 0f);
+            brt.sizeDelta = new Vector2(0f, 40f);
+            brt.anchoredPosition = new Vector2(0f, 22f);
+
+            var hpFill = Img("Fill", bar.transform, S("Main_UI/Boss_HP_Bar_1.png"), Color.white);
+            hpFill.type = Image.Type.Filled;
+            hpFill.fillMethod = Image.FillMethod.Horizontal;
+            hpFill.fillOrigin = 0;
+            hpFill.fillAmount = 1f;
+            var fr = hpFill.rectTransform;
+            fr.anchorMin = Vector2.zero; fr.anchorMax = Vector2.one;
+            fr.offsetMin = new Vector2(10, 7); fr.offsetMax = new Vector2(-10, -7);
+
+            var namePlate = Img("NamePlate", bar.transform, S("Main_UI/Boss_Name_Table.png"), Color.white);
+            namePlate.type = Image.Type.Sliced;
+            Place(namePlate, new Vector2(0.5f, 1f), new Vector2(300, 40), new Vector2(0, 26));
+            var bossName = Label("BossName", namePlate.transform, "MINI-BOSS", 22, new Color(0.95f, 0.97f, 1f));
+            bossName.fontStyle = FontStyle.Bold;
+            Stretch(bossName.rectTransform);
+
+            var so = new SerializedObject(hud);
+            so.FindProperty("_spawnDirector").objectReferenceValue = Object.FindFirstObjectByType<SpawnDirector>();
+            so.FindProperty("_warningRoot").objectReferenceValue = warning;
+            so.FindProperty("_warningText").objectReferenceValue = wText;
+            so.FindProperty("_barRoot").objectReferenceValue = bar.gameObject;
+            so.FindProperty("_bossNameText").objectReferenceValue = bossName;
+            so.FindProperty("_hpFill").objectReferenceValue = hpFill;
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            warning.SetActive(false);
+            bar.gameObject.SetActive(false);
         }
 
         // ---------------------------------------------------------------- vignette

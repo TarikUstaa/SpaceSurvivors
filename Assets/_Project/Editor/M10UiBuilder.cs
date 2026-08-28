@@ -24,6 +24,70 @@ namespace SpaceSurvivors.EditorTools
         private static Font Legacy => Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         private static Sprite S(string sub) => AssetDatabase.LoadAssetAtPath<Sprite>(Ui + sub);
 
+        [MenuItem("SpaceSurvivors/Build/M10 Main-Menu Settings (MainMenu scene)")]
+        private static void BuildMainMenuSettings()
+        {
+            var scene = EditorSceneManager.OpenScene("Assets/_Project/Scenes/MainMenu.unity", OpenSceneMode.Single);
+            var canvas = Object.FindFirstObjectByType<CanvasScaler>();
+            if (canvas == null) { Debug.LogError("[M10] MenuCanvas not found — run the M8 main-menu builder first."); return; }
+            var menuCanvas = canvas.transform;
+            var menuRoot = menuCanvas.parent;
+
+            var oldBtn = menuCanvas.Find("SettingsButton");
+            if (oldBtn != null) Object.DestroyImmediate(oldBtn.gameObject);
+            var oldGrp = menuCanvas.Find("MenuSettingsGroup");
+            if (oldGrp != null) Object.DestroyImmediate(oldGrp.gameObject);
+
+            var btn = TextButton("SettingsButton", menuCanvas, S("Shop/Prise_BTN_Table.png"), "SETTINGS");
+            var btnRt = (RectTransform)btn.transform;
+            btnRt.anchorMin = btnRt.anchorMax = new Vector2(1f, 1f);
+            btnRt.pivot = new Vector2(1f, 1f);
+            btnRt.sizeDelta = new Vector2(230, 74);
+            btnRt.anchoredPosition = new Vector2(-40, -40);
+
+            var group = new GameObject("MenuSettingsGroup", typeof(RectTransform));
+            group.transform.SetParent(menuCanvas, false);
+            Stretch((RectTransform)group.transform);
+            var dim = Img("Dim", group.transform, null, new Color(0.02f, 0.03f, 0.06f, 0.94f), raycast: true);
+            Stretch((RectTransform)dim.transform);
+
+            var win = Img("Window", group.transform, S("Setting/Window.png"), Color.white);
+            win.type = Image.Type.Sliced;
+            Place(win, new Vector2(0.5f, 0.5f), new Vector2(720, 640), Vector2.zero);
+            var hdr = Img("Header", win.transform, S("Setting/Header.png"), Color.white);
+            Place(hdr, new Vector2(0.5f, 1f), new Vector2(430, 90), new Vector2(0, -4));
+
+            var master = SliderRow(win.transform, "Master", "MASTER", 0.64f, out var mv);
+            var music = SliderRow(win.transform, "Music", "MUSIC", 0.48f, out var muv);
+            var sfx = SliderRow(win.transform, "Sfx", "SFX", 0.32f, out var sv);
+            var fs = ToggleRow(win.transform, "Fullscreen", "FULLSCREEN", 0.16f);
+            var close = TextButton("CloseButton", win.transform, S("Shop/Prise_BTN_Table.png"), "CLOSE");
+            Place(close, new Vector2(0.5f, 0.05f), new Vector2(280, 84), Vector2.zero);
+
+            var panel = group.AddComponent<SettingsPanel>();
+            var pso = new SerializedObject(panel);
+            pso.FindProperty("_masterSlider").objectReferenceValue = master;
+            pso.FindProperty("_musicSlider").objectReferenceValue = music;
+            pso.FindProperty("_sfxSlider").objectReferenceValue = sfx;
+            pso.FindProperty("_fullscreenToggle").objectReferenceValue = fs;
+            pso.FindProperty("_masterValue").objectReferenceValue = mv;
+            pso.FindProperty("_musicValue").objectReferenceValue = muv;
+            pso.FindProperty("_sfxValue").objectReferenceValue = sv;
+            pso.ApplyModifiedPropertiesWithoutUndo();
+
+            var toggle = menuRoot.GetComponent<PanelToggle>() ?? menuRoot.gameObject.AddComponent<PanelToggle>();
+            var tso = new SerializedObject(toggle);
+            tso.FindProperty("_openButton").objectReferenceValue = btn;
+            tso.FindProperty("_closeButton").objectReferenceValue = close;
+            tso.FindProperty("_panel").objectReferenceValue = group;
+            tso.ApplyModifiedPropertiesWithoutUndo();
+
+            group.SetActive(false);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            Debug.Log("[M10] main-menu settings added.");
+        }
+
         [MenuItem("SpaceSurvivors/Build/M10 UI (Game scene)")]
         private static void Build()
         {

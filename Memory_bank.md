@@ -306,7 +306,17 @@ Three waves. **Wave 1 done + Claude-tested; waves 2–3 pending.**
   proj speed), UTILITY (pickup range / xp gain), WEAPONS (equipped list). Reads `StatSheet.Modify`,
   `HealthComponent`, `LevelSystem`, `RunStats`, `WeaponController`. Pause window shifted right to
   make room. Built + wired by `M10UiBuilder.BuildPause`.
-- **Still pending:** main-menu Settings button/panel, BossHud re-theme.
+- **Main-menu Settings** — `UI/PanelToggle.cs` (open button shows a panel, close hides it) +
+  `M10UiBuilder.BuildMainMenuSettings` (menu `SpaceSurvivors/Build/M10 Main-Menu Settings`):
+  a SETTINGS button top-right of the main menu opens a `Setting/Window` pop-up with the same
+  3 sliders + fullscreen toggle (`SettingsPanel`) and a CLOSE button. Tested.
+- **BossHud re-themed** — `BossHud.cs` rewritten prefab-style (`_warningRoot`/`_warningText`/
+  `_barRoot`/`_bossNameText`/`_hpFill`). `HudBuilder.BuildBossHud` builds it with
+  `Main_UI/Boss_HP_Table` frame + `Boss_HP_Bar_1` Filled red fill + `Boss_Name_Table` name
+  plate. Verified with a spawned mini-boss.
+
+**Wave 2 done** (except a full BossHud warning-banner art pass — the banner is still plain text).
+Wave 3 (audio) deferred by the user until an asset pack is sourced.
 
 ### Wave 3 — audio (pending, needs asset pack)
 Blocked on a CC0 audio pack (like the UI kit was). Kenney Sci-Fi Sounds / Space Kit suggested.
