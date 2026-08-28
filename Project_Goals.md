@@ -104,6 +104,23 @@ is designed:**
   remote-later shape.
 - Not in scope for the game client: the server itself, its DB schema, hosting — separate track.
 
+**Planned stack (user, 2026-08-28):**
+- Backend: **Java 25** (IntelliJ IDEA) — presumably Spring Boot-style REST API.
+- DB: **PostgreSQL** (DBeaver as the client tool).
+- Auth + cloud save entry point: **Firebase** (Firebase Auth for identity is the likely role).
+- Hosting: **Azure**.
+- Flow: Unity client signs in via Firebase Auth → gets an ID token → sends it as a Bearer to the
+  Java API → API verifies with Firebase Admin SDK → reads/writes Postgres. The Unity
+  `HttpProfileStore` needs only a token provider + the base URL.
+
+**Client-side implications to honour when M13 lands:**
+- Use **Newtonsoft JSON** (`com.unity.nuget.newtonsoft-json`), not `JsonUtility`, for the profile
+  DTO — `JsonUtility` can't do dictionaries / nullable / ISO dates, and the payload must
+  round-trip cleanly with a Jackson backend.
+- Put an `int schemaVersion` on `PlayerProfile` from day one; keep field names stable and
+  snake_case or camelCase consistently (agree with the backend once).
+- The DTO is the contract shared between Unity and the Java API — one source of truth for its shape.
+
 ## 6. Non-Goals (for now)
 - Multiplayer, controller remapping UI, Steam integration, localization, mobile build.
 - 3D art, procedural narrative, save-scumming mid-run.

@@ -256,11 +256,14 @@ achievements — all depend on M13), M15 environment/maps, M16 balance. Order no
 user's call on sequencing.
 
 **Backend + DB planned (post-M13).** User intends cloud save / likely online leaderboards later.
-Design rule for M13: profile = plain serializable DTO (`PlayerProfile`), all access via an
-`IProfileStore` interface, M13 ships `LocalJsonProfileStore`, backend is later a drop-in HTTP
-implementation — not a rewrite. Score/currency mutations funnelled through one service for a
-future server-authoritative seam. Server itself is a separate track, not the game client. Detail
-in `Project_Goals.md §8` "Backend / database".
+Design rule for M13: profile = plain serializable DTO (`PlayerProfile` + `int schemaVersion`),
+all access via an `IProfileStore` interface, M13 ships `LocalJsonProfileStore`, backend is later
+a drop-in HTTP implementation — not a rewrite. Score/currency mutations funnelled through one
+service for a future server-authoritative seam.
+Planned stack: **Java 25** backend (IntelliJ), **PostgreSQL** (DBeaver), **Firebase** for
+auth/cloud-save entry, **Azure** hosting. Client-side rule: use **Newtonsoft JSON**
+(`com.unity.nuget.newtonsoft-json`), NOT `JsonUtility`, for the profile DTO so it round-trips
+with a Jackson backend. Server is a separate track. Detail in `Project_Goals.md §8`.
 
 ## Architecture pass — Assembly Definitions (2026-08-27, before M8)
 Split the ~45 scripts into 9 compiler-enforced assemblies. Dependency direction is now
