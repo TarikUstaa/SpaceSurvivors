@@ -46,10 +46,16 @@ namespace SpaceSurvivors.UI
 
             var l = new StringBuilder();
             var v = new StringBuilder();
+            bool first = true;
 
             void Row(string label, string value) { l.Append(label).Append('\n'); v.Append(value).Append('\n'); }
-            void Gap() { l.Append('\n'); v.Append('\n'); }
-            void Head(string h) { l.Append("<b>").Append(h).Append("</b>\n"); v.Append('\n'); }
+            void Head(string h)
+            {
+                if (!first) { l.Append('\n'); v.Append('\n'); }
+                first = false;
+                l.Append("<b><color=#8fd6ff>").Append(h).Append("</color></b>\n");
+                v.Append('\n');
+            }
 
             float Mod(StatId id, float base_) => _stats != null ? _stats.Modify(id, base_) : base_;
 
@@ -63,27 +69,27 @@ namespace SpaceSurvivors.UI
                 Row("Scrap", _runStats.Scrap.ToString());
             }
 
-            Gap(); Head("SHIP");
+            Head("SHIP");
             float moveBase = _playerConfig != null ? _playerConfig.moveSpeed : 6f;
             Row("Move Speed", Mod(StatId.MoveSpeed, moveBase).ToString("0.0"));
             Row("Max HP", _playerHealth != null ? Mathf.CeilToInt(_playerHealth.Max).ToString() : "-");
             if (_shield != null && _shield.MaxCharges > 0)
                 Row("Shield", $"{_shield.CurrentCharges}/{_shield.MaxCharges}");
 
-            Gap(); Head("OFFENSE");
+            Head("OFFENSE");
             Row("Damage", Pct(Mod(StatId.Damage, 1f)));
             Row("Fire Rate", "x" + Mod(StatId.FireRate, 1f).ToString("0.00"));
             Row("Projectiles", "+" + Mathf.RoundToInt(Mod(StatId.ProjectileCount, 0f)));
             Row("Pierce", "+" + Mathf.RoundToInt(Mod(StatId.ProjectilePierce, 0f)));
             Row("Proj. Speed", "x" + Mod(StatId.ProjectileSpeed, 1f).ToString("0.00"));
 
-            Gap(); Head("UTILITY");
+            Head("UTILITY");
             Row("Pickup Range", "x" + Mod(StatId.PickupRadius, 1f).ToString("0.00"));
             Row("XP Gain", "x" + Mod(StatId.XpGain, 1f).ToString("0.00"));
 
             if (_weapons != null && _weapons.Weapons.Count > 0)
             {
-                Gap(); Head("WEAPONS");
+                Head("WEAPONS");
                 foreach (var w in _weapons.Weapons)
                     Row(w != null ? w.displayName : "?", "");
             }

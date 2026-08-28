@@ -100,26 +100,31 @@ namespace SpaceSurvivors.EditorTools
             // ---- ship stats column, left of the pause window
             var statsWin = Img("StatsColumn", main.transform, S("Setting/Window.png"), Color.white);
             statsWin.type = Image.Type.Sliced;
-            Place(statsWin, new Vector2(0.5f, 0.5f), new Vector2(520, 780), new Vector2(-380, 0));
+            Place(statsWin, new Vector2(0.5f, 0.5f), new Vector2(540, 840), new Vector2(-380, 0));
 
-            var statsTitle = Label("Title", statsWin.transform, "SHIP  STATUS", 26, new Color(0.8f, 0.94f, 1f));
+            var statsTitle = Label("Title", statsWin.transform, "SHIP  STATUS", 26, new Color(0.85f, 0.95f, 1f));
             statsTitle.fontStyle = FontStyle.Bold;
-            Place(statsTitle, new Vector2(0.5f, 1f), new Vector2(420, 50), new Vector2(0, -40));
+            Place(statsTitle, new Vector2(0.5f, 1f), new Vector2(440, 50), new Vector2(0, -50));
 
-            var statLabels = Label("Labels", statsWin.transform, "", 20, new Color(0.74f, 0.86f, 0.97f));
+            var statLabels = Label("Labels", statsWin.transform, "", 20, new Color(0.78f, 0.88f, 0.98f));
             statLabels.alignment = TextAnchor.UpperLeft;
             statLabels.supportRichText = true;
-            statLabels.lineSpacing = 1.05f;
+            statLabels.lineSpacing = 1.12f;
             var slRt = statLabels.rectTransform;
-            slRt.anchorMin = new Vector2(0f, 0f); slRt.anchorMax = new Vector2(1f, 1f);
-            slRt.offsetMin = new Vector2(44, 40); slRt.offsetMax = new Vector2(-180, -96);
+            slRt.anchorMin = new Vector2(0f, 1f); slRt.anchorMax = new Vector2(0f, 1f);
+            slRt.pivot = new Vector2(0f, 1f);
+            slRt.sizeDelta = new Vector2(280, 640);
+            slRt.anchoredPosition = new Vector2(50, -118);
 
             var statValues = Label("Values", statsWin.transform, "", 20, new Color(0.98f, 0.95f, 0.8f));
             statValues.alignment = TextAnchor.UpperRight;
-            statValues.lineSpacing = 1.05f;
+            statValues.supportRichText = true;
+            statValues.lineSpacing = 1.12f;
             var svRt = statValues.rectTransform;
-            svRt.anchorMin = new Vector2(0f, 0f); svRt.anchorMax = new Vector2(1f, 1f);
-            svRt.offsetMin = new Vector2(44, 40); svRt.offsetMax = new Vector2(-44, -96);
+            svRt.anchorMin = new Vector2(1f, 1f); svRt.anchorMax = new Vector2(1f, 1f);
+            svRt.pivot = new Vector2(1f, 1f);
+            svRt.sizeDelta = new Vector2(150, 640);
+            svRt.anchoredPosition = new Vector2(-50, -118);
 
             var statsPanel = statsWin.gameObject.AddComponent<StatsPanel>();
             var playerStats = Object.FindFirstObjectByType<SpaceSurvivors.Stats.StatSheet>();
