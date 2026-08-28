@@ -152,9 +152,10 @@ namespace SpaceSurvivors.EditorTools
             if (prior != null) Object.DestroyImmediate(prior.gameObject);
 
             var canvas = Canvas("StageCanvas", ui.transform, 120);
-            var label = Label("StageLabel", canvas.transform, "STAGE 1/3", 30, new Color(1f, 0.86f, 0.55f));
+            var label = Label("StageLabel", canvas.transform, "STAGE 1/3", 28, new Color(1f, 0.86f, 0.55f));
             label.fontStyle = FontStyle.Bold;
-            Place(label, new Vector2(0.5f, 1f), new Vector2(360, 44), new Vector2(0, -72));
+            // Below the RunHud timer (timer sits at y -34..-84 from the top).
+            Place(label, new Vector2(0.5f, 1f), new Vector2(360, 40), new Vector2(0, -122));
 
             var si = canvas.gameObject.AddComponent<StageIndicator>();
             var so = new SerializedObject(si);
@@ -178,11 +179,19 @@ namespace SpaceSurvivors.EditorTools
             var existingBest = window.Find("BestValue");
             if (existingBest != null) Object.DestroyImmediate(existingBest.gameObject);
 
-            var stats = Label("StatsValue", window, "KILLS  0\nLEVEL  1\nSCRAP  0", 30, new Color(0.82f, 0.9f, 1f));
-            Place(stats, new Vector2(0.5f, 0.30f), new Vector2(460, 150), Vector2.zero);
+            // Re-flow the whole window so nothing overlaps now that stats + best are in it.
+            Reposition(window, "Header",       new Vector2(0.5f, 1.00f), new Vector2(470, 100), new Vector2(0, -6));
+            Reposition(window, "ScoreLabel",   new Vector2(0.5f, 0.74f), new Vector2(260, 60),  Vector2.zero);
+            Reposition(window, "ScoreValue",   new Vector2(0.5f, 0.615f),new Vector2(420, 96),  Vector2.zero);
+            Reposition(window, "ReplayButton", new Vector2(0.5f, 0.085f),new Vector2(120, 120), new Vector2(-95, 0));
+            Reposition(window, "MenuButton",   new Vector2(0.5f, 0.085f),new Vector2(120, 120), new Vector2(95, 0));
 
-            var best = Label("BestValue", window, "BEST  0:00", 28, new Color(1f, 0.86f, 0.55f));
-            Place(best, new Vector2(0.5f, 0.11f), new Vector2(460, 44), Vector2.zero);
+            var stats = Label("StatsValue", window, "KILLS  0\nLEVEL  1\nSCRAP  0", 28, new Color(0.82f, 0.9f, 1f));
+            stats.lineSpacing = 1.3f;
+            Place(stats, new Vector2(0.5f, 0.42f), new Vector2(460, 150), Vector2.zero);
+
+            var best = Label("BestValue", window, "BEST  0:00", 26, new Color(1f, 0.86f, 0.55f));
+            Place(best, new Vector2(0.5f, 0.245f), new Vector2(460, 44), Vector2.zero);
 
             var screen = canvas.GetComponent<RunEndScreen>();
             if (screen != null)
@@ -355,6 +364,12 @@ namespace SpaceSurvivors.EditorTools
         {
             rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
             rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
+        }
+
+        private static void Reposition(Transform parent, string child, Vector2 anchor, Vector2 size, Vector2 pos)
+        {
+            var t = parent.Find(child);
+            if (t != null) Place(t, anchor, size, pos);
         }
 
         private static void Place(Component c, Vector2 anchor, Vector2 size, Vector2 pos)
