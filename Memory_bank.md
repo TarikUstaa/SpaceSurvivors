@@ -248,6 +248,13 @@ infinitely scrolling arena — the *map/camera* concern the user raised.
   CraftPix `Main_UI/Cristal_Icon` (green crystal), mint tint `(0.65,1,0.75)`, scale 0.6 → 1.3,
   sortingOrder 6, slow spin 45°/s. Reads clearly against dark space + red enemies.
 
+## Feature backlog captured (2026-08-28)
+User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
+`Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,
+M12 enemy variety, **M13 persistent save/wallet core**, M14 meta screens (shop/ships/upgrades/
+achievements — all depend on M13), M15 environment/maps, M16 balance. Order not locked; awaiting
+user's call on sequencing.
+
 ## Architecture pass — Assembly Definitions (2026-08-27, before M8)
 Split the ~45 scripts into 9 compiler-enforced assemblies. Dependency direction is now
 enforced by the compiler → cannot become spaghetti. Layout + deps in `AI_Guidelines.md §6`:
