@@ -21,6 +21,12 @@ namespace SpaceSurvivors.Progression
         [Tooltip("Little idle bob so drops read as pickups, not scenery.")]
         [SerializeField] private float _bobAmplitude = 0.06f;
         [SerializeField] private float _bobSpeed = 4f;
+        [Tooltip("Idle spin (deg/s). 0 = none. A slow spin marks a special boss orb.")]
+        [SerializeField] private float _spinSpeed = 0f;
+
+        [Header("Boss orb (optional)")]
+        [Tooltip("On pickup, grant this many guaranteed full level-ups on top of the XP value.")]
+        [SerializeField, Min(0)] private int _guaranteedLevelUps = 0;
 
         private PoolHandle _handle;
         private ScrapCollector _collector;
@@ -47,6 +53,7 @@ namespace SpaceSurvivors.Progression
             _speed = 0f;
             _restPos = transform.position;
             _bobPhase = Random.value * Mathf.PI * 2f;
+            transform.rotation = Quaternion.identity;
         }
 
         public void OnDespawned()
@@ -83,14 +90,17 @@ namespace SpaceSurvivors.Progression
                 _bobPhase += _bobSpeed * Time.deltaTime;
                 transform.position = _restPos + Vector3.up * (Mathf.Sin(_bobPhase) * _bobAmplitude);
             }
+
+            if (_spinSpeed != 0f && !_flying)
+                transform.Rotate(0f, 0f, _spinSpeed * Time.deltaTime);
         }
 
         public void Collect(GameObject collector)
         {
             if (collector != null && collector.TryGetComponent(out ScrapCollector sc))
-                sc.Absorb(_scrap, _xp);
+                sc.Absorb(_scrap, _xp, _guaranteedLevelUps);
             else
-                _collector?.Absorb(_scrap, _xp);
+                _collector?.Absorb(_scrap, _xp, _guaranteedLevelUps);
 
             _handle.Despawn();
         }

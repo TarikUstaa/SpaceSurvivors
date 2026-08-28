@@ -44,7 +44,11 @@ namespace SpaceSurvivors.Progression
             int scrap = data != null ? data.scrapValue : 1;
             if (scrap <= 0 || _pool == null || _scrapPickupPrefab == null) return;
 
-            GameObject go = _pool.Spawn(_scrapPickupPrefab, position, Quaternion.identity);
+            GameObject prefab = data != null && data.specialLootPrefab != null
+                ? data.specialLootPrefab
+                : _scrapPickupPrefab;
+
+            GameObject go = _pool.Spawn(prefab, position, Quaternion.identity);
             if (go != null && go.TryGetComponent(out XpPickup pickup))
                 pickup.Configure(_collector, scrap, scrap * _xpPerScrap);
         }

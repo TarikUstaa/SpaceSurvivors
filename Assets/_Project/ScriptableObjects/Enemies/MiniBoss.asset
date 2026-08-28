@@ -15,6 +15,7 @@ MonoBehaviour:
   displayName: Mini-Boss
   prefab: {fileID: 5439157389020474755, guid: 3e57c6b74b9d647bf88f86651feca545, type: 3}
   deathVfxPrefab: {fileID: 3182996874433942192, guid: 18131f4385b86496c9b1826b986dceb5, type: 3}
+  specialLootPrefab: {fileID: 7851221784219942998, guid: acaaf94502e0b401bb679cecfe2770d8, type: 3}
   baseHealth: 650
   moveSpeed: 1.7
   contactDamage: 20

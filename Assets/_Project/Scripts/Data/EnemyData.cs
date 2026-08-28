@@ -21,6 +21,10 @@ namespace SpaceSurvivors.Data
         [Tooltip("Optional pooled one-shot VFX played where this enemy dies.")]
         public GameObject deathVfxPrefab;
 
+        [Tooltip("Optional. If set, this enemy drops THIS pickup instead of the normal scrap " +
+                 "drop (e.g. a boss XP orb). scrapValue below still applies as currency.")]
+        public GameObject specialLootPrefab;
+
         [Header("Base stats (before time scaling)")]
         [Min(1f)] public float baseHealth = 20f;
         [Min(0f)] public float moveSpeed = 2.2f;

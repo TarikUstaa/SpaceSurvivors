@@ -38,8 +38,11 @@ namespace SpaceSurvivors.Progression
         private float Modify(float radius)
             => _stats != null ? _stats.Modify(StatId.PickupRadius, radius) : radius;
 
-        /// <summary>Called by a pickup once it reaches the ship.</summary>
-        public void Absorb(int scrapValue, int xpValue)
+        /// <summary>
+        /// Called by a pickup once it reaches the ship. <paramref name="guaranteedLevels"/> &gt; 0
+        /// (boss orbs) forces that many extra full level-ups on top of the XP value.
+        /// </summary>
+        public void Absorb(int scrapValue, int xpValue, int guaranteedLevels = 0)
         {
             TotalScrap += scrapValue;
 
@@ -48,6 +51,7 @@ namespace SpaceSurvivors.Progression
                 : xpValue;
 
             _levelSystem.AddXp(xp);
+            if (guaranteedLevels > 0) _levelSystem.GrantLevels(guaranteedLevels);
             ScrapCollected?.Invoke(scrapValue);
         }
 

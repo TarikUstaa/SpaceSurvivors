@@ -196,6 +196,28 @@
   separately. If the repo ever goes PUBLIC, gitignore `Art/UI/PNG/` and ship only in builds.
   M8 menu + M9 polish will use this kit (replaces the code-built bootstrap UI over time).
 
+## Post-M8 tweaks (2026-08-28, after M8 build, before sign-off)
+- **Enemy speed scaling too aggressive** (user: "enemyler çok hızlı bize göre"). Old
+  `speedMultiplier` hit ×1.5 → Swarmer 5.4 u/s vs player 6 (uncatchable). New: Infinite
+  ×1.0→1.2 over 300s, Campaign ×1.0→1.15 over 150s; `Swarmer.moveSpeed` 3.6 → 3.1.
+  Now every enemy stays clearly below player top speed (VS rule: threat = numbers, not speed).
+- **Final Boss = distinct ship.** New `Prefabs/Enemies/FinalBoss.prefab` (cloned from MiniBoss),
+  sprite = `Extension_Assets/Sprites/Ships/spaceShips_007` (red twin-wing heavy fighter),
+  scale 2.5, collider r 0.62, `BossMarker._displayName = "FINAL BOSS"`. `FinalBoss.asset.prefab`
+  repointed. MiniBoss is still `enemyBlack5` tinted — a distinct MiniBoss ship is an open option.
+- **Boss special drop + guaranteed level-up.** New `Prefabs/Pickups/BossXpOrb.prefab`
+  (cloned from ScrapPickup): `powerupBlue_star` sprite, cyan, scale 1.7, spin 90°/s, bigger bob.
+  Pipeline additions (all backward-compatible):
+  - `EnemyData.specialLootPrefab` (optional) — `LootDropper` drops it instead of the normal
+    scrap pickup; still carries `scrapValue` as currency + `scrapValue*xpPerScrap` as XP.
+  - `XpPickup._guaranteedLevelUps` (+ `_spinSpeed`) — on collect, forces N full level-ups
+    on top of the XP.
+  - `LevelSystem.GrantLevels(int)` — instant level completion, discards leftover XP.
+  - `ScrapCollector.Absorb(scrap, xp, guaranteedLevels = 0)` — new optional 3rd arg.
+  - `MiniBoss.asset` + `FinalBoss.asset` → `specialLootPrefab = BossXpOrb` (`_guaranteedLevelUps = 1`).
+  Tested: kill MiniBoss @ ~60s → orb drops → collect → L1→L6 (60 xp ≈ +4 levels, +1 guaranteed).
+  Early-game swing is large but intentional (rare reward moment); one-number tweak if too strong.
+
 ## Architecture pass — Assembly Definitions (2026-08-27, before M8)
 Split the ~45 scripts into 9 compiler-enforced assemblies. Dependency direction is now
 enforced by the compiler → cannot become spaghetti. Layout + deps in `AI_Guidelines.md §6`:

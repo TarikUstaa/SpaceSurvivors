@@ -16,7 +16,7 @@ MonoBehaviour:
   prefab: {fileID: 6780565460230082648, guid: 578e2b449fb914f78abb55773dbc5087, type: 3}
   deathVfxPrefab: {fileID: 8153368564366023220, guid: 74ac4a2c83beb4bf3ab7b5c4e3828035, type: 3}
   baseHealth: 10
-  moveSpeed: 3.6
+  moveSpeed: 3.1
   contactDamage: 5
   contactInterval: 0.5
   scrapValue: 1

@@ -50,5 +50,25 @@ namespace SpaceSurvivors.Progression
 
             XpChanged?.Invoke(XpIntoLevel, XpForNextLevel);
         }
+
+        /// <summary>
+        /// Instantly complete the current level <paramref name="count"/> times, ignoring the
+        /// XP cost. Used by boss reward drops (a guaranteed level-up). Leftover XP into the
+        /// current level is discarded so the reward always feels like a clean "+1 level".
+        /// </summary>
+        public void GrantLevels(int count)
+        {
+            if (count <= 0 || _config == null) return;
+
+            for (int i = 0; i < count; i++)
+            {
+                CurrentLevel++;
+                XpIntoLevel = 0;
+                XpForNextLevel = _config.CostForLevel(CurrentLevel);
+                LeveledUp?.Invoke(CurrentLevel);
+            }
+
+            XpChanged?.Invoke(XpIntoLevel, XpForNextLevel);
+        }
     }
 }
