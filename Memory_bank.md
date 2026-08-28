@@ -295,8 +295,18 @@ Three waves. **Wave 1 done + Claude-tested; waves 2–3 pending.**
   HudBuilder wires it into the `_vignetteSprite` field.
 - **Level-up modal looks great** (screenshot-verified). HUD is themed + functional but rough:
   XP bar is low-contrast against dark space, clock icon barely visible — needs a polish round.
-- **Still pending:** main-menu Settings button/panel, pause+settings layout polish, BossHud
-  re-theme, HUD contrast tweaks — hand to the user for feedback first.
+- HUD polish round (user feedback): XP + health bars unified to one rounded
+  `Loading_Bar/Table` frame + inset rounded fill; clock icon anchored left with a gap before
+  the timer (was overlapping); shield shown as a compact "SHIELD" + `Armor_Bar_Dot` pip row
+  (`RunHud._shieldPips`) instead of a giant bar with one bullet.
+- **`UI/StatsPanel.cs`** (new) — "SHIP STATUS" column shown left of the pause window (under
+  `PauseCanvas/Dim/MainGroup/StatsColumn`, so it hides with the settings sub-panel). Two aligned
+  Text columns (labels / values), rebuilt on show. Sections: RUN (level/time/kills/scrap),
+  SHIP (move speed / max HP / shield), OFFENSE (damage% / fire rate / projectiles / pierce /
+  proj speed), UTILITY (pickup range / xp gain), WEAPONS (equipped list). Reads `StatSheet.Modify`,
+  `HealthComponent`, `LevelSystem`, `RunStats`, `WeaponController`. Pause window shifted right to
+  make room. Built + wired by `M10UiBuilder.BuildPause`.
+- **Still pending:** main-menu Settings button/panel, BossHud re-theme.
 
 ### Wave 3 — audio (pending, needs asset pack)
 Blocked on a CC0 audio pack (like the UI kit was). Kenney Sci-Fi Sounds / Space Kit suggested.

@@ -85,7 +85,7 @@ namespace SpaceSurvivors.EditorTools
 
             var window = Img("Window", main.transform, S("Pause/Window.png"), Color.white);
             window.type = Image.Type.Sliced;
-            Place(window, new Vector2(0.5f, 0.5f), new Vector2(620, 640), Vector2.zero);
+            Place(window, new Vector2(0.5f, 0.5f), new Vector2(600, 640), new Vector2(320, 0));
 
             var header = Img("Header", window.transform, S("Pause/Header.png"), Color.white);
             Place(header, new Vector2(0.5f, 1f), new Vector2(420, 96), new Vector2(0, 8));
@@ -96,6 +96,44 @@ namespace SpaceSurvivors.EditorTools
             Place(settings, new Vector2(0.5f, 0.44f), new Vector2(420, 108), Vector2.zero);
             var menu = TextButton("MenuButton", window.transform, S("Shop/Prise_BTN_Table.png"), "MAIN MENU");
             Place(menu, new Vector2(0.5f, 0.22f), new Vector2(420, 108), Vector2.zero);
+
+            // ---- ship stats column, left of the pause window
+            var statsWin = Img("StatsColumn", main.transform, S("Setting/Window.png"), Color.white);
+            statsWin.type = Image.Type.Sliced;
+            Place(statsWin, new Vector2(0.5f, 0.5f), new Vector2(520, 780), new Vector2(-380, 0));
+
+            var statsTitle = Label("Title", statsWin.transform, "SHIP  STATUS", 26, new Color(0.8f, 0.94f, 1f));
+            statsTitle.fontStyle = FontStyle.Bold;
+            Place(statsTitle, new Vector2(0.5f, 1f), new Vector2(420, 50), new Vector2(0, -40));
+
+            var statLabels = Label("Labels", statsWin.transform, "", 20, new Color(0.74f, 0.86f, 0.97f));
+            statLabels.alignment = TextAnchor.UpperLeft;
+            statLabels.supportRichText = true;
+            statLabels.lineSpacing = 1.05f;
+            var slRt = statLabels.rectTransform;
+            slRt.anchorMin = new Vector2(0f, 0f); slRt.anchorMax = new Vector2(1f, 1f);
+            slRt.offsetMin = new Vector2(44, 40); slRt.offsetMax = new Vector2(-180, -96);
+
+            var statValues = Label("Values", statsWin.transform, "", 20, new Color(0.98f, 0.95f, 0.8f));
+            statValues.alignment = TextAnchor.UpperRight;
+            statValues.lineSpacing = 1.05f;
+            var svRt = statValues.rectTransform;
+            svRt.anchorMin = new Vector2(0f, 0f); svRt.anchorMax = new Vector2(1f, 1f);
+            svRt.offsetMin = new Vector2(44, 40); svRt.offsetMax = new Vector2(-44, -96);
+
+            var statsPanel = statsWin.gameObject.AddComponent<StatsPanel>();
+            var playerStats = Object.FindFirstObjectByType<SpaceSurvivors.Stats.StatSheet>();
+            var stso = new SerializedObject(statsPanel);
+            stso.FindProperty("_stats").objectReferenceValue = playerStats;
+            stso.FindProperty("_playerConfig").objectReferenceValue = AssetDatabase.LoadAssetAtPath<SpaceSurvivors.Data.PlayerConfig>("Assets/_Project/ScriptableObjects/Config/PlayerConfig.asset");
+            stso.FindProperty("_playerHealth").objectReferenceValue = playerStats != null ? playerStats.GetComponent<SpaceSurvivors.Combat.HealthComponent>() : null;
+            stso.FindProperty("_shield").objectReferenceValue = playerStats != null ? playerStats.GetComponent<SpaceSurvivors.Combat.ShieldComponent>() : null;
+            stso.FindProperty("_level").objectReferenceValue = Object.FindFirstObjectByType<SpaceSurvivors.Progression.LevelSystem>();
+            stso.FindProperty("_runStats").objectReferenceValue = systems.GetComponent<RunStats>();
+            stso.FindProperty("_weapons").objectReferenceValue = Object.FindFirstObjectByType<SpaceSurvivors.Combat.WeaponController>();
+            stso.FindProperty("_labels").objectReferenceValue = statLabels;
+            stso.FindProperty("_values").objectReferenceValue = statValues;
+            stso.ApplyModifiedPropertiesWithoutUndo();
 
             // ---- settings group
             var settingsGroup = new GameObject("SettingsGroup", typeof(RectTransform));
