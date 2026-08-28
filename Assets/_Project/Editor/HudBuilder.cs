@@ -103,16 +103,32 @@ namespace SpaceSurvivors.EditorTools
             hpText.fontStyle = FontStyle.Bold;
             Stretch(hpText.rectTransform);
 
-            // --- shield, below health
+            // --- shield: a compact "SHIELD" caption + a row of small pips (no giant bar)
             var shieldGroup = new GameObject("ShieldGroup", typeof(RectTransform));
             shieldGroup.transform.SetParent(root, false);
-            Place(shieldGroup.transform, new Vector2(0f, 1f), new Vector2(260, 38), new Vector2(160, -124));
-            var shieldBar = Img("ShieldBar", shieldGroup.transform, S("Loading_Bar/Table.png"), new Color(0.8f, 0.88f, 1f));
-            shieldBar.type = Image.Type.Sliced;
-            Stretch(shieldBar.rectTransform);
-            var shieldText = Label("ShieldText", shieldGroup.transform, "", 22, new Color(0.62f, 0.9f, 1f));
-            shieldText.alignment = TextAnchor.MiddleCenter;
-            Stretch(shieldText.rectTransform);
+            Place(shieldGroup.transform, new Vector2(0f, 1f), new Vector2(320, 30), new Vector2(190, -122));
+            var shieldCaption = Label("Caption", shieldGroup.transform, "SHIELD", 18, new Color(0.6f, 0.88f, 1f));
+            shieldCaption.fontStyle = FontStyle.Bold;
+            shieldCaption.alignment = TextAnchor.MiddleLeft;
+            var scRt = shieldCaption.rectTransform;
+            scRt.anchorMin = scRt.anchorMax = new Vector2(0f, 0.5f);
+            scRt.pivot = new Vector2(0f, 0.5f);
+            scRt.sizeDelta = new Vector2(90, 26);
+            scRt.anchoredPosition = new Vector2(30, 0);
+
+            const int maxPips = 5;
+            var pips = new Image[maxPips];
+            for (int i = 0; i < maxPips; i++)
+            {
+                var pip = Img($"Pip{i}", shieldGroup.transform, S("Main_UI/Armor_Bar_Dot.png"), new Color(0.45f, 0.9f, 1f));
+                var pRt = pip.rectTransform;
+                pRt.anchorMin = pRt.anchorMax = new Vector2(0f, 0.5f);
+                pRt.pivot = new Vector2(0f, 0.5f);
+                pRt.sizeDelta = new Vector2(16, 24);
+                pRt.anchoredPosition = new Vector2(128 + i * 22, 0);
+                pip.enabled = false;
+                pips[i] = pip;
+            }
 
             // --- scrap counter, top-right
             var scrapGroup = new GameObject("ScrapGroup", typeof(RectTransform));
@@ -137,7 +153,10 @@ namespace SpaceSurvivors.EditorTools
             so.FindProperty("_healthFill").objectReferenceValue = hpFill;
             so.FindProperty("_healthLabel").objectReferenceValue = hpText;
             so.FindProperty("_shieldGroup").objectReferenceValue = shieldGroup;
-            so.FindProperty("_shieldLabel").objectReferenceValue = shieldText;
+            var pipsProp = so.FindProperty("_shieldPips");
+            pipsProp.arraySize = pips.Length;
+            for (int i = 0; i < pips.Length; i++)
+                pipsProp.GetArrayElementAtIndex(i).objectReferenceValue = pips[i];
             so.FindProperty("_scrapLabel").objectReferenceValue = scrapText;
             so.ApplyModifiedPropertiesWithoutUndo();
         }

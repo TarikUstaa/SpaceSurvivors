@@ -29,7 +29,9 @@ namespace SpaceSurvivors.UI
         [SerializeField] private Image _healthFill;
         [SerializeField] private Text _healthLabel;
         [SerializeField] private GameObject _shieldGroup;
-        [SerializeField] private Text _shieldLabel;
+        [SerializeField] private Image[] _shieldPips;
+        [SerializeField] private Color _shieldPipFull = new Color(0.45f, 0.9f, 1f, 1f);
+        [SerializeField] private Color _shieldPipEmpty = new Color(0.22f, 0.3f, 0.42f, 1f);
         [SerializeField] private Text _scrapLabel;
 
         private void Awake()
@@ -93,9 +95,17 @@ namespace SpaceSurvivors.UI
             {
                 bool has = _shield.MaxCharges > 0;
                 if (_shieldGroup.activeSelf != has) _shieldGroup.SetActive(has);
-                if (has && _shieldLabel != null)
-                    _shieldLabel.text = new string('●', _shield.CurrentCharges)
-                                      + new string('○', Mathf.Max(0, _shield.MaxCharges - _shield.CurrentCharges));
+                if (has && _shieldPips != null)
+                {
+                    for (int i = 0; i < _shieldPips.Length; i++)
+                    {
+                        if (_shieldPips[i] == null) continue;
+                        bool slotExists = i < _shield.MaxCharges;
+                        _shieldPips[i].enabled = slotExists;
+                        if (slotExists)
+                            _shieldPips[i].color = i < _shield.CurrentCharges ? _shieldPipFull : _shieldPipEmpty;
+                    }
+                }
             }
         }
     }
