@@ -88,9 +88,27 @@ Build that once and they all become tractable; attempt them piecemeal and each r
 So the recommended path is: M10 polish (no new systems, fast win) → M11–M12 content (fun, low-risk,
 self-contained) → M13 save core → M14 meta screens → M15 environment.
 
+### Backend / database (planned, post-M13 — user, 2026-08-28)
+The user intends to add a backend + database later (cloud save, likely online leaderboards for
+Infinite mode, possibly accounts). **This does not need to be built now, but it dictates how M13
+is designed:**
+- M13 defines the profile as a **plain serializable DTO** (`PlayerProfile` — wallet, owned
+  upgrades, owned ships, achievement flags, best scores). No `MonoBehaviour`, no Unity refs.
+- All game code talks to an **`IProfileStore` interface** (`Load()`, `Save(profile)`), never to
+  files directly. M13 ships a `LocalJsonProfileStore` (JSON in `Application.persistentDataPath`).
+- The backend later is a **new `IProfileStore` implementation** (HTTP) + a thin auth layer —
+  a drop-in, not a rewrite. Same DTO goes to disk or over the wire.
+- Keep score/currency mutations funnelled through one service so a future server-authoritative
+  check has a single seam.
+- Leaderboard submission is an `IProfileStore`-adjacent service with the same local-noop-now,
+  remote-later shape.
+- Not in scope for the game client: the server itself, its DB schema, hosting — separate track.
+
 ## 6. Non-Goals (for now)
 - Multiplayer, controller remapping UI, Steam integration, localization, mobile build.
 - 3D art, procedural narrative, save-scumming mid-run.
+- Backend/server & database — planned but post-M13; M13's save layer is built interface-first
+  so adding it is a new implementation, not a rewrite (see §8).
 
 ## 7. Tech Baseline
 - Unity **6000.5.9f1**, 2D Universal (URP).

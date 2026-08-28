@@ -255,6 +255,13 @@ M12 enemy variety, **M13 persistent save/wallet core**, M14 meta screens (shop/s
 achievements — all depend on M13), M15 environment/maps, M16 balance. Order not locked; awaiting
 user's call on sequencing.
 
+**Backend + DB planned (post-M13).** User intends cloud save / likely online leaderboards later.
+Design rule for M13: profile = plain serializable DTO (`PlayerProfile`), all access via an
+`IProfileStore` interface, M13 ships `LocalJsonProfileStore`, backend is later a drop-in HTTP
+implementation — not a rewrite. Score/currency mutations funnelled through one service for a
+future server-authoritative seam. Server itself is a separate track, not the game client. Detail
+in `Project_Goals.md §8` "Backend / database".
+
 ## Architecture pass — Assembly Definitions (2026-08-27, before M8)
 Split the ~45 scripts into 9 compiler-enforced assemblies. Dependency direction is now
 enforced by the compiler → cannot become spaghetti. Layout + deps in `AI_Guidelines.md §6`:
