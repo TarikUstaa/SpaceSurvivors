@@ -138,7 +138,7 @@ namespace SpaceSurvivors.EditorTools
             // --- scrap counter, top-right
             var scrapGroup = new GameObject("ScrapGroup", typeof(RectTransform));
             scrapGroup.transform.SetParent(root, false);
-            Place(scrapGroup.transform, new Vector2(1f, 1f), new Vector2(180, 52), new Vector2(-40, -80));
+            Place(scrapGroup.transform, new Vector2(1f, 1f), new Vector2(180, 52), new Vector2(-40, -116));
             var crys = Img("Crystal", scrapGroup.transform, S("Main_UI/Cristal_Icon.png"), Color.white);
             Place(crys, new Vector2(1f, 0.5f), new Vector2(34, 48), new Vector2(0, 0));
             var scrapText = Label("Scrap", scrapGroup.transform, "0", 28, new Color(0.7f, 1f, 0.78f));

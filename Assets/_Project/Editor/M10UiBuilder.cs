@@ -259,10 +259,15 @@ namespace SpaceSurvivors.EditorTools
             if (prior != null) Object.DestroyImmediate(prior.gameObject);
 
             var canvas = Canvas("StageCanvas", ui.transform, 120);
-            var label = Label("StageLabel", canvas.transform, "STAGE 1/3", 28, new Color(1f, 0.86f, 0.55f));
+            var label = Label("StageLabel", canvas.transform, "STAGE 1/3", 22, new Color(1f, 0.86f, 0.55f));
             label.fontStyle = FontStyle.Bold;
-            // Below the RunHud timer (timer sits at y -34..-84 from the top).
-            Place(label, new Vector2(0.5f, 1f), new Vector2(360, 40), new Vector2(0, -122));
+            label.alignment = TextAnchor.MiddleRight;
+            // Top-right corner, tucked under the XP bar, right-aligned.
+            var lr = label.rectTransform;
+            lr.anchorMin = lr.anchorMax = new Vector2(1f, 1f);
+            lr.pivot = new Vector2(1f, 1f);
+            lr.sizeDelta = new Vector2(220, 30);
+            lr.anchoredPosition = new Vector2(-36, -56);
 
             var si = canvas.gameObject.AddComponent<StageIndicator>();
             var so = new SerializedObject(si);
