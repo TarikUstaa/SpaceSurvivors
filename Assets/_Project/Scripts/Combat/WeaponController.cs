@@ -57,9 +57,12 @@ namespace SpaceSurvivors.Combat
         [Tooltip("Where projectiles spawn. Empty = this transform.")]
         [SerializeField] private Transform _muzzle;
 
+        [Tooltip("Faint ring sprite for Aura weapons (optional).")]
+        [SerializeField] private Sprite _auraRingSprite;
+
         private readonly List<Slot> _slots = new();
         private IAimStrategy _aim;
-        private readonly List<OrbitalWeapon> _orbitals = new();
+        private readonly List<GameObject> _specialRigs = new();
 
         /// <summary>Raised each time a weapon actually fires (for audio / VFX). Carries the weapon.</summary>
         public event System.Action<WeaponData> WeaponFired;
@@ -96,7 +99,7 @@ namespace SpaceSurvivors.Combat
         {
             if (data == null || _slots.Exists(s => s.Data == data)) return;
             _slots.Add(new Slot { Data = data, CooldownLeft = 0f });
-            SyncOrbitals();
+            SyncSpecialWeapons();
         }
 
         public bool HasWeapon(WeaponData data) => _slots.Exists(s => s.Data == data);
@@ -107,30 +110,47 @@ namespace SpaceSurvivors.Combat
             if (from == null || to == null) return;
             var slot = _slots.Find(s => s.Data == from);
             if (slot != null) slot.Data = to;
-            SyncOrbitals();
+            SyncSpecialWeapons();
         }
 
-        /// <summary>Rebuild the <see cref="OrbitalWeapon"/> children to match the equipped orbital weapons.</summary>
-        private void SyncOrbitals()
+        /// <summary>
+        /// Rebuild the child rigs for every non-projectile weapon (Orbital / Trail / Aura).
+        /// Cheap — a handful of rigs — so a full teardown+rebuild on any loadout change keeps
+        /// the evolution path simple.
+        /// </summary>
+        private void SyncSpecialWeapons()
         {
             if (_pool == null) return;
 
-            foreach (var o in _orbitals)
+            foreach (var rig in _specialRigs)
             {
-                if (o == null) continue;
-                o.Clear();
-                Destroy(o.gameObject);
+                if (rig == null) continue;
+                if (rig.TryGetComponent(out OrbitalWeapon ow)) ow.Clear();
+                Destroy(rig);
             }
-            _orbitals.Clear();
+            _specialRigs.Clear();
 
             foreach (var slot in _slots)
             {
-                if (slot.Data == null || slot.Data.kind != WeaponKind.Orbital) continue;
-                var go = new GameObject($"Orbital_{slot.Data.displayName}");
+                var d = slot.Data;
+                if (d == null || d.kind == WeaponKind.Projectile) continue;
+
+                var go = new GameObject($"{d.kind}_{d.displayName}");
                 go.transform.SetParent(transform, false);
-                var orbital = go.AddComponent<OrbitalWeapon>();
-                orbital.Configure(slot.Data, _pool, _stats, transform, gameObject);
-                _orbitals.Add(orbital);
+
+                switch (d.kind)
+                {
+                    case WeaponKind.Orbital:
+                        go.AddComponent<OrbitalWeapon>().Configure(d, _pool, _stats, transform, gameObject);
+                        break;
+                    case WeaponKind.Trail:
+                        go.AddComponent<MineLayer>().Configure(d, _pool, _stats, transform, gameObject);
+                        break;
+                    case WeaponKind.Aura:
+                        go.AddComponent<AuraWeapon>().Configure(d, _stats, gameObject, _auraRingSprite);
+                        break;
+                }
+                _specialRigs.Add(go);
             }
         }
 
@@ -145,7 +165,7 @@ namespace SpaceSurvivors.Combat
             for (int i = 0; i < _slots.Count; i++)
             {
                 var slot = _slots[i];
-                if (slot.Data.kind == WeaponKind.Orbital) continue; // driven by OrbitalWeapon
+                if (slot.Data.kind != WeaponKind.Projectile) continue; // driven by its own rig
 
                 slot.CooldownLeft -= dt;
                 if (slot.CooldownLeft > 0f) continue;

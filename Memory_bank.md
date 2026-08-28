@@ -3,7 +3,7 @@
 > Working memory log. Update after every major milestone. Newest entry on top.
 
 ## Current State
-**M1–M10 approved (2026-08-28). Now on M11 — combat content: new weapons + AoE weapon + weapon evolution tree.**
+**M1–M11 approved (2026-08-28). M11 = combat content: new weapons, AoE, orbital + trail + aura weapon types, evolution tree, new passives. Next: M12 — enemy variety (new archetypes + ranged enemies / enemy projectile system).**
 Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is in its section below.
 
 ### M7 — Mini-boss / boss schedule (built, play-tested OK)
@@ -186,7 +186,7 @@ Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is i
 | 2026-08-28 | M8 — main menu + 2 game modes | ✅ APPROVED 2026-08-28. All 3 paths play-tested. |
 | 2026-08-28 | M9 — open arena + camera | ✅ APPROVED 2026-08-28. |
 | 2026-08-28 | M10 — juice & UX (pause, settings, HUD retheme, SFX) | ✅ APPROVED 2026-08-28. Music deferred. |
-| 2026-08-28 | M11 — combat content | Built + Claude play-tested (4 new weapons, AoE splash, orbital weapon, 5-branch evolution tree). Awaiting user sign-off. |
+| 2026-08-28 | M11 — combat content | **Approved.** New weapons + AoE splash + Orbital/Trail/Aura weapon types + 8-branch evolution tree + Pierce/Haste passives + Mine Layer & Static Field variety weapons. |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -388,6 +388,34 @@ New events used: `WeaponController.WeaponFired` (added M10 for audio), `SpawnDir
 hits a cluster; PickupRadius×5 → "EVOLVE: Event Horizon" offered → applied → 4 orbs at r3.2,
 old rig cleaned up. Note: PlasmaBoom VFX is a weak stand-in (blobby); orb sprite is `star1`
 tinted cyan — both open to an art pass.
+
+### M11 follow-on — weapon variety (approved 2026-08-28)
+User: "silahlar biraz aynı gibi… arkamızda bir şey bıraksa giderken falan" → two mechanically
+different weapons added.
+- **`WeaponKind`** extended: `{Projectile, Orbital, Trail, Aura}`. `WeaponController` renamed
+  `_orbitals` → `_specialRigs` (List<GameObject>) and `SyncOrbitals` → `SyncSpecialWeapons`,
+  which builds a child rig for **every** non-Projectile kind (switch on kind). Fire loop now
+  skips `kind != Projectile` (was only `== Orbital`).
+- **`Combat/Aoe.cs`** — shared `Aoe.Splash(center, radius, damage, owner, skip=null)` static
+  helper. `Projectile.Explode` refactored to call it (single blast implementation).
+- **Mine Layer** (`kind = Trail`): `Combat/MineLayer.cs` child rig drops
+  `projectilesPerShot` mines every `cooldown / FireRate` sec, offset behind the ship
+  (`-body.linearVelocity.normalized * 0.7` + jitter). `Combat/Mine.cs` — pooled `IPoolable`,
+  arms after 0.3 s, detonates on enemy contact **or** lifetime → `Aoe.Splash` + VFX + despawn.
+  `MineLayer.asset` (dmg 26, cd 1.3, r 1.9, life 6) → evolves **Deep Mine** (dmg 44, 2/shot,
+  r 2.8); catalyst **MoveSpeed** max.
+- **Static Field** (`kind = Aura`): `Combat/AuraWeapon.cs` — a trigger `CircleCollider2D` of
+  radius `orbitRadius` on a child; tracks enemies in `_inside` (HashSet) via enter/exit; every
+  `cooldown` sec damages all of them (`Damage` stat). **Snapshot to `_tick` list before the
+  damage loop** — a kill fires OnTriggerExit and mutated the set mid-iteration (crash, fixed).
+  Optional faint ring view (`_auraRingSprite` on WeaponController, wired to baked
+  `Art/Sprites/Generated/AuraRing.png`). `StaticField.asset` (dmg 6/tick, cd 0.5, r 2.6) →
+  evolves **Ion Storm** (dmg 11, r 3.6); catalyst **MaxHealth** max.
+- Grants `GetMineLayer` / `GetStaticField` (weight 0.7, maxStacks 1) → catalogue 14 → 16.
+- `Mine.prefab` cloned from `OrbitOrb`, OrbHit→Mine, `meteorGrey_small1` sprite tinted warm +
+  a red `star1` "ArmLight" child. Play-tested: 20 kills w/ both equipped, mines detonate
+  (VFX + splash), aura melts enemies in range, no console errors.
+- **Still placeholder:** aura ring look (teal glow — user may want fainter), mine sprite.
 
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in

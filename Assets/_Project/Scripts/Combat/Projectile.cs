@@ -39,7 +39,6 @@ namespace SpaceSurvivors.Combat
         private float _explosionRadius;
         private float _splashFraction;
         private GameObject _explosionVfx;
-        private static readonly Collider2D[] _splashHits = new Collider2D[48];
 
         private void Awake()
         {
@@ -132,21 +131,7 @@ namespace SpaceSurvivors.Combat
         /// <summary>Deal splash damage to every other live target within the blast radius.</summary>
         private void Explode(IDamageable directHit)
         {
-            float splash = _damage * _splashFraction;
-            if (splash > 0f)
-            {
-                int n = Physics2D.OverlapCircleNonAlloc(transform.position, _explosionRadius, _splashHits);
-                for (int i = 0; i < n; i++)
-                {
-                    var col = _splashHits[i];
-                    if (col.attachedRigidbody != null && col.attachedRigidbody.gameObject == _owner) continue;
-
-                    var d = col.GetComponentInParent<IDamageable>();
-                    if (d == null || ReferenceEquals(d, directHit) || !d.IsAlive) continue;
-
-                    d.TakeDamage(new DamageInfo(splash, _owner, transform.position, Vector2.zero));
-                }
-            }
+            Aoe.Splash(transform.position, _explosionRadius, _damage * _splashFraction, _owner, directHit);
 
             if (_explosionVfx != null && _pool != null)
                 _pool.Spawn(_explosionVfx, transform.position, Quaternion.identity);

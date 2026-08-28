@@ -14,6 +14,12 @@ namespace SpaceSurvivors.Data
         Projectile,
         /// <summary>Orbs circle the ship and hurt whatever they touch (no firing).</summary>
         Orbital,
+        /// <summary>Drops a stationary mine behind the ship every <see cref="WeaponData.cooldown"/>s.
+        /// The mine detonates (splash) on enemy contact or after <see cref="WeaponData.projectileLifetime"/>s.</summary>
+        Trail,
+        /// <summary>A persistent damage ring around the ship: every <see cref="WeaponData.cooldown"/>s it
+        /// hits every enemy within <see cref="WeaponData.orbitRadius"/>. No projectiles, no aiming.</summary>
+        Aura,
     }
 
     [CreateAssetMenu(menuName = "SpaceSurvivors/Combat/Weapon Data", fileName = "WeaponData")]
