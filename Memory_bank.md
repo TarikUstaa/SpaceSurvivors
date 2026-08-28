@@ -183,6 +183,9 @@
 | 2026-08-27 | M6 — stat pipeline + weapons | ✅ DONE. Approved (+ missile fixes, damage vignette, hit flash, enemy death VFX, solid enemies, shield, laser speed bug). |
 | 2026-08-27 | M7 — difficulty director + mini-boss | Built + Claude play-tested (boss schedule, warning, health bar, arrival pop, death). Awaiting user sign-off. |
 
+## Tweaks (2026-08-28)
+- `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
+
 ## Architecture pass — Assembly Definitions (2026-08-27, before M8)
 Split the ~45 scripts into 9 compiler-enforced assemblies. Dependency direction is now
 enforced by the compiler → cannot become spaghetti. Layout + deps in `AI_Guidelines.md §6`:
