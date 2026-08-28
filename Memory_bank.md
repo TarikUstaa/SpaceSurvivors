@@ -316,7 +316,29 @@ Three waves. **Wave 1 done + Claude-tested; waves 2–3 pending.**
   plate. Verified with a spawned mini-boss.
 
 **Wave 2 done** (except a full BossHud warning-banner art pass — the banner is still plain text).
-Wave 3 (audio) deferred by the user until an asset pack is sourced.
+
+### Wave 3 — audio (SFX only, 2026-08-28)
+User dropped the 4 Kenney SFX packs into `Audio/SFX/{Kenney_SciFi,Kenney_UI,Kenney_Impact,Kenney_Interface}/`
+(CC0). Music deferred — no pack yet; the system has no music path.
+- `Data/SfxId.cs` — enum of sound events. `Data/SfxBank.cs` — SO mapping each id to clip(s) +
+  volume + pitch range + `minInterval` (repeat-suppression). Asset: `Config/SfxBank.asset`.
+- **`UI/AudioDirector.cs`** — the only thing that plays sound. Pure listener: subscribes on
+  Awake to `WeaponController.WeaponFired` (NEW event), `SpawnDirector.EnemyKilled` /
+  `BossDefeated` (NEW) / `BossIncoming`, `LevelSystem.LeveledUp`, `ScrapCollector.ScrapCollected`,
+  `ShieldComponent.Absorbed`, player `HealthComponent.Damaged`, `RunController.RunEnded`.
+  Round-robin pool of 10 `AudioSource` voices. Volume = bank entry × `SettingsService.SfxVolume`
+  (master already on `AudioListener.volume`). Lives in UI because it observes every layer;
+  gameplay code never calls audio, only raises events.
+- `UI/ButtonSfxInstaller.cs` — on the AudioDirector object, Start-wires every scene `Button`
+  to `UiClick` (onClick) + `UiHover` (PointerEnter).
+- `Editor/AudioBuilder.cs` (menu `SpaceSurvivors/Build/Audio (SFX bank + directors)`) —
+  populates `SfxBank.asset` with clip picks, sets `.ogg` import to DecompressOnLoad + forceToMono,
+  drops an `AudioDirector` (+ installer) into Game.unity and MainMenu.unity, wires `_bank`.
+  (Gotcha: re-load the bank asset by path inside the per-scene step — the just-created
+  reference goes stale across `OpenScene`.)
+- Play-tested: laser / enemy-death / player-hurt / pickup sounds all fire; 10-voice round-robin
+  works; no errors.
+- New events added: `WeaponController.WeaponFired(WeaponData)`, `SpawnDirector.BossDefeated`.
 
 ### Wave 3 — audio (pending, needs asset pack)
 Blocked on a CC0 audio pack (like the UI kit was). Kenney Sci-Fi Sounds / Space Kit suggested.

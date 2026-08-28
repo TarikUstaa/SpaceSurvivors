@@ -60,6 +60,9 @@ namespace SpaceSurvivors.Combat
         private readonly List<Slot> _slots = new();
         private IAimStrategy _aim;
 
+        /// <summary>Raised each time a weapon actually fires (for audio / VFX). Carries the weapon.</summary>
+        public event System.Action<WeaponData> WeaponFired;
+
         /// <summary>Weapons currently equipped (read-only view for the evolution UI).</summary>
         public IReadOnlyList<WeaponData> Weapons
         {
@@ -122,6 +125,7 @@ namespace SpaceSurvivors.Combat
                     continue; // No target and no fallback — hold fire, keep cooldown ready.
 
                 FireWeapon(slot.Data, origin, dir);
+                WeaponFired?.Invoke(slot.Data);
                 slot.CooldownLeft = slot.Data.cooldown / fireRate;
             }
         }

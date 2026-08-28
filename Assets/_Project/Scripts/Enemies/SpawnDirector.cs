@@ -62,6 +62,8 @@ namespace SpaceSurvivors.Enemies
         public event System.Action<string, float> BossIncoming;
         /// <summary>The boss brain, once it actually spawns.</summary>
         public event System.Action<EnemyBrain> BossSpawned;
+        /// <summary>Raised when a scheduled boss is killed (for audio / stingers).</summary>
+        public event System.Action BossDefeated;
 
         private float Now => _clock != null ? _clock.Elapsed : Time.timeSinceLevelLoad;
 
@@ -163,6 +165,7 @@ namespace SpaceSurvivors.Enemies
             brain.Killed -= HandleEnemyKilled;
             _bossesAlive = Mathf.Max(0, _bossesAlive - 1);
             BossesDefeated++;
+            BossDefeated?.Invoke();
         }
 
         private void HandleEnemyKilled(EnemyBrain brain, DamageInfo _)

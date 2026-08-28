@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dbfa449ecdb4e8eb08bfbf00fc5364, type: 3}
+  m_Name: SfxBank
+  m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.SfxBank
+  _entries:
+  - id: 1
+    clips:
+    - {fileID: 8300000, guid: 2f703a958afd24454855c40089868114, type: 3}
+    - {fileID: 8300000, guid: 3f39d55b4349c45f5a62f95e82e5b54e, type: 3}
+    - {fileID: 8300000, guid: 959bf25166e8d4911b978c9748f397dd, type: 3}
+    volume: 0.32
+    pitch: {x: 0.94, y: 1.06}
+    minInterval: 0.04
+  - id: 2
+    clips:
+    - {fileID: 8300000, guid: 8cba8a6ec25294d17a71a5e61beb8ac9, type: 3}
+    - {fileID: 8300000, guid: a629235c5539e48918f6656483eb11a5, type: 3}
+    volume: 0.5
+    pitch: {x: 0.9, y: 1.05}
+    minInterval: 0.05
+  - id: 3
+    clips:
+    - {fileID: 8300000, guid: ead7021864f1a4962b9957351190fe1f, type: 3}
+    - {fileID: 8300000, guid: ed7e82348e21443d09b46367998c76d8, type: 3}
+    - {fileID: 8300000, guid: daf900a9b0d5b49abae640fb0499769e, type: 3}
+    - {fileID: 8300000, guid: d9b467601a8f74c00a01231e896d3be4, type: 3}
+    volume: 0.5
+    pitch: {x: 0.88, y: 1.12}
+    minInterval: 0.03
+  - id: 4
+    clips:
+    - {fileID: 8300000, guid: 58bd54b1cc31e4dcaab3366e1ef72f72, type: 3}
+    - {fileID: 8300000, guid: fea344dae714340e6b6b1c3def16004f, type: 3}
+    volume: 0.9
+    pitch: {x: 0.95, y: 1}
+    minInterval: 0
+  - id: 5
+    clips:
+    - {fileID: 8300000, guid: 0f93450c8f8ee4f718d1ac2d400b9594, type: 3}
+    - {fileID: 8300000, guid: 85673ac9dd9fd40f0b778c601f81ddb6, type: 3}
+    volume: 0.7
+    pitch: {x: 0.92, y: 1.05}
+    minInterval: 0.15
+  - id: 6
+    clips:
+    - {fileID: 8300000, guid: aa9ceb7e30ee14d18b7cc963b6b49bfa, type: 3}
+    - {fileID: 8300000, guid: d6758403c07dd49cf9707b5044c656f7, type: 3}
+    volume: 0.6
+    pitch: {x: 0.95, y: 1.05}
+    minInterval: 0.1
+  - id: 7
+    clips:
+    - {fileID: 8300000, guid: 6dc650d98c0734feaae8ef6e3133d3c4, type: 3}
+    - {fileID: 8300000, guid: c4ba4b212ce2546f79021c0cdccf6ff4, type: 3}
+    volume: 0.28
+    pitch: {x: 0.96, y: 1.12}
+    minInterval: 0.02
+  - id: 8
+    clips:
+    - {fileID: 8300000, guid: f94250bd376ad4bd3a3a70250a19f25e, type: 3}
+    volume: 0.7
+    pitch: {x: 1, y: 1}
+    minInterval: 0
+  - id: 9
+    clips:
+    - {fileID: 8300000, guid: a091af8f110234195aad5ea24bffe788, type: 3}
+    volume: 0.8
+    pitch: {x: 1, y: 1}
+    minInterval: 0
+  - id: 10
+    clips:
+    - {fileID: 8300000, guid: 1e040698f60a844bdb71f5233c49e71b, type: 3}
+    volume: 0.5
+    pitch: {x: 1, y: 1}
+    minInterval: 0.03
+  - id: 11
+    clips:
+    - {fileID: 8300000, guid: 52d2c6711167649f9a323aae2f4a9b17, type: 3}
+    volume: 0.25
+    pitch: {x: 1, y: 1}
+    minInterval: 0.04
+  - id: 12
+    clips:
+    - {fileID: 8300000, guid: e9cb65b52ff4f4e66918173cc9f8a7fc, type: 3}
+    volume: 0.9
+    pitch: {x: 1, y: 1}
+    minInterval: 0
+  - id: 13
+    clips:
+    - {fileID: 8300000, guid: 8c7eb1a9a09344dd0bf9e873936737d2, type: 3}
+    volume: 0.9
+    pitch: {x: 1, y: 1}
+    minInterval: 0
