@@ -3,7 +3,7 @@
 > Working memory log. Update after every major milestone. Newest entry on top.
 
 ## Current State
-**M1–M11 approved (2026-08-28). M11 = combat content: new weapons, AoE, orbital + trail + aura weapon types, evolution tree, new passives. Next: M12 — enemy variety (new archetypes + ranged enemies / enemy projectile system).**
+**M1–M12 approved (2026-08-28). M12 = enemy variety (Shooter/Charger/Splitter/Brute + enemy projectile system) + enemy bonus drops (health capsule, timed power-up + ship aura). Next: M13 — persistent save + currency wallet core (linchpin for M14 meta screens).**
 Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is in its section below.
 
 ### M7 — Mini-boss / boss schedule (built, play-tested OK)
@@ -186,7 +186,8 @@ Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is i
 | 2026-08-28 | M8 — main menu + 2 game modes | ✅ APPROVED 2026-08-28. All 3 paths play-tested. |
 | 2026-08-28 | M9 — open arena + camera | ✅ APPROVED 2026-08-28. |
 | 2026-08-28 | M10 — juice & UX (pause, settings, HUD retheme, SFX) | ✅ APPROVED 2026-08-28. Music deferred. |
-| 2026-08-28 | M11 — combat content | **Approved.** New weapons + AoE splash + Orbital/Trail/Aura weapon types + 8-branch evolution tree + Pierce/Haste passives + Mine Layer & Static Field variety weapons. |
+| 2026-08-28 | M11 — combat content | ✅ APPROVED 2026-08-28. New weapons + AoE splash + Orbital/Trail/Aura weapon types + 8-branch evolution tree + Pierce/Haste passives + Mine Layer & Static Field variety weapons. |
+| 2026-08-28 | M12 — enemy variety + bonus drops | ✅ APPROVED 2026-08-28. Shooter/Charger/Splitter/Brute + enemy projectile system; health-capsule + timed power-up drops with ship aura. |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -416,6 +417,61 @@ different weapons added.
   a red `star1` "ArmLight" child. Play-tested: 20 kills w/ both equipped, mines detonate
   (VFX + splash), aura melts enemies in range, no console errors.
 - **Still placeholder:** aura ring look (teal glow — user may want fainter), mine sprite.
+
+## M12 — Enemy variety + bonus drops (approved 2026-08-28)
+
+### Enemy projectile system
+- **New layer 10 `EnemyProjectile`** (TagManager.asset) + Physics2D matrix: collides with
+  Player (9) only. `Physics2D.IgnoreLayerCollision` set in edit mode persists to
+  `Physics2DSettings.asset`.
+- `Combat/EnemyProjectile.cs` — pooled straight-mover, `_targetLayers` mask (Player), no
+  pierce, `Launch(dir, speed, damage, lifetime, owner, pool)`. `EnemyLaser.prefab` (red,
+  cloned from Laser, Projectile→EnemyProjectile, layer 10).
+
+### New archetypes (EnemyData in `ScriptableObjects/Enemies/`, prefabs cloned from Grunt)
+| Enemy | Behaviour script | hp / speed / contact | earliest / weight |
+|-------|------------------|----------------------|-------------------|
+| Shooter (enemyBlue2) | `KeepDistanceStrategy` (kite at r6, strafe) + `RangedAttack` | 14 / 2.4 / 4 | 45s / 0.7 |
+| Charger (enemyRed4) | `ChargeStrategy` (approach→windup→dash x4.5→recover) | 26 / 2.0 / 14 | 70s / 0.6 |
+| Splitter (enemyGreen3) | `SplitOnDeath` → 3× SplitterMite | 30 / 1.9 / 7 | 90s / 0.5 |
+| SplitterMite (enemyGreen1, 0.42) | plain chase | 6 / 3.4 / 4 | split-only (weight 0) |
+| Brute (enemyBlack4, 1.2) | plain chase, tank | 120 / 1.1 / 18 | 120s / 0.35 |
+- `RangedAttack.cs` — self-contained (like `ContactDamage`): resolves PoolManager + reads
+  `EnemyBrain.IsActive`/`Target`, fires `EnemyProjectile` bursts on an interval when in range.
+  Shot damage is NOT difficulty-scaled (deliberate — feels fairer).
+- **`EnemyBrain` change:** added `public Transform Target =>` (for abilities). Nothing else.
+- **`SpawnDirector` change:** `SpawnOne` refactored → `public EnemyBrain SpawnEnemyAt(data, pos)`
+  (wires alive-count + Killed event); `SplitOnDeath` uses it so mites are real spawns
+  (loot + kill-count normal). Bypasses spawn budget/cap like bosses.
+- Both rosters (Infinite `DifficultyConfig.asset` + `CampaignDifficulty.asset`) get the 4 new
+  archetypes (not the mite).
+
+### Bonus drops (health capsule + power-up)
+- `LootDropper` rolls per kill, independent of scrap: `_healthDropChance` **0.022**,
+  `_powerUpDropChance` **0.014** (one or the other, never both). Wired in `Game.unity`.
+- `Progression/FlyToPlayerPickup.cs` — abstract base (magnet/bob/fly loop + `ICollectible`),
+  abstract `OnCollected`. `XpPickup` deliberately NOT folded in (bespoke Absorb path).
+- `HealthPickup.cs` — heals `_healAmount` 25 (capped), spawns `HealBurst` VFX.
+  `HealthCapsule.prefab` (`pill_green`, scale **1.3**).
+- `PowerUpPickup.cs` — applies a timed `StatModifier` via `PlayerPowerUps`. Default:
+  FireRate +40% PercentAdd, 8s, label "Overdrive". `PowerUp.prefab` (`bolt_gold`, scale 1.3).
+  Author stat/amount/duration on the prefab → new power-up types = new prefab, no code.
+- `PlayerPowerUps.cs` (on Player) — holds active timed buffs; `Apply(mod, dur, label)` pushes
+  to `StatSheet`, `Update` pulls it back on expiry, same label refreshes (no stack). Drives
+  the gold `PowerUpAura` child (spin + pulse) while any buff is active. Uses `Time.time` so
+  buffs pause during the level-up screen.
+- **`StatSheet` change:** added `RemoveModifier(in StatModifier)` + `Accumulator.Remove`
+  (inverse of Add) — the one API the timed-buff system needs; permanent upgrades unaffected.
+- `Combat/OneShotPulse.cs` — generic pooled scale-out+fade flourish. Prefabs `HealBurst`
+  (green) / `PowerUpBurst` (gold), both from the baked `AuraRing.png` sprite.
+
+### Tuning applied (user feedback, 2026-08-28)
+- XP crystal (`ScrapPickup.prefab`): scale 0.7 → **0.3**, colour green → **purple**
+  `(0.72, 0.38, 1)` (was reading as health).
+- Play-tested: all 4 archetypes behave; Shooter fires (60+ shots verified, hits player, not
+  other enemies); Charger dashes; Splitter 0→3 mites confirmed; Brute ~217 scaled hp.
+  Health 40→90 via capsules; power-up FireRate 1.20→1.60 + aura on, clean revert to 1.20 on
+  expiry. LootDropper drops both at test rates. No console errors.
 
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in

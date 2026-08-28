@@ -23,6 +23,12 @@ namespace SpaceSurvivors.Progression
         [Tooltip("XP granted per unit of scrap value.")]
         [SerializeField, Min(1)] private int _xpPerScrap = 1;
 
+        [Header("Bonus drops (rolled per kill, independent of scrap)")]
+        [SerializeField] private GameObject _healthPickupPrefab;
+        [SerializeField, Range(0f, 1f)] private float _healthDropChance = 0.035f;
+        [SerializeField] private GameObject _powerUpPickupPrefab;
+        [SerializeField, Range(0f, 1f)] private float _powerUpDropChance = 0.025f;
+
         private void Awake()
         {
             if (_pool == null || _spawnDirector == null || _collector == null || _scrapPickupPrefab == null)
@@ -51,6 +57,26 @@ namespace SpaceSurvivors.Progression
             GameObject go = _pool.Spawn(prefab, position, Quaternion.identity);
             if (go != null && go.TryGetComponent(out XpPickup pickup))
                 pickup.Configure(_collector, scrap, scrap * _xpPerScrap);
+
+            TryBonusDrop(position);
+        }
+
+        /// <summary>One roll for a health capsule, else one for a power-up (never both).</summary>
+        private void TryBonusDrop(Vector2 position)
+        {
+            if (_pool == null) return;
+
+            GameObject prefab = null;
+            if (_healthPickupPrefab != null && Random.value < _healthDropChance)
+                prefab = _healthPickupPrefab;
+            else if (_powerUpPickupPrefab != null && Random.value < _powerUpDropChance)
+                prefab = _powerUpPickupPrefab;
+            if (prefab == null) return;
+
+            Vector2 pos = position + Random.insideUnitCircle * 0.3f;
+            GameObject go = _pool.Spawn(prefab, pos, Quaternion.identity);
+            if (go != null && go.TryGetComponent(out FlyToPlayerPickup bonus))
+                bonus.Bind(_collector);
         }
     }
 }

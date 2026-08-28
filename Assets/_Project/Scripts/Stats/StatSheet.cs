@@ -32,6 +32,18 @@ namespace SpaceSurvivors.Stats
                     case ModifierOp.Multiplier: Mult *= 1f + v; break;
                 }
             }
+
+            public void Remove(ModifierOp op, float v)
+            {
+                switch (op)
+                {
+                    case ModifierOp.Flat: Flat -= v; break;
+                    case ModifierOp.PercentAdd: PercentAdd -= v; break;
+                    case ModifierOp.Multiplier:
+                        if (!Mathf.Approximately(1f + v, 0f)) Mult /= 1f + v;
+                        break;
+                }
+            }
         }
 
         private readonly Dictionary<StatId, Accumulator> _stats = new();
@@ -42,6 +54,16 @@ namespace SpaceSurvivors.Stats
         public void AddModifier(in StatModifier m)
         {
             Acc(m.stat).Add(m.op, m.value);
+            Changed?.Invoke();
+        }
+
+        /// <summary>
+        /// Undo one previously-added modifier — for timed buffs / power-ups that expire.
+        /// Pass the exact same <see cref="StatModifier"/> value that was added.
+        /// </summary>
+        public void RemoveModifier(in StatModifier m)
+        {
+            Acc(m.stat).Remove(m.op, m.value);
             Changed?.Invoke();
         }
 

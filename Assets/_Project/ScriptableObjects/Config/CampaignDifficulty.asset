@@ -133,6 +133,10 @@ MonoBehaviour:
   roster:
   - {fileID: 11400000, guid: fa99b996c37ca47e1973f66fac906c81, type: 2}
   - {fileID: 11400000, guid: ac60ab641671a4903aa0d6f4d1fae965, type: 2}
+  - {fileID: 11400000, guid: 38e9ee3f5089149f8a7ea7ecca2395b6, type: 2}
+  - {fileID: 11400000, guid: fc504e0fb25cc4413988cebe6806cf6a, type: 2}
+  - {fileID: 11400000, guid: 202298f3357d54f6ca3f819230e77dba, type: 2}
+  - {fileID: 11400000, guid: 207f1d0362fac415b80c98591d9c1b44, type: 2}
   bossSchedule:
   - triggerTime: 60
     bossData: {fileID: 11400000, guid: 63b58cd595aef4cb59cafbc76d3d6518, type: 2}

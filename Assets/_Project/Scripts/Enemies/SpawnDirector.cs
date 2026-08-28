@@ -99,12 +99,24 @@ namespace SpaceSurvivors.Enemies
         private void SpawnOne(float now)
         {
             EnemyData data = PickEnemy(now);
-            if (data == null || data.prefab == null) return;
+            if (data == null) return;
+            SpawnEnemyAt(data, GetOffscreenPosition());
+        }
 
-            Vector3 pos = GetOffscreenPosition();
-            GameObject go = _pool.Spawn(data.prefab, pos, Quaternion.identity);
-            if (go == null || !go.TryGetComponent(out EnemyBrain brain)) return;
+        /// <summary>
+        /// Spawn one extra enemy at a world position, fully wired into the alive-count and
+        /// kill events (loot, kill-count, VFX all fire normally). Bypasses the spawn budget
+        /// and the alive cap — same as bosses. Used by <see cref="SplitOnDeath"/>.
+        /// </summary>
+        public EnemyBrain SpawnEnemyAt(EnemyData data, Vector3 position)
+        {
+            if (_pool == null || _config == null || _player == null) return null;
+            if (data == null || data.prefab == null) return null;
 
+            GameObject go = _pool.Spawn(data.prefab, position, Quaternion.identity);
+            if (go == null || !go.TryGetComponent(out EnemyBrain brain)) return null;
+
+            float now = Now;
             float hp = data.baseHealth * _config.HealthMultiplierAt(now);
             float speedMul = _config.SpeedMultiplierAt(now);
 
@@ -114,6 +126,8 @@ namespace SpaceSurvivors.Enemies
 
             if (_logEverySpawn)
                 Debug.Log($"[Spawn] {data.displayName} @ {now:0}s  hp={hp:0}  alive={_aliveCount}  rate={_config.SpawnRateAt(now):0.0}/s");
+
+            return brain;
         }
 
         // ---------------------------------------------------------------- bosses

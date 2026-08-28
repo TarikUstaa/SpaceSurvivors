@@ -47,6 +47,10 @@ namespace SpaceSurvivors.Enemies
         public EnemyData Data => _data;
         public bool IsActive => _active;
 
+        /// <summary>The thing this enemy is hunting (the player). Null until <see cref="Initialize"/>.
+        /// Read by abilities like <see cref="RangedAttack"/>.</summary>
+        public Transform Target => _target;
+
         private void Awake()
         {
             _body = GetComponent<Rigidbody2D>();
