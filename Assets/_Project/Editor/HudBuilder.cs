@@ -21,6 +21,7 @@ namespace SpaceSurvivors.EditorTools
         private const string Ui = "Assets/_Project/Art/UI/PNG/";
         private static Font Legacy => Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         private static Sprite S(string sub) => AssetDatabase.LoadAssetAtPath<Sprite>(Ui + sub);
+        private static Sprite SG(string file) => AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/Sprites/Generated/" + file);
         private static Sprite UiSprite() => AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
 
         [MenuItem("SpaceSurvivors/Build/M10 HUD + Level-Up (Game scene)")]
@@ -135,15 +136,32 @@ namespace SpaceSurvivors.EditorTools
                 pips[i] = pip;
             }
 
-            // --- scrap counter, top-right
+            // --- scrap wallet counter (persistent balance + this run), top-right, metal look.
+            // Pivot at the group's own top-right corner so the negative offset can't push it
+            // off screen.
             var scrapGroup = new GameObject("ScrapGroup", typeof(RectTransform));
             scrapGroup.transform.SetParent(root, false);
-            Place(scrapGroup.transform, new Vector2(1f, 1f), new Vector2(180, 52), new Vector2(-40, -116));
-            var crys = Img("Crystal", scrapGroup.transform, S("Main_UI/Cristal_Icon.png"), Color.white);
-            Place(crys, new Vector2(1f, 0.5f), new Vector2(34, 48), new Vector2(0, 0));
-            var scrapText = Label("Scrap", scrapGroup.transform, "0", 28, new Color(0.7f, 1f, 0.78f));
+            var sgRt = (RectTransform)scrapGroup.transform;
+            sgRt.anchorMin = sgRt.anchorMax = sgRt.pivot = new Vector2(1f, 1f);
+            sgRt.sizeDelta = new Vector2(230, 50);
+            sgRt.anchoredPosition = new Vector2(-34, -108);
+
+            var crys = Img("Crystal", scrapGroup.transform, SG("ScrapChip.png"), Color.white);
+            var crysRt = (RectTransform)crys.transform;
+            crysRt.anchorMin = crysRt.anchorMax = crysRt.pivot = new Vector2(1f, 0.5f);
+            crysRt.sizeDelta = new Vector2(40, 40);
+            crysRt.anchoredPosition = Vector2.zero;
+
+            var scrapText = Label("Scrap", scrapGroup.transform, "0", 28, new Color(0.80f, 0.84f, 0.90f));
             scrapText.alignment = TextAnchor.MiddleRight;
-            Place(scrapText, new Vector2(1f, 0.5f), new Vector2(120, 50), new Vector2(-46, 0));
+            scrapText.fontStyle = FontStyle.Bold;
+            var scrapOutline = scrapText.gameObject.AddComponent<UnityEngine.UI.Outline>();
+            scrapOutline.effectColor = new Color(0.06f, 0.07f, 0.10f, 0.9f);
+            scrapOutline.effectDistance = new Vector2(1.5f, -1.5f);
+            var stRt = (RectTransform)scrapText.transform;
+            stRt.anchorMin = stRt.anchorMax = stRt.pivot = new Vector2(1f, 0.5f);
+            stRt.sizeDelta = new Vector2(175, 46);
+            stRt.anchoredPosition = new Vector2(-50, 0);
 
             var so = new SerializedObject(hud);
             var ls = Object.FindFirstObjectByType<LevelSystem>();

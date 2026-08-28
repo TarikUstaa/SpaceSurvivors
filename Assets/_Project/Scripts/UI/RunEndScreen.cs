@@ -62,8 +62,19 @@ namespace SpaceSurvivors.UI
             if (_scoreValue != null)
                 _scoreValue.text = Clock(survivedSeconds);
 
+            // Bank the run's earnings + history before showing the numbers (Vampire-Survivors
+            // rule: you keep the scrap even on a defeat). One seam — ProfileService.
+            if (_stats != null)
+            {
+                ProfileService.AddScrap(_stats.Scrap);
+                ProfileService.RecordRun(_stats.Kills);
+            }
+            ProfileService.Save();
+
             if (_statsValue != null && _stats != null)
-                _statsValue.text = $"KILLS  {_stats.Kills}\nLEVEL  {_stats.Level}\nSCRAP  {_stats.Scrap}";
+                _statsValue.text =
+                    $"KILLS  {_stats.Kills}\nLEVEL  {_stats.Level}\n" +
+                    $"SCRAP  +{_stats.Scrap}\nWALLET  {ProfileService.Wallet}";
 
             string modeId = GameSession.SelectedMode != null ? GameSession.SelectedMode.name : "default";
             bool record = HighScoreService.Submit(modeId, survivedSeconds);

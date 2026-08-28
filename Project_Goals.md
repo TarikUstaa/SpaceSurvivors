@@ -36,7 +36,7 @@ driven by emergent build synergies.
 | M10 | Juice & UX | ✅ Audio (SFX; music deferred), settings menu, run-stats + high score, "STAGE n/N" HUD, visual pass on level-up / HUD / end screens (CraftPix kit) |
 | M11 | Combat content | ✅ New weapons (Plasma Orb AoE, Scatter Shot, Rail Spike, Orbiter, Mine Layer, Static Field), AoE splash, Orbital/Trail/Aura weapon types, 8-branch evolution tree, Pierce + Haste passives |
 | M12 | Enemy variety | ✅ Shooter/Charger/Splitter/Brute + enemy projectile system; enemy bonus drops (health capsule, timed power-up + ship aura) |
-| M13 | Persistent meta core | Save system + currency wallet; scrap carries run → profile. Foundation for M14. |
+| M13 | Persistent meta core | ✅ PlayerProfile DTO + IProfileStore/LocalJsonProfileStore (Newtonsoft) + ProfileService seam; run scrap → wallet on run end; wallet on MainMenu + HUD |
 | M14 | Meta screens | Permanent upgrade shop (buy stat upgrades with scrap), ship shop + buyable ships, achievements. All on top of M13; may split. |
 | M15 | Environment & maps | Asteroids / obstacles, interactive/destructible objects, map variants |
 | M16 | Balance pass | Tuning against the targets below, playtest telemetry |

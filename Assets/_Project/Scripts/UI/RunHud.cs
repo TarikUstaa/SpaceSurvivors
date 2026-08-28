@@ -32,6 +32,7 @@ namespace SpaceSurvivors.UI
         [SerializeField] private Image[] _shieldPips;
         [SerializeField] private Color _shieldPipFull = new Color(0.45f, 0.9f, 1f, 1f);
         [SerializeField] private Color _shieldPipEmpty = new Color(0.22f, 0.3f, 0.42f, 1f);
+        [Tooltip("Shows the live scrap total: persistent wallet + what's been collected this run.")]
         [SerializeField] private Text _scrapLabel;
 
         private void Awake()
@@ -51,10 +52,10 @@ namespace SpaceSurvivors.UI
                 HandleXpChanged(_levelSystem.XpIntoLevel, _levelSystem.XpForNextLevel);
             }
             if (_scrap != null)
-            {
                 _scrap.ScrapCollected += HandleScrap;
-                HandleScrap(0);
-            }
+            ProfileService.Changed += RefreshScrap;
+            RefreshScrap();
+
             if (_shieldGroup != null && _shield != null)
                 _shieldGroup.SetActive(_shield.MaxCharges > 0);
         }
@@ -63,6 +64,7 @@ namespace SpaceSurvivors.UI
         {
             if (_levelSystem != null) _levelSystem.XpChanged -= HandleXpChanged;
             if (_scrap != null) _scrap.ScrapCollected -= HandleScrap;
+            ProfileService.Changed -= RefreshScrap;
         }
 
         private void HandleXpChanged(int into, int needed)
@@ -71,9 +73,13 @@ namespace SpaceSurvivors.UI
             if (_levelLabel != null && _levelSystem != null) _levelLabel.text = $"LV {_levelSystem.CurrentLevel}";
         }
 
-        private void HandleScrap(int _)
+        private void HandleScrap(int _) => RefreshScrap();
+
+        private void RefreshScrap()
         {
-            if (_scrapLabel != null && _scrap != null) _scrapLabel.text = _scrap.TotalScrap.ToString();
+            if (_scrapLabel == null) return;
+            long total = ProfileService.Wallet + (_scrap != null ? _scrap.TotalScrap : 0);
+            _scrapLabel.text = total.ToString("n0");
         }
 
         private void Update()

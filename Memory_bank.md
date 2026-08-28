@@ -3,7 +3,7 @@
 > Working memory log. Update after every major milestone. Newest entry on top.
 
 ## Current State
-**M1–M12 approved (2026-08-28). M12 = enemy variety (Shooter/Charger/Splitter/Brute + enemy projectile system) + enemy bonus drops (health capsule, timed power-up + ship aura). Next: M13 — persistent save + currency wallet core (linchpin for M14 meta screens).**
+**M1–M13 approved (2026-08-28). M13 = persistent profile + currency wallet (PlayerProfile DTO, IProfileStore + LocalJsonProfileStore via Newtonsoft, ProfileService seam; run scrap banks to wallet on run end; wallet shown on MainMenu + HUD). Next: M14 — meta screens (permanent-upgrade shop / ship shop / achievements), all on top of M13.**
 Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is in its section below.
 
 ### M7 — Mini-boss / boss schedule (built, play-tested OK)
@@ -188,6 +188,7 @@ Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is i
 | 2026-08-28 | M10 — juice & UX (pause, settings, HUD retheme, SFX) | ✅ APPROVED 2026-08-28. Music deferred. |
 | 2026-08-28 | M11 — combat content | ✅ APPROVED 2026-08-28. New weapons + AoE splash + Orbital/Trail/Aura weapon types + 8-branch evolution tree + Pierce/Haste passives + Mine Layer & Static Field variety weapons. |
 | 2026-08-28 | M12 — enemy variety + bonus drops | ✅ APPROVED 2026-08-28. Shooter/Charger/Splitter/Brute + enemy projectile system; health-capsule + timed power-up drops with ship aura. |
+| 2026-08-28 | M13 — persistent profile + wallet | ✅ APPROVED 2026-08-28. PlayerProfile DTO + IProfileStore/LocalJsonProfileStore (Newtonsoft) + ProfileService seam; run scrap → wallet on run end; wallet on MainMenu + HUD (metal look + baked ScrapChip icon). |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -472,6 +473,51 @@ different weapons added.
   other enemies); Charger dashes; Splitter 0→3 mites confirmed; Brute ~217 scaled hp.
   Health 40→90 via capsules; power-up FireRate 1.20→1.60 + aura on, clean revert to 1.20 on
   expiry. LootDropper drops both at test rates. No console errors.
+
+## M13 — Persistent profile + currency wallet (approved 2026-08-28)
+
+The linchpin for M14. Everything is in `Core` (no gameplay deps → backend-portable).
+
+- **Package added:** `com.unity.nuget.newtonsoft-json` 3.2.1 (`Packages/manifest.json`).
+  It's `autoReferenced`, so `Core` picks it up without an asmdef change.
+- **`Core/PlayerProfile.cs`** — the DTO. `schemaVersion` (const `CurrentSchemaVersion = 1`),
+  `long wallet`, `long lifetimeScrap`, `int runsPlayed`, `int bestKills`, plus reserved M14
+  fields (`ownedUpgradeIds`, `ownedShipIds`, `selectedShipId`, `unlockedAchievementIds`) so
+  M14 doesn't bump the schema. No UnityEngine types — round-trips through any JSON lib.
+- **`Core/IProfileStore.cs`** — `Load()` / `Save(profile)`. Backend = a later HTTP impl behind
+  this, not a rewrite.
+- **`Core/LocalJsonProfileStore.cs`** — `profile.json` in `Application.persistentDataPath`
+  (ctor takes a filename so tests can use a scratch file). `FilePath` property (NOT named
+  `Path` — that shadows `System.IO.Path`, CS1061). Defensive read: missing/corrupt → fresh
+  profile, corrupt file copied to `.corrupt-<timestamp>` first. Write goes via `.tmp` then
+  move, so a crash mid-save can't half-write. `Migrate()` hook for future schema bumps.
+- **`Core/ProfileService.cs`** — the single seam (static, like `SettingsService`).
+  `[RuntimeInitializeOnLoadMethod(BeforeSceneLoad)]` boot-loads. `Current` / `Wallet` /
+  `LifetimeScrap`; `AddScrap(long)` (credits wallet + lifetime), `TrySpend(long)` (false +
+  no-op if short), `RecordRun(kills)`, `Save()`. `SetStore(IProfileStore)` swaps the backend
+  (tests / future HTTP) and reloads. `event Changed`.
+- **`RunEndScreen`** — on `RunEnded` (win OR lose, VS rule): `ProfileService.AddScrap(RunStats.Scrap)`
+  + `RecordRun(Kills)` + `Save()`. Stats line now `SCRAP +N` / `WALLET n`.
+- **`MainMenuScreen`** — `_walletLabel` (gold, top-left of MenuCanvas) shows `SCRAP n`, live
+  via `ProfileService.Changed`.
+- **HUD (`RunHud` + `HudBuilder`)** — the top-right scrap counter now shows the **live total**
+  `ProfileService.Wallet + ScrapCollector.TotalScrap` (`n0` format), restyled metal: steel
+  text `(0.80,0.84,0.90)` + bold + dark `Outline`, and a baked hexagonal metal-nut icon
+  `Art/Sprites/Generated/ScrapChip.png` (steel gradient + specular streak + rim + bolt hole).
+  **Fixed a pre-existing bug:** the ScrapGroup had pivot (0.5,0.5) at a top-right anchor with
+  a negative offset → it was rendering half off the right edge (invisible in every prior
+  screenshot). Now pivot (1,1), children pivot (1,0.5).
+- **RunCommand gotcha:** direct `System.IO` calls (`File.Exists`/`Delete`) from a RunCommand
+  script trigger a macOS TCC prompt ("User interactions are not supported") because the
+  ad-hoc assembly isn't signed for `~/Library/Application Support`. File I/O *inside* Core
+  code is fine — test ProfileService through its API, never touch `File` in the test script.
+- **Play-tested:** store round-trip (load→AddScrap→Save→reload new instance = persisted);
+  `TrySpend` success + insufficient both correct; full run-end death → wallet = RunStats.Scrap,
+  runs+1, bestKills, persisted, RunEnd screen shows it; MainMenu + HUD labels display + live-
+  update. No console errors. (Test-polluted the real `profile.json` once via an early run-end
+  before switching to scratch stores — wiped it back to 0/0 after. Scratch files
+  `profile_m13*.json` / `profile_hudtest.json` linger in persistentDataPath, harmless,
+  outside the repo, never loaded by the game.)
 
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in

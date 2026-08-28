@@ -1,4 +1,5 @@
 using System;
+using SpaceSurvivors.Core;
 using SpaceSurvivors.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -26,10 +27,14 @@ namespace SpaceSurvivors.UI
         [SerializeField] private Button _quitButton;
         [Tooltip("Optional — shows the hovered/last mode's description.")]
         [SerializeField] private Text _descriptionLabel;
+        [Tooltip("Optional — shows the persistent scrap wallet.")]
+        [SerializeField] private Text _walletLabel;
 
         private void Awake()
         {
             EnsureEventSystem();
+            RefreshWallet();
+            ProfileService.Changed += RefreshWallet;
 
             foreach (var m in _modes)
             {
@@ -49,6 +54,13 @@ namespace SpaceSurvivors.UI
             if (_quitButton != null) _quitButton.onClick.AddListener(Application.Quit);
             if (_descriptionLabel != null && _modes.Length > 0 && _modes[0].mode != null)
                 _descriptionLabel.text = _modes[0].mode.description;
+        }
+
+        private void OnDestroy() => ProfileService.Changed -= RefreshWallet;
+
+        private void RefreshWallet()
+        {
+            if (_walletLabel != null) _walletLabel.text = $"SCRAP  {ProfileService.Wallet:n0}";
         }
 
         private void Play(GameModeData mode)
