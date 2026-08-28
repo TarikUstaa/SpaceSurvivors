@@ -1394,14 +1394,14 @@ MonoBehaviour:
   _baseSortingOrder: -100
   _layers:
   - parallax: 0.03
-    brightness: 0.45
-    density: 0.6
+    brightness: 0.3
+    density: 0.55
   - parallax: 0.08
-    brightness: 0.75
-    density: 1
+    brightness: 0.5
+    density: 0.85
   - parallax: 0.16
-    brightness: 1
-    density: 1.7
+    brightness: 0.72
+    density: 1.15
 --- !u!4 &1223522666
 Transform:
   m_ObjectHideFlags: 0

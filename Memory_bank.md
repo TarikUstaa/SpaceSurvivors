@@ -240,7 +240,13 @@ infinitely scrolling arena — the *map/camera* concern the user raised.
 - Main Camera `backgroundColor` → opaque dark navy `#0a0d16` (was alpha 0).
 - Play-tested: camera tracks player to x=120+, enemies spawn around the roamed position,
   tagged stale enemies recycled, 3 parallax layers scroll at different rates, player unclamped.
-- Densities/brightness are a first pass — easy to dial in M10 polish.
+
+**M9 follow-up (same day, user feedback):**
+- Starfield was too dense / eye-straining → baker star counts 260/90/14 → 70/28/6, fainter
+  alphas; layer brightness 0.45/0.75/1.0 → 0.30/0.50/0.72, densities 0.6/1.0/1.7 → 0.55/0.85/1.15.
+- XP drops barely visible (tiny faint gold star on a busy field) → `ScrapPickup` now uses the
+  CraftPix `Main_UI/Cristal_Icon` (green crystal), mint tint `(0.65,1,0.75)`, scale 0.6 → 1.3,
+  sortingOrder 6, slow spin 45°/s. Reads clearly against dark space + red enemies.
 
 ## Architecture pass — Assembly Definitions (2026-08-27, before M8)
 Split the ~45 scripts into 9 compiler-enforced assemblies. Dependency direction is now

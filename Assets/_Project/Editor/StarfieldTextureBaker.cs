@@ -24,9 +24,10 @@ namespace SpaceSurvivors.EditorTools
             for (int i = 0; i < px.Length; i++) px[i] = new Color32(0, 0, 0, 0);
 
             // Three passes: faint dust, mid stars, a few bright ones.
-            AddStars(px, rng, count: 260, minR: 0.6f, maxR: 1.1f, minA: 0.10f, maxA: 0.28f);
-            AddStars(px, rng, count: 90,  minR: 0.9f, maxR: 1.7f, minA: 0.35f, maxA: 0.70f);
-            AddStars(px, rng, count: 14,  minR: 1.3f, maxR: 2.6f, minA: 0.80f, maxA: 1.00f);
+            // Kept deliberately sparse — a dense field strains the eye over a whole session.
+            AddStars(px, rng, count: 70, minR: 0.55f, maxR: 1.0f, minA: 0.06f, maxA: 0.16f);
+            AddStars(px, rng, count: 28, minR: 0.9f,  maxR: 1.5f, minA: 0.22f, maxA: 0.45f);
+            AddStars(px, rng, count: 6,  minR: 1.3f,  maxR: 2.4f, minA: 0.55f, maxA: 0.80f);
 
             tex.SetPixels32(px);
             tex.Apply();

@@ -38,9 +38,9 @@ namespace SpaceSurvivors.Core
         [SerializeField]
         private Layer[] _layers =
         {
-            new Layer { parallax = 0.03f, brightness = 0.45f, density = 0.6f },
-            new Layer { parallax = 0.08f, brightness = 0.75f, density = 1.0f },
-            new Layer { parallax = 0.16f, brightness = 1.0f,  density = 1.7f },
+            new Layer { parallax = 0.03f, brightness = 0.30f, density = 0.55f },
+            new Layer { parallax = 0.08f, brightness = 0.50f, density = 0.85f },
+            new Layer { parallax = 0.16f, brightness = 0.72f, density = 1.15f },
         };
 
         private Transform[] _layerTf;
