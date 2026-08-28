@@ -1,0 +1,5408 @@
+fileFormatVersion: 2
+guid: a929b6486b19c467289e309ea8640098
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4058872542606281896
+    second: StarTile_0
+  - first:
+      213: -3983768378823612271
+    second: StarTile_1
+  - first:
+      213: 6109403412165213231
+    second: StarTile_2
+  - first:
+      213: 1627328221540874096
+    second: StarTile_3
+  - first:
+      213: 7396695003934605586
+    second: StarTile_4
+  - first:
+      213: -1821977814820816348
+    second: StarTile_5
+  - first:
+      213: -3690323984408077223
+    second: StarTile_6
+  - first:
+      213: 2441015155890291741
+    second: StarTile_7
+  - first:
+      213: -6386307257806941955
+    second: StarTile_8
+  - first:
+      213: -9133093172947783951
+    second: StarTile_9
+  - first:
+      213: -8489007076441572669
+    second: StarTile_10
+  - first:
+      213: 9024914574742591129
+    second: StarTile_11
+  - first:
+      213: -8542840336270252007
+    second: StarTile_12
+  - first:
+      213: 6574658125574781547
+    second: StarTile_13
+  - first:
+      213: 3595829094170444819
+    second: StarTile_14
+  - first:
+      213: -4887127692553976514
+    second: StarTile_15
+  - first:
+      213: 1359050858355299221
+    second: StarTile_16
+  - first:
+      213: -1916386510199456506
+    second: StarTile_17
+  - first:
+      213: 260716295057730439
+    second: StarTile_18
+  - first:
+      213: -2099403706958911456
+    second: StarTile_19
+  - first:
+      213: -674299978745994338
+    second: StarTile_20
+  - first:
+      213: -5089295151026751654
+    second: StarTile_21
+  - first:
+      213: 5201338319917545706
+    second: StarTile_22
+  - first:
+      213: 319700912660441631
+    second: StarTile_23
+  - first:
+      213: 5835685522689089583
+    second: StarTile_24
+  - first:
+      213: 4814197459712700291
+    second: StarTile_25
+  - first:
+      213: -8688774068507431860
+    second: StarTile_26
+  - first:
+      213: -2269346318555588684
+    second: StarTile_27
+  - first:
+      213: -6892541497992538392
+    second: StarTile_28
+  - first:
+      213: 1907906652678267158
+    second: StarTile_29
+  - first:
+      213: -7802711461523452547
+    second: StarTile_30
+  - first:
+      213: 6170450047370256468
+    second: StarTile_31
+  - first:
+      213: 4198876739219413446
+    second: StarTile_32
+  - first:
+      213: -8948710893949695127
+    second: StarTile_33
+  - first:
+      213: -5020808686934566032
+    second: StarTile_34
+  - first:
+      213: 3344055915017878824
+    second: StarTile_35
+  - first:
+      213: 7265113063287207682
+    second: StarTile_36
+  - first:
+      213: -3064799363665838820
+    second: StarTile_37
+  - first:
+      213: 6143675517723740821
+    second: StarTile_38
+  - first:
+      213: -5434008402115427878
+    second: StarTile_39
+  - first:
+      213: -7048282721433713738
+    second: StarTile_40
+  - first:
+      213: 5806011288485318935
+    second: StarTile_41
+  - first:
+      213: -4615126252153625016
+    second: StarTile_42
+  - first:
+      213: -3624232473696272675
+    second: StarTile_43
+  - first:
+      213: 669267924615325259
+    second: StarTile_44
+  - first:
+      213: -187588718643123762
+    second: StarTile_45
+  - first:
+      213: -3741388664140360929
+    second: StarTile_46
+  - first:
+      213: -2344268113523066126
+    second: StarTile_47
+  - first:
+      213: 8473134569125068270
+    second: StarTile_48
+  - first:
+      213: -1217628449617238857
+    second: StarTile_49
+  - first:
+      213: 7687188759285294166
+    second: StarTile_50
+  - first:
+      213: 2610082187127576146
+    second: StarTile_51
+  - first:
+      213: 191252045098339293
+    second: StarTile_52
+  - first:
+      213: -8706374860979190484
+    second: StarTile_53
+  - first:
+      213: -6019805511379089837
+    second: StarTile_54
+  - first:
+      213: 5118916573493919703
+    second: StarTile_55
+  - first:
+      213: 1012879250062298511
+    second: StarTile_56
+  - first:
+      213: 6669014222349453269
+    second: StarTile_57
+  - first:
+      213: 6694989974323030115
+    second: StarTile_58
+  - first:
+      213: -3305895488220978596
+    second: StarTile_59
+  - first:
+      213: -8188621410408644374
+    second: StarTile_60
+  - first:
+      213: -2766708488790170221
+    second: StarTile_61
+  - first:
+      213: -5925090814630621904
+    second: StarTile_62
+  - first:
+      213: 249939065203176061
+    second: StarTile_63
+  - first:
+      213: -2132298800316765226
+    second: StarTile_64
+  - first:
+      213: -5887541232707445932
+    second: StarTile_65
+  - first:
+      213: 4340584904844264022
+    second: StarTile_66
+  - first:
+      213: -9048968844207829551
+    second: StarTile_67
+  - first:
+      213: -1249703022207211730
+    second: StarTile_68
+  - first:
+      213: -2386730619041178864
+    second: StarTile_69
+  - first:
+      213: 5129393520642457825
+    second: StarTile_70
+  - first:
+      213: 3365871352684616366
+    second: StarTile_71
+  - first:
+      213: -1983728669120086409
+    second: StarTile_72
+  - first:
+      213: 8835371355005733292
+    second: StarTile_73
+  - first:
+      213: 1095144020580986479
+    second: StarTile_74
+  - first:
+      213: -3970082371463115016
+    second: StarTile_75
+  - first:
+      213: 2295367269588495792
+    second: StarTile_76
+  - first:
+      213: 3625186251476290092
+    second: StarTile_77
+  - first:
+      213: -3105263349360193876
+    second: StarTile_78
+  - first:
+      213: -3043743311648289964
+    second: StarTile_79
+  - first:
+      213: 2603874313923602371
+    second: StarTile_80
+  - first:
+      213: -3662869879976088567
+    second: StarTile_81
+  - first:
+      213: 1311460803613979338
+    second: StarTile_82
+  - first:
+      213: -6235030664945931631
+    second: StarTile_83
+  - first:
+      213: -2598430653693174514
+    second: StarTile_84
+  - first:
+      213: -4760174757645663912
+    second: StarTile_85
+  - first:
+      213: 2049003360320693975
+    second: StarTile_86
+  - first:
+      213: -1140450091357108551
+    second: StarTile_87
+  - first:
+      213: -5580169052734527833
+    second: StarTile_88
+  - first:
+      213: -2386414246249150334
+    second: StarTile_89
+  - first:
+      213: -3992953526575252045
+    second: StarTile_90
+  - first:
+      213: 3449738925849703186
+    second: StarTile_91
+  - first:
+      213: 8473793850157114872
+    second: StarTile_92
+  - first:
+      213: 7509316943274433889
+    second: StarTile_93
+  - first:
+      213: 790475363483190818
+    second: StarTile_94
+  - first:
+      213: 400564852546873856
+    second: StarTile_95
+  - first:
+      213: -4239713650903257776
+    second: StarTile_96
+  - first:
+      213: 2293681586493748246
+    second: StarTile_97
+  - first:
+      213: 4972674421564718470
+    second: StarTile_98
+  - first:
+      213: 6812209319745785414
+    second: StarTile_99
+  - first:
+      213: 1979964857270489654
+    second: StarTile_100
+  - first:
+      213: -673423061361761962
+    second: StarTile_101
+  - first:
+      213: -8377157383307318384
+    second: StarTile_102
+  - first:
+      213: -6475503448761734313
+    second: StarTile_103
+  - first:
+      213: 8768065768051136951
+    second: StarTile_104
+  - first:
+      213: 6952876176965139453
+    second: StarTile_105
+  - first:
+      213: 1999804708041346469
+    second: StarTile_106
+  - first:
+      213: -8234293879522825115
+    second: StarTile_107
+  - first:
+      213: -5731009545209255950
+    second: StarTile_108
+  - first:
+      213: 1248232158612971777
+    second: StarTile_109
+  - first:
+      213: 7206719961523732746
+    second: StarTile_110
+  - first:
+      213: -7082056102778111938
+    second: StarTile_111
+  - first:
+      213: 5340193390081553358
+    second: StarTile_112
+  - first:
+      213: -2899006516836614262
+    second: StarTile_113
+  - first:
+      213: -7576589243105181170
+    second: StarTile_114
+  - first:
+      213: -1368232135836957172
+    second: StarTile_115
+  - first:
+      213: 4729341942314549399
+    second: StarTile_116
+  - first:
+      213: -5455047668303528473
+    second: StarTile_117
+  - first:
+      213: -2238634741118732744
+    second: StarTile_118
+  - first:
+      213: 6144460817838682973
+    second: StarTile_119
+  - first:
+      213: -2404435949541874156
+    second: StarTile_120
+  - first:
+      213: 1841268514148437762
+    second: StarTile_121
+  - first:
+      213: -4251420832111597075
+    second: StarTile_122
+  - first:
+      213: 7332866925907281380
+    second: StarTile_123
+  - first:
+      213: -6239773512572166736
+    second: StarTile_124
+  - first:
+      213: -8083411811566564703
+    second: StarTile_125
+  - first:
+      213: 6668381614477105912
+    second: StarTile_126
+  - first:
+      213: -4821063115701726698
+    second: StarTile_127
+  - first:
+      213: -3154279557502932924
+    second: StarTile_128
+  - first:
+      213: 2139631876493562540
+    second: StarTile_129
+  - first:
+      213: -4474556399141317237
+    second: StarTile_130
+  - first:
+      213: -4599837087547546594
+    second: StarTile_131
+  - first:
+      213: 4674735178659096300
+    second: StarTile_132
+  - first:
+      213: -106081817020668454
+    second: StarTile_133
+  - first:
+      213: 2186501646344810831
+    second: StarTile_134
+  - first:
+      213: -5018191534963111650
+    second: StarTile_135
+  - first:
+      213: -3899842952585165829
+    second: StarTile_136
+  - first:
+      213: 5955129039298847241
+    second: StarTile_137
+  - first:
+      213: -3711230575938623183
+    second: StarTile_138
+  - first:
+      213: -7724672258244155224
+    second: StarTile_139
+  - first:
+      213: 2284920605652447824
+    second: StarTile_140
+  - first:
+      213: 2454656672148637521
+    second: StarTile_141
+  - first:
+      213: -3259225482432311706
+    second: StarTile_142
+  - first:
+      213: -105327315013751555
+    second: StarTile_143
+  - first:
+      213: 5021987731288338346
+    second: StarTile_144
+  - first:
+      213: 4715230520822917870
+    second: StarTile_145
+  - first:
+      213: -7809070278458596106
+    second: StarTile_146
+  - first:
+      213: -2198660563270576044
+    second: StarTile_147
+  - first:
+      213: 3606405114161519265
+    second: StarTile_148
+  - first:
+      213: -9089511024358620952
+    second: StarTile_149
+  - first:
+      213: 8904100403000392774
+    second: StarTile_150
+  - first:
+      213: -3491282850694883904
+    second: StarTile_151
+  - first:
+      213: -8085957315912698270
+    second: StarTile_152
+  - first:
+      213: 2177972394094438361
+    second: StarTile_153
+  - first:
+      213: -6025028950318096692
+    second: StarTile_154
+  - first:
+      213: -6514109059182394068
+    second: StarTile_155
+  - first:
+      213: 2904652623414005403
+    second: StarTile_156
+  - first:
+      213: -5924159370798381808
+    second: StarTile_157
+  - first:
+      213: 5633772579301407367
+    second: StarTile_158
+  - first:
+      213: -8510822663673304100
+    second: StarTile_159
+  - first:
+      213: -4437151201403932703
+    second: StarTile_160
+  - first:
+      213: -7961948390948707304
+    second: StarTile_161
+  - first:
+      213: 5312312620552319180
+    second: StarTile_162
+  - first:
+      213: -3542173741069044262
+    second: StarTile_163
+  - first:
+      213: -7435650619452546851
+    second: StarTile_164
+  - first:
+      213: 6097222907011582976
+    second: StarTile_165
+  - first:
+      213: 5249494482566053310
+    second: StarTile_166
+  - first:
+      213: -2813742046524450392
+    second: StarTile_167
+  - first:
+      213: -1587094967519958736
+    second: StarTile_168
+  - first:
+      213: 8191724647071415895
+    second: StarTile_169
+  - first:
+      213: -980501443973183324
+    second: StarTile_170
+  - first:
+      213: -6728922640942621784
+    second: StarTile_171
+  - first:
+      213: -3876617527261170967
+    second: StarTile_172
+  - first:
+      213: 3511266573952681120
+    second: StarTile_173
+  - first:
+      213: -8470762144117109945
+    second: StarTile_174
+  - first:
+      213: -2504320506796040774
+    second: StarTile_175
+  - first:
+      213: -9214958085367714178
+    second: StarTile_176
+  - first:
+      213: 3674546331316038492
+    second: StarTile_177
+  - first:
+      213: -5858487073277770692
+    second: StarTile_178
+  - first:
+      213: 3484000811402654080
+    second: StarTile_179
+  - first:
+      213: 441776489006745229
+    second: StarTile_180
+  - first:
+      213: 32666861966942789
+    second: StarTile_181
+  - first:
+      213: 3552305488196267331
+    second: StarTile_182
+  - first:
+      213: -1995766874580716448
+    second: StarTile_183
+  - first:
+      213: -4885259641894854415
+    second: StarTile_184
+  - first:
+      213: 7506959838299040406
+    second: StarTile_185
+  - first:
+      213: -6536400714742148621
+    second: StarTile_186
+  - first:
+      213: 7774383156124654567
+    second: StarTile_187
+  - first:
+      213: -7427381605920232652
+    second: StarTile_188
+  - first:
+      213: -7619591312928223237
+    second: StarTile_189
+  - first:
+      213: 5573763472751670505
+    second: StarTile_190
+  - first:
+      213: 123931151767647318
+    second: StarTile_191
+  - first:
+      213: 8283834146789336852
+    second: StarTile_192
+  - first:
+      213: 1976927158250486935
+    second: StarTile_193
+  - first:
+      213: 5387619652238453899
+    second: StarTile_194
+  - first:
+      213: 4397633101019950252
+    second: StarTile_195
+  - first:
+      213: -5389752155172031629
+    second: StarTile_196
+  - first:
+      213: 5960133436950229678
+    second: StarTile_197
+  - first:
+      213: -1167700586704087850
+    second: StarTile_198
+  - first:
+      213: -1077438466813040480
+    second: StarTile_199
+  - first:
+      213: 3028683439285141709
+    second: StarTile_200
+  - first:
+      213: -6325772612243171964
+    second: StarTile_201
+  - first:
+      213: -5947876932277937689
+    second: StarTile_202
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: StarTile_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 245
+        width: 17
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ac42aa9213045830800000000000000
+      internalID: 4058872542606281896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_1
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 219
+        width: 45
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 198e8c034cfc6b8c0800000000000000
+      internalID: -3983768378823612271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_2
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 250
+        width: 14
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2cbaabc806f8c450800000000000000
+      internalID: 6109403412165213231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_3
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 222
+        width: 20
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07779e1456e659610800000000000000
+      internalID: 1627328221540874096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_4
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 238
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 211cd6daae656a660800000000000000
+      internalID: 7396695003934605586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_5
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 247
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42a76f6a4d807b6e0800000000000000
+      internalID: -1821977814820816348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_6
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 241
+        width: 30
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95c904b63e559ccc0800000000000000
+      internalID: -3690323984408077223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_7
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 245
+        width: 36
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d148f2ae95a30e120800000000000000
+      internalID: 2441015155890291741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 231
+        width: 7
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df01be792674f57a0800000000000000
+      internalID: -6386307257806941955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_9
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 227
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fee6edf52cb04180800000000000000
+      internalID: -9133093172947783951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_10
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 221
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ca3ce86a0df03a80800000000000000
+      internalID: -8489007076441572669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_11
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 238
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99617cb5dffee3d70800000000000000
+      internalID: 9024914574742591129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_12
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 236
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 918abbfd9fbb17980800000000000000
+      internalID: -8542840336270252007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_13
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 221
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6a358e2bb0ed3b50800000000000000
+      internalID: 6574658125574781547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_14
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 240
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3144b077283f6e130800000000000000
+      internalID: 3595829094170444819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_15
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 230
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e358859b14f6d2cb0800000000000000
+      internalID: -4887127692553976514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_16
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 237
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59315fb1e815cd210800000000000000
+      internalID: 1359050858355299221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_17
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 229
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60df5375f90a765e0800000000000000
+      internalID: -1916386510199456506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_18
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 241
+        width: 17
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78b621ac6104e9300800000000000000
+      internalID: 260716295057730439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_19
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 226
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 028639e937b6dd2e0800000000000000
+      internalID: -2099403706958911456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_20
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 226
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e93aaceedb764a6f0800000000000000
+      internalID: -674299978745994338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_21
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 231
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a57beed36013f59b0800000000000000
+      internalID: -5089295151026751654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_22
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 229
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae8ff43e4adde2840800000000000000
+      internalID: 5201338319917545706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_23
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 215
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1a6e75494ecf6400800000000000000
+      internalID: 319700912660441631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_24
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 208
+        width: 18
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f20e5c860158cf050800000000000000
+      internalID: 5835685522689089583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_25
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 222
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38f63c835177fc240800000000000000
+      internalID: 4814197459712700291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_26
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 206
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4c2df015064b6780800000000000000
+      internalID: -8688774068507431860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_27
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 207
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b7572afb89a180e0800000000000000
+      internalID: -2269346318555588684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_28
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 218
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e6148c9606c850a0800000000000000
+      internalID: -6892541497992538392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_29
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 213
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6112e79fdfe3a7a10800000000000000
+      internalID: 1907906652678267158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_30
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 215
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7d860b244337b390800000000000000
+      internalID: -7802711461523452547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_31
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 215
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 450ebc920a7d1a550800000000000000
+      internalID: 6170450047370256468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_32
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 207
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c9d2d0d528654a30800000000000000
+      internalID: 4198876739219413446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_33
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 208
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96bc570badacfc380800000000000000
+      internalID: -8948710893949695127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_34
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 206
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07bd112c911825ab0800000000000000
+      internalID: -5020808686934566032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_35
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 208
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82d3fab1329786e20800000000000000
+      internalID: 3344055915017878824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_36
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 201
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 207b84eb6ddd2d460800000000000000
+      internalID: 7265113063287207682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_37
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 195
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1dbadc7735a775d0800000000000000
+      internalID: -3064799363665838820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_38
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 206
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59a00313558b24550800000000000000
+      internalID: 6143675517723740821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_39
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 207
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad10c6d16268694b0800000000000000
+      internalID: -5434008402115427878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_40
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 199
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b38b6055387f2e90800000000000000
+      internalID: -7048282721433713738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_41
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 200
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 711531c5188139050800000000000000
+      internalID: 5806011288485318935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_42
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 193
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 846adca2027c3ffb0800000000000000
+      internalID: -4615126252153625016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_43
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 195
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddef5e564c324bdc0800000000000000
+      internalID: -3624232473696272675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_44
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 193
+        width: 19
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b46624aa1a7b94900800000000000000
+      internalID: 669267924615325259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_45
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 200
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec9e765ed0d856df0800000000000000
+      internalID: -187588718643123762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_46
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 192
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f139d3b25dae31cc0800000000000000
+      internalID: -3741388664140360929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_47
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 194
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fabe2b329c777fd0800000000000000
+      internalID: -2344268113523066126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_48
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 163
+        width: 30
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eed38ce7ffe969570800000000000000
+      internalID: 8473134569125068270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_49
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 196
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b4a728506d1a1fe0800000000000000
+      internalID: -1217628449617238857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_50
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 200
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6546396b2716eaa60800000000000000
+      internalID: 7687188759285294166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_51
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 194
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 256505e9befd83420800000000000000
+      internalID: 2610082187127576146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_52
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 186
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddb47a2c8b677a200800000000000000
+      internalID: 191252045098339293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_53
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 185
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c25c1f9313ebc2780800000000000000
+      internalID: -8706374860979190484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_54
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 178
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3568f4d18ca557ca0800000000000000
+      internalID: -6019805511379089837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_55
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 179
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dff6fd908b0a0740800000000000000
+      internalID: 5118916573493919703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_56
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 182
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8dc35cbf487e0e00800000000000000
+      internalID: 1012879250062298511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_57
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 176
+        width: 22
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d7ca2de9191d8c50800000000000000
+      internalID: 6669014222349453269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_58
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 179
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 368635af8e169ec50800000000000000
+      internalID: 6694989974323030115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_59
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 183
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c52a500a1991f12d0800000000000000
+      internalID: -3305895488220978596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_60
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 177
+        width: 27
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae04f60663c2c5e80800000000000000
+      internalID: -8188621410408644374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_61
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 175
+        width: 19
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 395aa90c94daa99d0800000000000000
+      internalID: -2766708488790170221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_62
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 182
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03d030ceb49d5cda0800000000000000
+      internalID: -5925090814630621904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_63
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 176
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d72bdec6146f77300800000000000000
+      internalID: 249939065203176061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_64
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 172
+        width: 16
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6dba02cd98d8862e0800000000000000
+      internalID: -2132298800316765226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_65
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 176
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45bd10041704b4ea0800000000000000
+      internalID: -5887541232707445932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_66
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 169
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6524aaa39fadc3c30800000000000000
+      internalID: 4340584904844264022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_67
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 174
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1dd4a6997ca9b6280800000000000000
+      internalID: -9048968844207829551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_68
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 162
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e276b96f8b928aee0800000000000000
+      internalID: -1249703022207211730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_69
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 164
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01b908db521a0eed0800000000000000
+      internalID: -2386730619041178864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_70
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 158
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e08517fa344f2740800000000000000
+      internalID: 5129393520642457825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_71
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 165
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eaa1e60892af5be20800000000000000
+      internalID: 3365871352684616366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_72
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 166
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77eb65229416874e0800000000000000
+      internalID: -1983728669120086409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_73
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 166
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca947c18f6b8d9a70800000000000000
+      internalID: 8835371355005733292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_74
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 167
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6e6f943fabb23f00800000000000000
+      internalID: 1095144020580986479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_75
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 163
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fe86e71e1f67e8c0800000000000000
+      internalID: -3970082371463115016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_76
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 156
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bd61ecce58cadf10800000000000000
+      internalID: 2295367269588495792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_77
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 150
+        width: 9
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2acfdb40bf3f4230800000000000000
+      internalID: 3625186251476290092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_78
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 151
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cae8857af63e7e4d0800000000000000
+      internalID: -3105263349360193876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_79
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 150
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45b8bb1a59372c5d0800000000000000
+      internalID: -3043743311648289964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_80
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 159
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c72e2184e1d22420800000000000000
+      internalID: 2603874313923602371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_81
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 151
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90c2c89304fda2dc0800000000000000
+      internalID: -3662869879976088567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_82
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 144
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac2724807ae333210800000000000000
+      internalID: 1311460803613979338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_83
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 151
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19aea3415a8b879a0800000000000000
+      internalID: -6235030664945931631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_84
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 157
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0dd129661580fbd0800000000000000
+      internalID: -2598430653693174514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_85
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 152
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 851cfb5474670fdb0800000000000000
+      internalID: -4760174757645663912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_86
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 152
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d62f7b33b58f6c10800000000000000
+      internalID: 2049003360320693975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_87
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 150
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b6099c2fae4c20f0800000000000000
+      internalID: -1140450091357108551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_88
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 150
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a66121cfc14f82b0800000000000000
+      internalID: -5580169052734527833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_89
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 143
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 288436503e0c1eed0800000000000000
+      internalID: -2386414246249150334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_90
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 147
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3bdb6d35ced2698c0800000000000000
+      internalID: -3992953526575252045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_91
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 139
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 213fb1b864fefdf20800000000000000
+      internalID: 3449738925849703186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_92
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 147
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f521825c96f89570800000000000000
+      internalID: 8473793850157114872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_93
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 139
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16dd1bd49f3763860800000000000000
+      internalID: 7509316943274433889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_94
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 141
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2260d1ca72558fa00800000000000000
+      internalID: 790475363483190818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_95
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 141
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00a20917c971f8500800000000000000
+      internalID: 400564852546873856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_96
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 132
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05d6980c5e28925c0800000000000000
+      internalID: -4239713650903257776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_97
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 130
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61470de104bc4df10800000000000000
+      internalID: 2293681586493748246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_98
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 142
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68d39014a0d720540800000000000000
+      internalID: 4972674421564718470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_99
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 133
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64e8d0f9844d98e50800000000000000
+      internalID: 6812209319745785414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_100
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 125
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6325d512c8f3a7b10800000000000000
+      internalID: 1979964857270489654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_101
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 126
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 651e9fb2b4587a6f0800000000000000
+      internalID: -673423061361761962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_102
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 112
+        width: 21
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09b2d647ebb5ebb80800000000000000
+      internalID: -8377157383307318384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_103
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 119
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75b6dba0ce36226a0800000000000000
+      internalID: -6475503448761734313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_104
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 115
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b953ff5c5d6ea970800000000000000
+      internalID: 8768065768051136951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_105
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 119
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfb78478b049d7060800000000000000
+      internalID: 6952876176965139453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_106
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 125
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ad45fa59cbb0cb10800000000000000
+      internalID: 1999804708041346469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_107
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 121
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56c6edef759e9bd80800000000000000
+      internalID: -8234293879522825115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_108
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 124
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f7ed6dce2d5770b0800000000000000
+      internalID: -5731009545209255950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_109
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 102
+        width: 19
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 101685be88c925110800000000000000
+      internalID: 1248232158612971777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_110
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 125
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a01c6564f99630460800000000000000
+      internalID: 7206719961523732746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_111
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 99
+        width: 9
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e38f5823f7b77bd90800000000000000
+      internalID: -7082056102778111938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_112
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 104
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec333bf389d2c1a40800000000000000
+      internalID: 5340193390081553358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_113
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 108
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8f396abee8a4c7d0800000000000000
+      internalID: -2899006516836614262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_114
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 115
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e028ba3d93c8ad690800000000000000
+      internalID: -7576589243105181170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_115
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 110
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c060a252f10130de0800000000000000
+      internalID: -1368232135836957172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_116
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 102
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 790c30d707ff1a140800000000000000
+      internalID: 4729341942314549399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_117
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 111
+        width: 5
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7edf1f93c07cb44b0800000000000000
+      internalID: -5455047668303528473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_118
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 105
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 836f4c15095cee0e0800000000000000
+      internalID: -2238634741118732744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_119
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 103
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d53b49f1f82854550800000000000000
+      internalID: 6144460817838682973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_120
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 96
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 416a06e3e3ab1aed0800000000000000
+      internalID: -2404435949541874156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_121
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 96
+        width: 19
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20fcde945ff7d8910800000000000000
+      internalID: 1841268514148437762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_122
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 89
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de9ea47374beff4c0800000000000000
+      internalID: -4251420832111597075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_123
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 99
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e50aef2e9393c560800000000000000
+      internalID: 7332866925907281380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_124
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 92
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bd9e30dc0fd769a0800000000000000
+      internalID: -6239773512572166736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_125
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 84
+        width: 18
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1aac06ef8c3f1df80800000000000000
+      internalID: -8083411811566564703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_126
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 97
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fa57ad6fb9da8c50800000000000000
+      internalID: 6668381614477105912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_127
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 91
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6125cdca3a4281db0800000000000000
+      internalID: -4821063115701726698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_128
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 91
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 448e2cc547fb934d0800000000000000
+      internalID: -3154279557502932924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_129
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 88
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca2508cfadf71bd10800000000000000
+      internalID: 2139631876493562540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_130
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 83
+        width: 9
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b851bb589ae27e1c0800000000000000
+      internalID: -4474556399141317237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_131
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 79
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e14af043a881a20c0800000000000000
+      internalID: -4599837087547546594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_132
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 82
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce66ffe80eeffd040800000000000000
+      internalID: 4674735178659096300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_133
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 81
+        width: 18
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad5ea53462f178ef0800000000000000
+      internalID: -106081817020668454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_134
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 87
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f41703ba9a3085e10800000000000000
+      internalID: 2186501646344810831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_135
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 88
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e19c6afe26dcb5ab0800000000000000
+      internalID: -5018191534963111650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_136
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 79
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf3c9533f79f0e9c0800000000000000
+      internalID: -3899842952585165829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_137
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 82
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90265034f4ed4a250800000000000000
+      internalID: 5955129039298847241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_138
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 79
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1392c91447f0f7cc0800000000000000
+      internalID: -3711230575938623183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_139
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 59
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a8ea0912837cc490800000000000000
+      internalID: -7724672258244155224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_140
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 74
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05272ef4f2ba5bf10800000000000000
+      internalID: 2284920605652447824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_141
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 61
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15746fcec31b01220800000000000000
+      internalID: 2454656672148637521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_142
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 61
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66e88bc11b7e4c2d0800000000000000
+      internalID: -3259225482432311706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_143
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 60
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfca5737d5dc98ef0800000000000000
+      internalID: -105327315013751555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_144
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 68
+        width: 21
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aafafc5eb3fa1b540800000000000000
+      internalID: 5021987731288338346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_145
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 62
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eeaeab32d2ddf6140800000000000000
+      internalID: 4715230520822917870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_146
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 74
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f42a6ab4fb90a390800000000000000
+      internalID: -7809070278458596106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_147
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 67
+        width: 7
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 458d890edd9cc71e0800000000000000
+      internalID: -2198660563270576044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_148
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 68
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1aadfb108568c0230800000000000000
+      internalID: 3606405114161519265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_149
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 63
+        width: 17
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e08b13b1e19bd180800000000000000
+      internalID: -9089511024358620952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_150
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 59
+        width: 23
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64c304df328b19b70800000000000000
+      internalID: 8904100403000392774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_151
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 63
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c51be1beb87c8fc0800000000000000
+      internalID: -3491282850694883904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_152
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 68
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2667d0499a8e8cf80800000000000000
+      internalID: -8085957315912698270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_153
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 46
+        width: 5
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d72b906a56b93e10800000000000000
+      internalID: 2177972394094438361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_154
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 50
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cce58d6771cc26ca0800000000000000
+      internalID: -6025028950318096692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_155
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 47
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c25874be25c3995a0800000000000000
+      internalID: -6514109059182394068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_156
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 48
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9e8f76eb266f4820800000000000000
+      internalID: 2904652623414005403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_157
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 47
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 015c2c6907829cda0800000000000000
+      internalID: -5924159370798381808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_158
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 44
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78ab896df4e2f2e40800000000000000
+      internalID: 5633772579301407367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_159
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 53
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cdba86131eb73e980800000000000000
+      internalID: -8510822663673304100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_160
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 42
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1efee99cd721c62c0800000000000000
+      internalID: -4437151201403932703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_161
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 42
+        width: 13
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81462856f1a718190800000000000000
+      internalID: -7961948390948707304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_162
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 54
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc078dbbe2029b940800000000000000
+      internalID: 5312312620552319180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_163
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 49
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad5fcdeefbba7dec0800000000000000
+      internalID: -3542173741069044262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_164
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 43
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd02e9948234fc890800000000000000
+      internalID: -7435650619452546851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_165
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 46
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00cccc0fdefad9450800000000000000
+      internalID: 6097222907011582976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_166
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 30
+        width: 26
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebdf8bb3b63f9d840800000000000000
+      internalID: 5249494482566053310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_167
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 44
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a9545b348493f8d0800000000000000
+      internalID: -2813742046524450392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_168
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 13
+        width: 30
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 039a92c298189f9e0800000000000000
+      internalID: -1587094967519958736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_169
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 39
+        width: 17
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75ef0863a2adea170800000000000000
+      internalID: 8191724647071415895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_170
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 46
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a88832b12f8462f0800000000000000
+      internalID: -980501443973183324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_171
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 31
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ab188962801e92a0800000000000000
+      internalID: -6728922640942621784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_172
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 36
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e27b8de5ec733ac0800000000000000
+      internalID: -3876617527261170967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_173
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 23
+        width: 7
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a4072478568ab030800000000000000
+      internalID: 3511266573952681120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_174
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 30
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74bc21fb5bec17a80800000000000000
+      internalID: -8470762144117109945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_175
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 31
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abd12bc74cdde3dd0800000000000000
+      internalID: -2504320506796040774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_176
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 33
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7e2b8db174ed1080800000000000000
+      internalID: -9214958085367714178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_177
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 35
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5baec47b6c9ef230800000000000000
+      internalID: 3674546331316038492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_178
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 15
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c348f04eb0972bea0800000000000000
+      internalID: -5858487073277770692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_179
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 20
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 081f3d86748a95030800000000000000
+      internalID: 3484000811402654080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_180
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 18
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d86cd594061812600800000000000000
+      internalID: 441776489006745229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_181
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 22
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 542677f765e047000800000000000000
+      internalID: 32666861966942789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_182
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 23
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34deb9545035c4130800000000000000
+      internalID: 3552305488196267331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_183
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 25
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 064ff120a9c9d44e0800000000000000
+      internalID: -1995766874580716448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_184
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 4
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f02e492d32143cb0800000000000000
+      internalID: -4885259641894854415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_185
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 13
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69a20f803341e2860800000000000000
+      internalID: 7506959838299040406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_186
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 8
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f15f286e2a0a45a0800000000000000
+      internalID: -6536400714742148621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_187
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 14
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7eb17904a4824eb60800000000000000
+      internalID: 7774383156124654567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_188
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 8
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43baad708c3ace890800000000000000
+      internalID: -7427381605920232652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_189
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 15
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bffc24b3216c14690800000000000000
+      internalID: -7619591312928223237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_190
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 10
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e4396fe85cf95d40800000000000000
+      internalID: 5573763472751670505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_191
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 4
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65437b5d9ba48b100800000000000000
+      internalID: 123931151767647318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_192
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 0
+        width: 16
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41721a1544716f270800000000000000
+      internalID: 8283834146789336852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_193
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 7
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79cb756b6c47f6b10800000000000000
+      internalID: 1976927158250486935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_194
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 0
+        width: 19
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8c2694678ba4ca40800000000000000
+      internalID: 5387619652238453899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_195
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 9
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cac2bc67108870d30800000000000000
+      internalID: 4397633101019950252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_196
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 373339398f0c335b0800000000000000
+      internalID: -5389752155172031629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_197
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 0
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea2b85368c5a6b250800000000000000
+      internalID: 5960133436950229678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_198
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 0
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d4dc7dc08e7bcfe0800000000000000
+      internalID: -1167700586704087850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_199
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 0
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a864464c6b2c01f0800000000000000
+      internalID: -1077438466813040480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_200
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 1
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc003b79a8b080a20800000000000000
+      internalID: 3028683439285141709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_201
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 485d95513575638a0800000000000000
+      internalID: -6325772612243171964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StarTile_202
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 0
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e955db7175e47da0800000000000000
+      internalID: -5947876932277937689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      StarTile_0: 4058872542606281896
+      StarTile_1: -3983768378823612271
+      StarTile_10: -8489007076441572669
+      StarTile_100: 1979964857270489654
+      StarTile_101: -673423061361761962
+      StarTile_102: -8377157383307318384
+      StarTile_103: -6475503448761734313
+      StarTile_104: 8768065768051136951
+      StarTile_105: 6952876176965139453
+      StarTile_106: 1999804708041346469
+      StarTile_107: -8234293879522825115
+      StarTile_108: -5731009545209255950
+      StarTile_109: 1248232158612971777
+      StarTile_11: 9024914574742591129
+      StarTile_110: 7206719961523732746
+      StarTile_111: -7082056102778111938
+      StarTile_112: 5340193390081553358
+      StarTile_113: -2899006516836614262
+      StarTile_114: -7576589243105181170
+      StarTile_115: -1368232135836957172
+      StarTile_116: 4729341942314549399
+      StarTile_117: -5455047668303528473
+      StarTile_118: -2238634741118732744
+      StarTile_119: 6144460817838682973
+      StarTile_12: -8542840336270252007
+      StarTile_120: -2404435949541874156
+      StarTile_121: 1841268514148437762
+      StarTile_122: -4251420832111597075
+      StarTile_123: 7332866925907281380
+      StarTile_124: -6239773512572166736
+      StarTile_125: -8083411811566564703
+      StarTile_126: 6668381614477105912
+      StarTile_127: -4821063115701726698
+      StarTile_128: -3154279557502932924
+      StarTile_129: 2139631876493562540
+      StarTile_13: 6574658125574781547
+      StarTile_130: -4474556399141317237
+      StarTile_131: -4599837087547546594
+      StarTile_132: 4674735178659096300
+      StarTile_133: -106081817020668454
+      StarTile_134: 2186501646344810831
+      StarTile_135: -5018191534963111650
+      StarTile_136: -3899842952585165829
+      StarTile_137: 5955129039298847241
+      StarTile_138: -3711230575938623183
+      StarTile_139: -7724672258244155224
+      StarTile_14: 3595829094170444819
+      StarTile_140: 2284920605652447824
+      StarTile_141: 2454656672148637521
+      StarTile_142: -3259225482432311706
+      StarTile_143: -105327315013751555
+      StarTile_144: 5021987731288338346
+      StarTile_145: 4715230520822917870
+      StarTile_146: -7809070278458596106
+      StarTile_147: -2198660563270576044
+      StarTile_148: 3606405114161519265
+      StarTile_149: -9089511024358620952
+      StarTile_15: -4887127692553976514
+      StarTile_150: 8904100403000392774
+      StarTile_151: -3491282850694883904
+      StarTile_152: -8085957315912698270
+      StarTile_153: 2177972394094438361
+      StarTile_154: -6025028950318096692
+      StarTile_155: -6514109059182394068
+      StarTile_156: 2904652623414005403
+      StarTile_157: -5924159370798381808
+      StarTile_158: 5633772579301407367
+      StarTile_159: -8510822663673304100
+      StarTile_16: 1359050858355299221
+      StarTile_160: -4437151201403932703
+      StarTile_161: -7961948390948707304
+      StarTile_162: 5312312620552319180
+      StarTile_163: -3542173741069044262
+      StarTile_164: -7435650619452546851
+      StarTile_165: 6097222907011582976
+      StarTile_166: 5249494482566053310
+      StarTile_167: -2813742046524450392
+      StarTile_168: -1587094967519958736
+      StarTile_169: 8191724647071415895
+      StarTile_17: -1916386510199456506
+      StarTile_170: -980501443973183324
+      StarTile_171: -6728922640942621784
+      StarTile_172: -3876617527261170967
+      StarTile_173: 3511266573952681120
+      StarTile_174: -8470762144117109945
+      StarTile_175: -2504320506796040774
+      StarTile_176: -9214958085367714178
+      StarTile_177: 3674546331316038492
+      StarTile_178: -5858487073277770692
+      StarTile_179: 3484000811402654080
+      StarTile_18: 260716295057730439
+      StarTile_180: 441776489006745229
+      StarTile_181: 32666861966942789
+      StarTile_182: 3552305488196267331
+      StarTile_183: -1995766874580716448
+      StarTile_184: -4885259641894854415
+      StarTile_185: 7506959838299040406
+      StarTile_186: -6536400714742148621
+      StarTile_187: 7774383156124654567
+      StarTile_188: -7427381605920232652
+      StarTile_189: -7619591312928223237
+      StarTile_19: -2099403706958911456
+      StarTile_190: 5573763472751670505
+      StarTile_191: 123931151767647318
+      StarTile_192: 8283834146789336852
+      StarTile_193: 1976927158250486935
+      StarTile_194: 5387619652238453899
+      StarTile_195: 4397633101019950252
+      StarTile_196: -5389752155172031629
+      StarTile_197: 5960133436950229678
+      StarTile_198: -1167700586704087850
+      StarTile_199: -1077438466813040480
+      StarTile_2: 6109403412165213231
+      StarTile_20: -674299978745994338
+      StarTile_200: 3028683439285141709
+      StarTile_201: -6325772612243171964
+      StarTile_202: -5947876932277937689
+      StarTile_21: -5089295151026751654
+      StarTile_22: 5201338319917545706
+      StarTile_23: 319700912660441631
+      StarTile_24: 5835685522689089583
+      StarTile_25: 4814197459712700291
+      StarTile_26: -8688774068507431860
+      StarTile_27: -2269346318555588684
+      StarTile_28: -6892541497992538392
+      StarTile_29: 1907906652678267158
+      StarTile_3: 1627328221540874096
+      StarTile_30: -7802711461523452547
+      StarTile_31: 6170450047370256468
+      StarTile_32: 4198876739219413446
+      StarTile_33: -8948710893949695127
+      StarTile_34: -5020808686934566032
+      StarTile_35: 3344055915017878824
+      StarTile_36: 7265113063287207682
+      StarTile_37: -3064799363665838820
+      StarTile_38: 6143675517723740821
+      StarTile_39: -5434008402115427878
+      StarTile_4: 7396695003934605586
+      StarTile_40: -7048282721433713738
+      StarTile_41: 5806011288485318935
+      StarTile_42: -4615126252153625016
+      StarTile_43: -3624232473696272675
+      StarTile_44: 669267924615325259
+      StarTile_45: -187588718643123762
+      StarTile_46: -3741388664140360929
+      StarTile_47: -2344268113523066126
+      StarTile_48: 8473134569125068270
+      StarTile_49: -1217628449617238857
+      StarTile_5: -1821977814820816348
+      StarTile_50: 7687188759285294166
+      StarTile_51: 2610082187127576146
+      StarTile_52: 191252045098339293
+      StarTile_53: -8706374860979190484
+      StarTile_54: -6019805511379089837
+      StarTile_55: 5118916573493919703
+      StarTile_56: 1012879250062298511
+      StarTile_57: 6669014222349453269
+      StarTile_58: 6694989974323030115
+      StarTile_59: -3305895488220978596
+      StarTile_6: -3690323984408077223
+      StarTile_60: -8188621410408644374
+      StarTile_61: -2766708488790170221
+      StarTile_62: -5925090814630621904
+      StarTile_63: 249939065203176061
+      StarTile_64: -2132298800316765226
+      StarTile_65: -5887541232707445932
+      StarTile_66: 4340584904844264022
+      StarTile_67: -9048968844207829551
+      StarTile_68: -1249703022207211730
+      StarTile_69: -2386730619041178864
+      StarTile_7: 2441015155890291741
+      StarTile_70: 5129393520642457825
+      StarTile_71: 3365871352684616366
+      StarTile_72: -1983728669120086409
+      StarTile_73: 8835371355005733292
+      StarTile_74: 1095144020580986479
+      StarTile_75: -3970082371463115016
+      StarTile_76: 2295367269588495792
+      StarTile_77: 3625186251476290092
+      StarTile_78: -3105263349360193876
+      StarTile_79: -3043743311648289964
+      StarTile_8: -6386307257806941955
+      StarTile_80: 2603874313923602371
+      StarTile_81: -3662869879976088567
+      StarTile_82: 1311460803613979338
+      StarTile_83: -6235030664945931631
+      StarTile_84: -2598430653693174514
+      StarTile_85: -4760174757645663912
+      StarTile_86: 2049003360320693975
+      StarTile_87: -1140450091357108551
+      StarTile_88: -5580169052734527833
+      StarTile_89: -2386414246249150334
+      StarTile_9: -9133093172947783951
+      StarTile_90: -3992953526575252045
+      StarTile_91: 3449738925849703186
+      StarTile_92: 8473793850157114872
+      StarTile_93: 7509316943274433889
+      StarTile_94: 790475363483190818
+      StarTile_95: 400564852546873856
+      StarTile_96: -4239713650903257776
+      StarTile_97: 2293681586493748246
+      StarTile_98: 4972674421564718470
+      StarTile_99: 6812209319745785414
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

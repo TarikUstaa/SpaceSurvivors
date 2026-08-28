@@ -181,8 +181,9 @@
 | 2026-08-27 | M4 — enemies + spawning | ✅ DONE. Approved (+ M4.5 crowd steering + game-over). |
 | 2026-08-27 | M5 — scrap/xp/levelup | ✅ DONE. Approved (+ XP bar fix, multishot fan, no-overkill projectiles, laser impact VFX). |
 | 2026-08-27 | M6 — stat pipeline + weapons | ✅ DONE. Approved (+ missile fixes, damage vignette, hit flash, enemy death VFX, solid enemies, shield, laser speed bug). |
-| 2026-08-27 | M7 — difficulty director + mini-boss | Built + Claude play-tested (boss schedule, warning, health bar, arrival pop, death). Awaiting user sign-off. |
-| 2026-08-28 | M8 — main menu + 2 game modes | Built + Claude play-tested all 3 paths (Infinite defeat, Campaign defeat, Campaign victory). Awaiting user sign-off. |
+| 2026-08-27 | M7 — difficulty director + mini-boss | ✅ APPROVED 2026-08-28 (with M8). |
+| 2026-08-28 | M8 — main menu + 2 game modes | ✅ APPROVED 2026-08-28. All 3 paths play-tested. |
+| 2026-08-28 | M9 — open arena + camera follow | Built + Claude play-tested (follow, ring-spawn, far-cull, parallax). Awaiting user sign-off. |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -217,6 +218,29 @@
   - `MiniBoss.asset` + `FinalBoss.asset` → `specialLootPrefab = BossXpOrb` (`_guaranteedLevelUps = 1`).
   Tested: kill MiniBoss @ ~60s → orb drops → collect → L1→L6 (60 xp ≈ +4 levels, +1 guaranteed).
   Early-game swing is large but intentional (rare reward moment); one-number tweak if too strong.
+
+## M9 — Open arena + camera follow (VS-style) (built 2026-08-28)
+The play area was one fixed screen (camera static, player clamped). Now it's an open,
+infinitely scrolling arena — the *map/camera* concern the user raised.
+
+- **`Core/CameraFollow.cs`** — `SmoothDamp` follow of a target Transform + velocity look-ahead
+  (clamped). On the Main Camera, target = Player. No world bounds (infinite).
+- **`SpawnDirector` unchanged** — it already spawns at the *camera* edges, so once the camera
+  follows the player, enemies ring-spawn around the player for free.
+- **`PlayerConfig.clampToScreen` → false** (field kept for other scenes).
+- **Far-cull:** `EnemyData.cullWhenFarOffscreen` (default true; MiniBoss + FinalBoss = false).
+  `EnemyBrain._farCullRadius = 45` — past that from the target, `_handle.Despawn()` (no Killed
+  event → no loot). Keeps the pool + spawn budget honest when the player keeps running.
+- **`Core/StarfieldParallax.cs`** — builds 3 tiled `SpriteRenderer` layers parented to the
+  camera, slides each by `camPos * parallaxFactor` wrapped to tile size → seamless infinite
+  parallax. Layers: parallax 0.03/0.08/0.16, brightness 0.45/0.75/1.0, density 0.6/1.0/1.7.
+- **`Editor/StarfieldTextureBaker.cs`** (menu `SpaceSurvivors/Build/Starfield Texture`) →
+  bakes `Art/Sprites/Generated/StarTile.png` (256², seamless, wrap Repeat, ~360 soft stars,
+  white / pale-blue / pale-amber). Committed asset; script just regenerates it.
+- Main Camera `backgroundColor` → opaque dark navy `#0a0d16` (was alpha 0).
+- Play-tested: camera tracks player to x=120+, enemies spawn around the roamed position,
+  tagged stale enemies recycled, 3 parallax layers scroll at different rates, player unclamped.
+- Densities/brightness are a first pass — easy to dial in M10 polish.
 
 ## Architecture pass — Assembly Definitions (2026-08-27, before M8)
 Split the ~45 scripts into 9 compiler-enforced assemblies. Dependency direction is now

@@ -23,3 +23,4 @@ MonoBehaviour:
   scrapValue: 60
   earliestSpawnTime: 99999
   spawnWeight: 0
+  cullWhenFarOffscreen: 0

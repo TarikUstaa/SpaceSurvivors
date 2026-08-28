@@ -40,5 +40,9 @@ namespace SpaceSurvivors.Data
         [Min(0f)] public float earliestSpawnTime = 0f;
         [Tooltip("Relative chance vs other currently-eligible enemies.")]
         [Min(0f)] public float spawnWeight = 1f;
+
+        [Tooltip("Recycle this enemy to the pool once the player has left it far behind " +
+                 "(open arena). Turn OFF for bosses so they always pursue.")]
+        public bool cullWhenFarOffscreen = true;
     }
 }

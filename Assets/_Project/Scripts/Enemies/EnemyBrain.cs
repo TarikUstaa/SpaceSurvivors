@@ -24,6 +24,10 @@ namespace SpaceSurvivors.Enemies
     [DisallowMultipleComponent]
     public class EnemyBrain : MonoBehaviour, IPoolable
     {
+        [Tooltip("Distance from the target past which this enemy is recycled (open arena). " +
+                 "Only applies when its EnemyData has cullWhenFarOffscreen = true.")]
+        [SerializeField, Min(10f)] private float _farCullRadius = 45f;
+
         private Rigidbody2D _body;
         private HealthComponent _health;
         private IMoveStrategy _move;
@@ -81,6 +85,16 @@ namespace SpaceSurvivors.Enemies
         private void FixedUpdate()
         {
             if (!_active || _target == null) return;
+
+            if (_data != null && _data.cullWhenFarOffscreen)
+            {
+                float sqrFar = _farCullRadius * _farCullRadius;
+                if (((Vector2)_target.position - _body.position).sqrMagnitude > sqrFar)
+                {
+                    _handle.Despawn();   // OnDespawned fires the release callback; no Killed event, no loot
+                    return;
+                }
+            }
 
             float dt = Time.fixedDeltaTime;
             Vector2 velocity = _move != null

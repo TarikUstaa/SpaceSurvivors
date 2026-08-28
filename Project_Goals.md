@@ -32,8 +32,9 @@ driven by emergent build synergies.
 | M6 | Upgrade system | Upgrade ScriptableObjects, stat modifier pipeline, weapon evolutions |
 | M7 | Difficulty director | ✅ Continuous spawn/HP scaling, timed boss schedule, mini-boss + boss HUD |
 | M8 | Main menu + game modes | ✅ Menu scene, mode selection, Campaign + Infinite modes, Victory/Defeat screens |
-| M9 | Meta & polish | Parallax starfield background, audio (SFX + music), settings, run-stats screen, persistent high score |
-| M10 | Balance pass | Tuning against the targets below, playtest telemetry |
+| M9 | Open arena + camera | ✅ VS-style scrolling arena: camera follows player, no screen clamp, ring spawning, far-cull, parallax starfield |
+| M10 | Meta & polish | Audio (SFX + music), settings menu, run-stats screen, persistent high score, "STAGE 1/3" HUD |
+| M11 | Balance pass | Tuning against the targets below, playtest telemetry |
 
 ### Game modes (M8)
 - **Campaign** — a finite run in scripted stages. Timed countdowns escalate the fight; a

@@ -15,5 +15,8 @@ MonoBehaviour:
   moveSpeed: 6
   acceleration: 40
   deceleration: 25
-  clampToScreen: 1
+  turnSpeed: 540
+  spriteForwardOffsetDegrees: 90
+  minSpeedToTurn: 0.05
+  clampToScreen: 0
   screenEdgePadding: 0.5
