@@ -15,6 +15,7 @@ MonoBehaviour:
   displayName: Grunt
   prefab: {fileID: 6780565460230082648, guid: 578e2b449fb914f78abb55773dbc5087, type: 3}
   deathVfxPrefab: {fileID: 8153368564366023220, guid: 74ac4a2c83beb4bf3ab7b5c4e3828035, type: 3}
+  specialLootPrefab: {fileID: 0}
   baseHealth: 20
   moveSpeed: 2.2
   contactDamage: 8
@@ -22,3 +23,4 @@ MonoBehaviour:
   scrapValue: 1
   earliestSpawnTime: 0
   spawnWeight: 1
+  cullWhenFarOffscreen: 1

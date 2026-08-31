@@ -15,10 +15,12 @@ MonoBehaviour:
   displayName: Swarmer
   prefab: {fileID: 6780565460230082648, guid: 578e2b449fb914f78abb55773dbc5087, type: 3}
   deathVfxPrefab: {fileID: 8153368564366023220, guid: 74ac4a2c83beb4bf3ab7b5c4e3828035, type: 3}
+  specialLootPrefab: {fileID: 0}
   baseHealth: 10
   moveSpeed: 3.1
   contactDamage: 5
   contactInterval: 0.5
   scrapValue: 1
-  earliestSpawnTime: 25
-  spawnWeight: 1.4
+  earliestSpawnTime: 20
+  spawnWeight: 1.3
+  cullWhenFarOffscreen: 1

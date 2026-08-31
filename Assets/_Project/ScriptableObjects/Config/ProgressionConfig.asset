@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ProgressionConfig
   m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.ProgressionConfig
   baseCost: 5
-  perLevel: 4
+  perLevel: 5
   softGrowth: 1.06
   maxCostPerLevel: 4000

@@ -3,8 +3,9 @@
 > Working memory log. Update after every major milestone. Newest entry on top.
 
 ## Current State
-**M1–M14c approved. M15 BUILT (revised per user), awaiting sign-off (2026-08-31) = environment & maps. The asteroid / cache / hazard field is the STANDARD ARENA (config on `EnvironmentDirector`, the same on every map — asteroids are core gameplay, not a map feature). Maps = pure BACKDROP THEMES: Milky Way / Crimson Nebula / Supernova, each a baked seamless nebula texture + sky/star tint drawn as `StarfieldParallax`'s farthest layer. No standalone MAPS menu — Campaign/Infinite → `MapSelect.unity` carousel → PLAY → Game. `Obstacle` layer (11) + physics matrix; `SpaceSurvivors.Environment` asmdef (`Obstacle` kinematic solid + HealthComponent → debris+scrap; `HazardZone` OverlapCircle ticker; `EnvironmentDirector` chunk streamer). `Data/MapData`/`MapCatalogue`, `Progression/MapService` (schema v3→v4 `selectedMapId`). Kinematic ship deflects off rocks via `Rigidbody2D.Cast` in `PlayerMovement`. Next after sign-off: M16 — balance pass.**
-Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c follow-on); enemy obstacle-avoidance `IVelocityModifier` (M15 follow-on if rocks clump enemies badly); map preview art. Full detail for each milestone is in its section below.
+**M1–M14c approved. M15 committed `18de62c` (environment & maps, revised per user). M16 BUILT 2026-08-31, awaiting human playtest sign-off = balance pass — `Editor/BalanceConfig` (one-shot tuning applier for all curves/roster/bosses/XP/ceilings) + `Editor/BalancePlaytest` telemetry harness (orbit-the-horde bot via `Player/ExternalMoveInput`, CSV output). Iter-3: first 3:00 gentle (no elites, mini-boss @180), then a hard mid/late ramp; Campaign now a 4-boss/5-stage/~15-min arc; Damage/FireRate stack ceilings 5→4 / 8→6. Bot is noisy on survivability — needs the human feel-check. Next: M17 (nothing formally scoped yet) or address the M16 caveats.**
+
+Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c follow-on); enemy obstacle-avoidance `IVelocityModifier`; map preview art; the M16 caveats (bot noise, on-screen density, MaxHealth stacking, hazard-zone count). Full detail for each milestone is in its section below.
 
 ### M7 — Mini-boss / boss schedule (built, play-tested OK)
 - `DifficultyConfig` +`List<BossEntry> bossSchedule` (`{triggerTime, bossData, count, warningLead}`). Default entry at 180s. Wired: [{180s, MiniBoss, ×1, lead 4s}, {360s, MiniBoss, ×2, lead 4s}].
@@ -193,7 +194,8 @@ Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c foll
 | 2026-08-28 | Session follow-ons | Magnet bonus-drop (pulls every XP drop on the map); pickup size tuning; smoother ship turning (input-based ShipRotator via MoveRotation, camera look-ahead reduced). |
 | 2026-08-28 | M14b — ship shop / hangar | ✅ APPROVED 2026-08-28. Scout (free) / Vanguard / Wraith / Ronin — each = a hull sprite + run-start `StatModifier[]` via `ShipService` + `ShipApplier`. `Hangar.unity` carousel + MainMenu HANGAR button. MainMenu wallet restyled to the HUD metal look. |
 | 2026-08-31 | M14c — achievements | ⏳ BUILT, awaiting sign-off. 8 stat-threshold achievements (`AchievementData` = metric enum + threshold; `AchievementCatalogue` in `Resources/`). `AchievementService` static auto-tracks via `ProfileService.Changed` → `Evaluate()` → writes `unlockedAchievementIds` + `Save`. `Achievements.unity` 2×4 grid (`Rating/` CraftPix art) + MainMenu ACHIEVEMENTS button. Profile schema v2→v3 (`lifetimeKills` / `bestSurvivalSeconds` / `bestLevel` / `bossKills`); `ProfileService.RecordRun` extended; `RunEndScreen` calls `Evaluate()`. |
-| 2026-08-31 | M15 — environment & maps | ⏳ BUILT (revised per user), awaiting sign-off. `Obstacle` layer (11) + Physics2D matrix. New `SpaceSurvivors.Environment` asmdef: `Obstacle` (kinematic solid + `HealthComponent`; destructible raises `Destroyed` → director spawns debris VFX + `ScrapReward` scrap), `HazardZone` (`OverlapCircleNonAlloc` ticker damaging Player + Enemy), `EnvironmentDirector` (chunk streamer — deterministic per-cell RNG, pooled, far-cull; **owns the field config** — same asteroid/cache/hazard field on every map). `Data/MapData` (= backdrop theme: sky/star tint + baked nebula sprite) + `MapCatalogue` (Resources). `Progression/MapService` (static; profile schema **v3→v4** `selectedMapId`). 3 maps = **backdrops**: Milky Way / Crimson Nebula / Supernova (`Editor/BackdropTextureBaker` bakes 3 seamless 512² PNGs; `StarfieldParallax.SetBackdrop()` draws one as the farthest parallax layer). Flow: Campaign/Infinite → `MapSelect.unity` (build 5) carousel → PLAY → Game (no MAPS menu button). `PlayerMovement` gains `Rigidbody2D.Cast` obstacle deflection (`_obstacleMask`). `EnemyProjectile._blockLayers`. `StarfieldParallax.SetTint()` / `SetBackdrop()`. |
+| 2026-08-31 | M16 — balance pass | ⏳ BUILT, awaiting human playtest sign-off. `Editor/BalanceConfig` = one-shot applier for all difficulty curves / roster timing / boss schedules / XP curve / upgrade stack ceilings. `Editor/BalancePlaytest` = telemetry harness (orbit-the-horde autopilot via `Player/ExternalMoveInput` shim, CSV to persistentDataPath). Iter-3: first 3:00 gentle (Grunt/Swarmer/Shooter only, mini-boss @180) then a hard mid/late ramp (spawn 2.4→13/s, HP-mult 1.6→11); Campaign = 4-boss / 5-stage / ~15-min arc; Damage/FireRate maxStacks 5→4 / 8→6. Bot noisy on survivability → the feel needs human hands. |
+| 2026-08-31 | M15 — environment & maps | ✅ committed `18de62c`. `Obstacle` layer (11) + Physics2D matrix. New `SpaceSurvivors.Environment` asmdef: `Obstacle` (kinematic solid + `HealthComponent`; destructible raises `Destroyed` → director spawns debris VFX + `ScrapReward` scrap), `HazardZone` (`OverlapCircleNonAlloc` ticker damaging Player + Enemy), `EnvironmentDirector` (chunk streamer — deterministic per-cell RNG, pooled, far-cull; **owns the field config** — same asteroid/cache/hazard field on every map). `Data/MapData` (= backdrop theme: sky/star tint + baked nebula sprite) + `MapCatalogue` (Resources). `Progression/MapService` (static; profile schema **v3→v4** `selectedMapId`). 3 maps = **backdrops**: Milky Way / Crimson Nebula / Supernova (`Editor/BackdropTextureBaker` bakes 3 seamless 512² PNGs; `StarfieldParallax.SetBackdrop()` draws one as the farthest parallax layer). Flow: Campaign/Infinite → `MapSelect.unity` (build 5) carousel → PLAY → Game (no MAPS menu button). `PlayerMovement` gains `Rigidbody2D.Cast` obstacle deflection (`_obstacleMask`). `EnemyProjectile._blockLayers`. `StarfieldParallax.SetTint()` / `SetBackdrop()`. |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -677,7 +679,55 @@ The linchpin for M14. Everything is in `Core` (no gameplay deps → backend-port
 - **Deferred:** in-run achievement toast / unlock animation (`Evaluate()` already returns the freshly
   unlocked list for a future notifier to consume).
 
-## M15 — Environment & Maps (built 2026-08-31, revised per user, awaiting sign-off)
+## M16 — Balance pass (built 2026-08-31, awaiting human playtest sign-off)
+
+**User's calls:** Campaign win ≈ 15 min (4 bosses / 5 stages); GDD-faithful — no elites in the first 3:00.
+
+- **`Editor/BalanceConfig`** (`SpaceSurvivors/Balance/M16 Apply balance`) — the single source of truth
+  for every tuning knob, applied programmatically (AnimationCurve keyframes in YAML are unmaintainable).
+  Re-run after any tweak. Sets: both difficulty configs' spawn/HP/speed curves, enemy roster timing,
+  boss schedules, the XP curve, and upgrade stack ceilings.
+- **`Editor/BalancePlaytest`** (`M16 Sim — Infinite` / `M16 Sim — Campaign`) — telemetry harness.
+  Opens Game.unity, points the SpawnDirector at the chosen config, drives the player with a simple
+  "orbit-the-horde" autopilot (via the runtime **`Player/ExternalMoveInput`** shim — a settable
+  `IMoveInput`, ships, inert unless driven), auto-answers level-ups by a keyword priority list, gives
+  the sim player +220% pickup radius (models a competent XP-sweeper), runs at 2.5× with
+  `Application.runInBackground = true`, and appends a row every 10 game-seconds to
+  `persistentDataPath/balance_<mode>.csv` (t, level, kills, scrap, hp, enemiesAlive, spawnRate). Exits
+  play at the time cap or player death. Scene never saved.
+- **Tuning applied (iteration 3):**
+  | knob | before | after |
+  |------|--------|-------|
+  | roster: Shooter earliest | 45 | 50 |
+  | roster: Charger / Splitter / Brute earliest | 70 / 90 / 120 | **185 / 210 / 300** (no elites &lt; 3:00) |
+  | Infinite spawn/s @ 3:00 / 8:00 / 16:00 | 3.2 / 5.3 / 9.5 | **2.4 / 6 / 13** |
+  | Infinite HP-mult @ 3:00 / 8:00 / 16:00 | 1.6 / ~3.5 / ~6 | **1.6 / 4.2 / 11** |
+  | Campaign boss schedule | 60 (mini), 150 (final) — a 2.5-min run | **180, 420, 660 (mini xN), 900 (final)** — 5 stages, ~15 min |
+  | Damage upgrade maxStacks | 5 | 4 |
+  | FireRate upgrade maxStacks | 8 | 6 |
+  | ProgressionConfig | base 5 / per 4 / growth 1.06 | base 5 / per 5 / growth 1.06 |
+  - Iteration 1 kept the first 3:00 soft (from the original) but the mid/late game was trivial for a
+    focused build (bot at HP 100 at 12 min). Iteration 2 pushed the *early* ramp + XP too hard → bot
+    died at 0:90. Iteration 3 = iter-1's first 3:00 exactly + a much harder mid/late ramp + trimmed
+    DPS ceilings.
+- **Telemetry (Infinite, iter-3 bot run):** 0:00–3:00 — HP holds 60–90, ≤10 enemies, mini-boss at
+  exactly 180s. Power — level ~11–14 by 3:00 (≈1 level/16–20s early, stretching to ~1/30s). Mid/late —
+  field grows 8 → 38 enemies, spawn 2.4 → 13/s, HP-mult → 11. A near-optimal focused build + perfect
+  kiting stays comfortable the whole 16 min (and tanks to 150 HP late by stacking MaxHealth once the
+  offensive upgrades cap).
+- **KNOWN CAVEATS / open for the human playtest:**
+  - The bot is **noisy** — single runs vary a lot on survivability (one Campaign run bled out at 3:00
+    from positioning bad-luck; an Infinite run cruised 16 min). The curve *shapes* are GDD-aligned; the
+    exact difficulty *feel* needs real hands.
+  - **On-screen density** — at 6:00 the camera shows only ~5–8 enemies (an open arena + a mobile player
+    strings the horde into a trailing line; far-cull at 45u despawns stragglers). For a denser "bullet
+    heaven" look, bump late spawn rates harder and/or spawn enemies in clumps.
+  - **MaxHealth stacking** — after offensive upgrades cap (~level 20) every level only buys defence;
+    consider MaxHealth maxStacks 6 → 4.
+  - **Hazard-zone count (M15 follow-on)** — the environment field renders a lot of orange hazard rings;
+    consider the `EnvironmentDirector` hazard weight 0.7 → ~0.3.
+
+## M15 — Environment & Maps (revised per user, committed `18de62c` 2026-08-31)
 
 **User's steer (mid-M15):** asteroids/caches/hazards should be the STANDARD ARENA (they expected them
 in the base game regardless of map). Maps = pure **backdrop themes** ("samanyolu galaksisi / kırmızı

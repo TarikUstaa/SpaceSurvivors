@@ -41,7 +41,7 @@ driven by emergent build synergies.
 | M14b | Ship shop / hangar | ✅ Scout/Vanguard/Wraith/Ronin — each a hull sprite + run-start StatModifiers via ShipService + ShipApplier; Hangar.unity carousel + MainMenu HANGAR button |
 | M14c | Achievements | ✅ (awaiting sign-off) 8 stat-threshold achievements — `AchievementData` (metric + threshold) + `AchievementCatalogue`; `AchievementService` auto-tracks via `ProfileService.Changed` → writes `unlockedAchievementIds`; `Achievements.unity` grid + MainMenu button. Profile schema v2→v3. |
 | M15 | Environment & maps | ✅ (awaiting sign-off) `Obstacle` layer + `SpaceSurvivors.Environment` asmdef (`Obstacle` / `HazardZone` / `EnvironmentDirector` chunk streamer — the asteroid/cache/hazard field is the standard arena, the same on every map); `MapData` = backdrop theme + `MapService` (schema v3→v4); 3 backdrops (Milky Way / Crimson Nebula / Supernova) baked by `BackdropTextureBaker`, drawn by `StarfieldParallax.SetBackdrop`; mode → `MapSelect.unity` carousel → PLAY → Game (no MAPS menu); kinematic-ship `Rigidbody2D.Cast` deflection |
-| M16 | Balance pass | Tuning against the targets below, playtest telemetry |
+| M16 | Balance pass | ✅ (awaiting human playtest) `Editor/BalanceConfig` one-shot tuning applier + `Editor/BalancePlaytest` bot telemetry harness. Curves reshaped to the GDD ramp (gentle 0:00–3:00, no elites, mini-boss @180, hard mid/late escalation). Campaign = 4-boss / 5-stage / ~15-min arc. Damage/FireRate stack ceilings trimmed. |
 
 *(Order is a proposal — see §8 backlog. Milestones after M10 are not locked; earlier ones stay open to revisits — the assembly split makes that safe.)*
 
