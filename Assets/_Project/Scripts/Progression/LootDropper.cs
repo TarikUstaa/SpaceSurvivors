@@ -28,6 +28,8 @@ namespace SpaceSurvivors.Progression
         [SerializeField, Range(0f, 1f)] private float _healthDropChance = 0.035f;
         [SerializeField] private GameObject _powerUpPickupPrefab;
         [SerializeField, Range(0f, 1f)] private float _powerUpDropChance = 0.025f;
+        [SerializeField] private GameObject _magnetPickupPrefab;
+        [SerializeField, Range(0f, 1f)] private float _magnetDropChance = 0.02f;
 
         private void Awake()
         {
@@ -61,7 +63,7 @@ namespace SpaceSurvivors.Progression
             TryBonusDrop(position);
         }
 
-        /// <summary>One roll for a health capsule, else one for a power-up (never both).</summary>
+        /// <summary>One roll per bonus type, in order — at most one bonus drops per kill.</summary>
         private void TryBonusDrop(Vector2 position)
         {
             if (_pool == null) return;
@@ -71,6 +73,8 @@ namespace SpaceSurvivors.Progression
                 prefab = _healthPickupPrefab;
             else if (_powerUpPickupPrefab != null && Random.value < _powerUpDropChance)
                 prefab = _powerUpPickupPrefab;
+            else if (_magnetPickupPrefab != null && Random.value < _magnetDropChance)
+                prefab = _magnetPickupPrefab;
             if (prefab == null) return;
 
             Vector2 pos = position + Random.insideUnitCircle * 0.3f;

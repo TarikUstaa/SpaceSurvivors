@@ -47,6 +47,9 @@ namespace SpaceSurvivors.Progression
             _xp = xpValue;
         }
 
+        /// <summary>Fly to the ship now, ignoring magnet range — used by the Magnet pickup.</summary>
+        public void Attract() => _flying = true;
+
         public void OnSpawned()
         {
             _flying = false;

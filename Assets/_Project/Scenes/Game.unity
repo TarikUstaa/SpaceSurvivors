@@ -8940,6 +8940,8 @@ MonoBehaviour:
   _healthDropChance: 0.022
   _powerUpPickupPrefab: {fileID: 5747322664020243352, guid: 1e336566c817e4ab5894ae45571c26c3, type: 3}
   _powerUpDropChance: 0.014
+  _magnetPickupPrefab: {fileID: 697050805417079683, guid: 3a11761a0872446bca0bc1d38f2ea034, type: 3}
+  _magnetDropChance: 0.02
 --- !u!114 &2065986494
 MonoBehaviour:
   m_ObjectHideFlags: 0
