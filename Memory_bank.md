@@ -3,7 +3,7 @@
 > Working memory log. Update after every major milestone. Newest entry on top.
 
 ## Current State
-**M1–M14a approved (2026-08-28). M14a = permanent-upgrade shop (buy Damage/Hull/Thrusters/Armour with wallet scrap; MetaProgressionService + MetaUpgradeApplier seed the StatSheet at run start; Shop.unity + MainMenu SHOP button). Plus session follow-ons: Magnet bonus-drop pickup (pulls all XP), pickup size tuning, smoother ship turning. Next: M14b — ship shop / hangar, then M14c — achievements.**
+**M1–M14b approved (2026-08-28). M14b = ship shop / hangar (buy + equip ships — Scout/Vanguard/Wraith/Ronin; each = a hull sprite + run-start StatModifiers via ShipService + ShipApplier; Hangar.unity carousel + MainMenu HANGAR button). MainMenu wallet restyled to the HUD metal look. Next: M14c — achievements.**
 Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is in its section below.
 
 ### M7 — Mini-boss / boss schedule (built, play-tested OK)
@@ -191,6 +191,7 @@ Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is i
 | 2026-08-28 | M13 — persistent profile + wallet | ✅ APPROVED 2026-08-28. PlayerProfile DTO + IProfileStore/LocalJsonProfileStore (Newtonsoft) + ProfileService seam; run scrap → wallet on run end; wallet on MainMenu + HUD (metal look + baked ScrapChip icon). |
 | 2026-08-28 | M14a — permanent upgrade shop | ✅ APPROVED 2026-08-28. Damage/Hull/Thrusters/Armour lines bought with wallet scrap; `MetaProgressionService` + `MetaUpgradeApplier` seed the run-start `StatSheet`; `Shop.unity` + MainMenu SHOP button. New `StatId.DamageResist`. Profile schema v1→v2 (`metaUpgradeLevels`). |
 | 2026-08-28 | Session follow-ons | Magnet bonus-drop (pulls every XP drop on the map); pickup size tuning; smoother ship turning (input-based ShipRotator via MoveRotation, camera look-ahead reduced). |
+| 2026-08-28 | M14b — ship shop / hangar | ✅ APPROVED 2026-08-28. Scout (free) / Vanguard / Wraith / Ronin — each = a hull sprite + run-start `StatModifier[]` via `ShipService` + `ShipApplier`. `Hangar.unity` carousel + MainMenu HANGAR button. MainMenu wallet restyled to the HUD metal look. |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -585,6 +586,44 @@ The linchpin for M14. Everything is in `Core` (no gameplay deps → backend-port
   `m_Constraints` 4 → 0.
 - `CameraFollow` look-ahead reduced (was sweeping ~5 units on a direction change, read as the
   world lurching): `_smoothTime` 0.18→0.12, `_lookAhead` 0.15→0.09, `_maxLookAhead` 2.5→1.4.
+
+## M14b — Ship shop / hangar (approved 2026-08-28)
+
+- **`Data/ShipData`** — id, displayName, description, `Sprite sprite`, `int cost`,
+  `StatModifier[] runStartModifiers`. A ship = "a permanent build you paid for once".
+  **`Data/ShipCatalogue`** — `List<ShipData>` in `Resources/`; the first entry is the free
+  starter. No profile schema bump — `ownedShipIds` / `selectedShipId` were reserved in M13.
+- Catalogue (`Resources/Ship_*.asset` + `ShipCatalogue.asset`), all use Kenney
+  `playerShip*` sprites (all 75px tall → consistent in-game size, no scaling needed):
+  | id | sprite | cost | run-start modifiers |
+  |----|--------|------|---------------------|
+  | starter (Scout) | playerShip1_blue | 0 | — (matches the current player sprite) |
+  | vanguard | playerShip3_orange | 700 | +35 MaxHealth Flat, -10% MoveSpeed |
+  | wraith | playerShip1_green | 700 | +22% MoveSpeed, -15 MaxHealth Flat |
+  | ronin | playerShip2_red | 1400 | +20% Damage, +10% FireRate, -25 MaxHealth Flat |
+- **`Progression/ShipService`** (static) — `Ships`, `IsOwned` (starter always true),
+  `SelectedId` (falls back to starter when blank / not owned / missing), `Selected`,
+  `SelectedSprite`, `CanAfford`, `TryBuy` (→ `ProfileService.TrySpend` + add to
+  `ownedShipIds` + auto-select + `Save`), `Select` (owned only), `BuildStartingModifiers`,
+  `SetCatalogue`, `Changed`.
+- **`Progression/ShipApplier`** — `[DefaultExecutionOrder(-100)]` on the Player. `Awake`:
+  `_hull.sprite = ShipService.SelectedSprite` + `_stats.AddModifiers(ShipService.BuildStartingModifiers())`.
+  Coexists with `MetaUpgradeApplier` (both just add to the sheet). `_hull` = the player's
+  root SpriteRenderer.
+- **`UI/HangarScreen`** — one-ship carousel: prev/next cycle, big sprite, name/desc, a
+  formatted stat block ("+35 Hull\n-10% Speed"), and a BUY / EQUIP / EQUIPPED action button
+  (+ chip on BUY). Wired by the builder.
+- **`Editor/HangarBuilder`** — MenuItems `M14b Hangar scene` (builds `Hangar.unity` from
+  `Ship_Shop/` CraftPix art + `ShipCatalogue`, registers it in Build Settings) and
+  `M14b Main-Menu Hangar button` (HANGAR button under SHOP).
+- Build scenes: MainMenu (0), Game (1), Shop (2), **Hangar (3)**.
+- **MainMenu wallet restyled** (user: "match the game") — `WalletLabel` now steel
+  `(0.80,0.84,0.90)` + bold + dark `Outline`, with a `WalletChip` `ScrapChip.png` icon to
+  its left. Same look as the HUD scrap counter.
+- **Play-tested:** hangar carousel Next → Vanguard, stats shown, BUY (1000→300 scrap, owned +
+  auto-equipped, → EQUIPPED); start run → hull sprite = `playerShip3_orange`, MaxHealth
+  100→135, MoveSpeed 6→5.40. MainMenu HANGAR button works. No console errors. Real profile
+  reset to 0.
 
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in

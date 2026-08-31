@@ -3762,6 +3762,7 @@ GameObject:
   - component: {fileID: 632278097}
   - component: {fileID: 632278098}
   - component: {fileID: 632278099}
+  - component: {fileID: 632278100}
   m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
@@ -4117,6 +4118,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: SpaceSurvivors.Progression::SpaceSurvivors.Progression.MetaUpgradeApplier
   _stats: {fileID: 632278095}
+--- !u!114 &632278100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632278081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8ace9013ee44ca4899871cbba5ed63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Progression::SpaceSurvivors.Progression.ShipApplier
+  _stats: {fileID: 632278095}
+  _hull: {fileID: 632278086}
 --- !u!1 &639183348
 GameObject:
   m_ObjectHideFlags: 0

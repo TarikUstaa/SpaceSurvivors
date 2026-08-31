@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Scenes/Shop.unity
     guid: a631bed5e4b1448479acc8bc0a8f5ecb
+  - enabled: 1
+    path: Assets/_Project/Scenes/Hangar.unity
+    guid: 1a16aadc3a9e04d0ebbdfca24d403b5e
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

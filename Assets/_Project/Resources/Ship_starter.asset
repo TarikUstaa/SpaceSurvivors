@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990840e416e9d42ed83db2d8c84ebe7e, type: 3}
+  m_Name: Ship_starter
+  m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.ShipData
+  id: starter
+  displayName: Scout
+  description: The standard hull. No bonuses, no weaknesses.
+  sprite: {fileID: -354191649082998739, guid: 6cb55507bdd0a4617ae8373cbdf5247f, type: 3}
+  cost: 0
+  runStartModifiers: []

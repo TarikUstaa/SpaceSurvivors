@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990840e416e9d42ed83db2d8c84ebe7e, type: 3}
+  m_Name: Ship_wraith
+  m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.ShipData
+  id: wraith
+  displayName: Wraith
+  description: Stripped-down racer. Fast and fragile.
+  sprite: {fileID: 1626006803560414696, guid: 36e9da76f28024ca5ab31021f524b1c4, type: 3}
+  cost: 700
+  runStartModifiers:
+  - stat: 0
+    op: 1
+    value: 0.22
+  - stat: 1
+    op: 0
+    value: -15

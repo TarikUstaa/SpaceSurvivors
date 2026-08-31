@@ -38,7 +38,7 @@ driven by emergent build synergies.
 | M12 | Enemy variety | ✅ Shooter/Charger/Splitter/Brute + enemy projectile system; enemy bonus drops (health capsule, timed power-up + ship aura) |
 | M13 | Persistent meta core | ✅ PlayerProfile DTO + IProfileStore/LocalJsonProfileStore (Newtonsoft) + ProfileService seam; run scrap → wallet on run end; wallet on MainMenu + HUD |
 | M14a | Permanent upgrade shop | ✅ Damage/Hull/Thrusters/Armour bought with wallet scrap; MetaProgressionService + MetaUpgradeApplier seed the run-start StatSheet; Shop.unity + MainMenu SHOP button; new StatId.DamageResist |
-| M14b | Ship shop / hangar | Buy + select ships (ShipData SO, profile ownedShipIds/selectedShipId). Needs M13. |
+| M14b | Ship shop / hangar | ✅ Scout/Vanguard/Wraith/Ronin — each a hull sprite + run-start StatModifiers via ShipService + ShipApplier; Hangar.unity carousel + MainMenu HANGAR button |
 | M14c | Achievements | Event bus + achievement defs + unlock tracking + screen. Needs M13. |
 | M15 | Environment & maps | Asteroids / obstacles, interactive/destructible objects, map variants |
 | M16 | Balance pass | Tuning against the targets below, playtest telemetry |
