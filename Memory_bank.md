@@ -3,7 +3,7 @@
 > Working memory log. Update after every major milestone. Newest entry on top.
 
 ## Current State
-**M1–M13 approved (2026-08-28). M13 = persistent profile + currency wallet (PlayerProfile DTO, IProfileStore + LocalJsonProfileStore via Newtonsoft, ProfileService seam; run scrap banks to wallet on run end; wallet shown on MainMenu + HUD). Next: M14 — meta screens (permanent-upgrade shop / ship shop / achievements), all on top of M13.**
+**M1–M14a approved (2026-08-28). M14a = permanent-upgrade shop (buy Damage/Hull/Thrusters/Armour with wallet scrap; MetaProgressionService + MetaUpgradeApplier seed the StatSheet at run start; Shop.unity + MainMenu SHOP button). Plus session follow-ons: Magnet bonus-drop pickup (pulls all XP), pickup size tuning, smoother ship turning. Next: M14b — ship shop / hangar, then M14c — achievements.**
 Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is in its section below.
 
 ### M7 — Mini-boss / boss schedule (built, play-tested OK)
@@ -189,6 +189,8 @@ Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is i
 | 2026-08-28 | M11 — combat content | ✅ APPROVED 2026-08-28. New weapons + AoE splash + Orbital/Trail/Aura weapon types + 8-branch evolution tree + Pierce/Haste passives + Mine Layer & Static Field variety weapons. |
 | 2026-08-28 | M12 — enemy variety + bonus drops | ✅ APPROVED 2026-08-28. Shooter/Charger/Splitter/Brute + enemy projectile system; health-capsule + timed power-up drops with ship aura. |
 | 2026-08-28 | M13 — persistent profile + wallet | ✅ APPROVED 2026-08-28. PlayerProfile DTO + IProfileStore/LocalJsonProfileStore (Newtonsoft) + ProfileService seam; run scrap → wallet on run end; wallet on MainMenu + HUD (metal look + baked ScrapChip icon). |
+| 2026-08-28 | M14a — permanent upgrade shop | ✅ APPROVED 2026-08-28. Damage/Hull/Thrusters/Armour lines bought with wallet scrap; `MetaProgressionService` + `MetaUpgradeApplier` seed the run-start `StatSheet`; `Shop.unity` + MainMenu SHOP button. New `StatId.DamageResist`. Profile schema v1→v2 (`metaUpgradeLevels`). |
+| 2026-08-28 | Session follow-ons | Magnet bonus-drop (pulls every XP drop on the map); pickup size tuning; smoother ship turning (input-based ShipRotator via MoveRotation, camera look-ahead reduced). |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -518,6 +520,71 @@ The linchpin for M14. Everything is in `Core` (no gameplay deps → backend-port
   before switching to scratch stores — wiped it back to 0/0 after. Scratch files
   `profile_m13*.json` / `profile_hudtest.json` linger in persistentDataPath, harmless,
   outside the repo, never loaded by the game.)
+
+## M14a — Permanent upgrade shop (approved 2026-08-28)
+
+- **`StatId.DamageResist`** added (fraction of incoming damage ignored, 0..0.85). Applied in
+  `HealthComponent.TakeDamage` *after* interceptors, player-only (`_stats != null`). MUST be
+  a `Flat` op modifier — its base is 0, so `PercentAdd` on it is always 0 (learned the hard way).
+- **`PlayerProfile` schema v1 → v2:** `Dictionary<string,int> metaUpgradeLevels` added.
+  `LocalJsonProfileStore.Migrate` normalises null dicts/lists; `ownedUpgradeIds` (unused
+  reserved list) removed.
+- **`Data/MetaUpgradeData`** — id, title, icon, `StatModifier perLevel`, `maxLevel`,
+  `baseCost` + `costGrowth` (`CostForNext(lvl) = round(baseCost · growth^lvl)`).
+  **`Data/MetaUpgradeCatalogue`** — `List<MetaUpgradeData>`, one asset in
+  `Assets/_Project/Resources/` so a static service can load it without per-scene wiring.
+- Catalogue (`Resources/Meta_*.asset` + `MetaUpgradeCatalogue.asset`):
+  | id | stat / op / per-level | max | baseCost / growth |
+  |----|----------------------|-----|-------------------|
+  | damage | Damage PercentAdd +0.06 | 12 | 50 / 1.45 |
+  | health | MaxHealth Flat +12 | 12 | 45 / 1.40 |
+  | speed | MoveSpeed PercentAdd +0.04 | 8 | 60 / 1.50 |
+  | armor | DamageResist **Flat** +0.035 | 10 | 70 / 1.55 |
+- **`Progression/MetaProgressionService`** (static) — `Upgrades`, `LevelOf`, `CostToNext`,
+  `CanAfford`, `IsMaxed`, `TryPurchase` (→ `ProfileService.TrySpend` + bump level + `Save`),
+  `BuildStartingModifiers` (one copy of `perLevel` per owned level — works for any op),
+  `SetCatalogue` (test/editor hook), `Changed` event.
+- **`Progression/MetaUpgradeApplier`** — `[DefaultExecutionOrder(-100)]` on the Player;
+  `Awake` → `_statSheet.AddModifiers(MetaProgressionService.BuildStartingModifiers())`.
+- **`UI/ShopScreen`** — prefab-style, `UpgradeRow[]` (upgradeId + icon/title/desc/level/cost/
+  buyButton) wired by the builder; BUY → `TryPurchase`; refresh on `Changed` / `ProfileService.Changed`.
+- **`UI/LoadSceneButton`** — reusable: `Button.onClick → SceneManager.LoadScene(_sceneName)`.
+- **`Editor/ShopBuilder`** — MenuItems `M14a Shop scene` (builds `Shop.unity` from
+  `Upgrade/` CraftPix art + catalogue, registers it in Build Settings) and
+  `M14a Main-Menu Shop button` (SHOP button under SETTINGS). 9-slice borders set on
+  `Upgrade/Window.png`, `Upgrade/Price_BTN_Table.png`, `Shop/Prise_BTN_Table.png`,
+  `Main_UI/Stats_Bar.png`. Header uses the plate's own "UPGRADE" text (no label).
+- Build scenes now: MainMenu (0), Game (1), **Shop (2)**.
+- **Play-tested end-to-end:** buy in shop → wallet down, level up, persisted; start run →
+  `StatSheet` gets the mods (Damage ×1.18 from lvl 3, Armour → 100 dmg hit took 93 at lvl 2);
+  MainMenu SHOP → Shop → BACK. No console errors. Scratch stores used throughout; real
+  `profile.json` reset to 0.
+
+## Session follow-ons (2026-08-28, after M14a)
+
+### Magnet bonus-drop (M12 pickups + 1)
+- `Progression/MagnetPickup : FlyToPlayerPickup` — on collect, `foreach XpPickup → Attract()`
+  + cyan `MagnetBurst` VFX. `XpPickup.Attract()` = `_flying = true` (ignores magnet range).
+- `LootDropper` gets `_magnetPickupPrefab` + `_magnetDropChance` 0.02 (3rd bonus roll after
+  health / power-up). Wired in `Game.unity`.
+- `Magnet.prefab` (from PowerUp clone, PowerUpPickup→MagnetPickup) + baked
+  `Art/Sprites/Generated/MagnetIcon.png` (red horseshoe + silver poles).
+- **Sizing note:** generated pickup icons render huge because they're 96px @ 96 PPU = 1 unit,
+  while Kenney pills are ~22px @ 100 PPU = 0.2 unit. Fix = raise the sprite's Pixels Per Unit
+  (MagnetIcon → 430) OR lower the prefab Transform scale. All pickup sizes live on the
+  prefab's Transform > Scale (`ScrapPickup` 0.3, `HealthCapsule`/`PowerUp` 1.3, `Magnet` 1.3).
+
+### Smoother ship turning
+- **`ShipRotator` rewritten:** steers toward the raw `IMoveInput` heading (full-rate, no
+  zero-crossing on reversal) instead of the physics-stepped velocity, which used to freeze
+  below `minSpeedToTurn` on a reversal then snap 180°. Rotates via `Rigidbody2D.MoveRotation`
+  in `FixedUpdate` so rotation interpolates in lock-step with position (body has Interpolate).
+  Falls back to velocity heading only while coasting.
+- `PlayerMovement.Awake` now sets `_body.constraints = None` (was `freezeRotation = true`) —
+  needed for `MoveRotation`; kinematic body can't be spun by collisions. `Game.unity` RB
+  `m_Constraints` 4 → 0.
+- `CameraFollow` look-ahead reduced (was sweeping ~5 units on a direction change, read as the
+  world lurching): `_smoothTime` 0.18→0.12, `_lookAhead` 0.15→0.09, `_maxLookAhead` 2.5→1.4.
 
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in

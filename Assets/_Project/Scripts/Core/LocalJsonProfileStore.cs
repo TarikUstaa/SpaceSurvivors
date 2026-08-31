@@ -67,8 +67,14 @@ namespace SpaceSurvivors.Core
 
         private static void Migrate(PlayerProfile profile)
         {
-            // No migrations yet. When CurrentSchemaVersion bumps, translate old shapes here.
-            if (profile.schemaVersion < 1) profile.schemaVersion = 1;
+            // v1 → v2: metaUpgradeLevels added (M14a). Nothing to translate — a missing/null
+            // dict just deserialises to null; normalise it so callers never null-check.
+            profile.metaUpgradeLevels ??= new System.Collections.Generic.Dictionary<string, int>();
+            profile.ownedShipIds ??= new System.Collections.Generic.List<string>();
+            profile.unlockedAchievementIds ??= new System.Collections.Generic.List<string>();
+
+            if (profile.schemaVersion < PlayerProfile.CurrentSchemaVersion)
+                profile.schemaVersion = PlayerProfile.CurrentSchemaVersion;
         }
 
         private void TryBackupCorrupt()

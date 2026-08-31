@@ -37,7 +37,9 @@ driven by emergent build synergies.
 | M11 | Combat content | ✅ New weapons (Plasma Orb AoE, Scatter Shot, Rail Spike, Orbiter, Mine Layer, Static Field), AoE splash, Orbital/Trail/Aura weapon types, 8-branch evolution tree, Pierce + Haste passives |
 | M12 | Enemy variety | ✅ Shooter/Charger/Splitter/Brute + enemy projectile system; enemy bonus drops (health capsule, timed power-up + ship aura) |
 | M13 | Persistent meta core | ✅ PlayerProfile DTO + IProfileStore/LocalJsonProfileStore (Newtonsoft) + ProfileService seam; run scrap → wallet on run end; wallet on MainMenu + HUD |
-| M14 | Meta screens | Permanent upgrade shop (buy stat upgrades with scrap), ship shop + buyable ships, achievements. All on top of M13; may split. |
+| M14a | Permanent upgrade shop | ✅ Damage/Hull/Thrusters/Armour bought with wallet scrap; MetaProgressionService + MetaUpgradeApplier seed the run-start StatSheet; Shop.unity + MainMenu SHOP button; new StatId.DamageResist |
+| M14b | Ship shop / hangar | Buy + select ships (ShipData SO, profile ownedShipIds/selectedShipId). Needs M13. |
+| M14c | Achievements | Event bus + achievement defs + unlock tracking + screen. Needs M13. |
 | M15 | Environment & maps | Asteroids / obstacles, interactive/destructible objects, map variants |
 | M16 | Balance pass | Tuning against the targets below, playtest telemetry |
 

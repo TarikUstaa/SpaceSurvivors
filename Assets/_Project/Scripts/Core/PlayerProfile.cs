@@ -15,7 +15,7 @@ namespace SpaceSurvivors.Core
     [Serializable]
     public class PlayerProfile
     {
-        public const int CurrentSchemaVersion = 1;
+        public const int CurrentSchemaVersion = 2;
 
         public int schemaVersion = CurrentSchemaVersion;
 
@@ -29,8 +29,11 @@ namespace SpaceSurvivors.Core
         public int runsPlayed;
         public int bestKills;
 
-        // ---- Reserved for M14 meta screens (declared early to keep the schema stable) ----
-        public List<string> ownedUpgradeIds = new();
+        // ---- Meta progression (M14a): permanent stat upgrades bought with wallet scrap ----
+        /// <summary>Owned level per meta-upgrade id. Absent id = level 0.</summary>
+        public Dictionary<string, int> metaUpgradeLevels = new();
+
+        // ---- Reserved for M14b/M14c (declared early to keep the schema stable) ----
         public List<string> ownedShipIds = new();
         public string selectedShipId = "";
         public List<string> unlockedAchievementIds = new();

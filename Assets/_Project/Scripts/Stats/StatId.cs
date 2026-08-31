@@ -18,6 +18,7 @@ namespace SpaceSurvivors.Stats
         PickupRadius,       // % on ScrapCollector radii
         XpGain,             // multiplier on collected XP
         ShieldCharges,      // flat + shield charges (0 base — the Shield upgrade unlocks it)
+        DamageResist,       // fraction of incoming damage ignored (0..~0.8), on HealthComponent
     }
 
     /// <summary>How a <see cref="StatModifier"/> combines into its stat.</summary>

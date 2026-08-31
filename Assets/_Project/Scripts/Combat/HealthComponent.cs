@@ -134,7 +134,16 @@ namespace SpaceSurvivors.Combat
                     return true; // the hit "landed" (attacker did its thing) but no HP lost
             }
 
-            float applied = _state.Apply(-info.Amount); // negative delta
+            // Armour: a fraction of the hit is ignored (player only — enemies have no _stats).
+            float amount = info.Amount;
+            if (_stats != null)
+            {
+                float resist = Mathf.Clamp(
+                    _stats.Modify(SpaceSurvivors.Stats.StatId.DamageResist, 0f), 0f, 0.85f);
+                amount *= 1f - resist;
+            }
+
+            float applied = _state.Apply(-amount); // negative delta
 
             if (_data != null && _data.invulnerabilityAfterHit > 0f)
                 _iFrameTimer = _data.invulnerabilityAfterHit;
