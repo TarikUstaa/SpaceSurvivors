@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Mode_Campaign
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.GameModeData
   displayName: CAMPAIGN
-  description: Three stages. Beat the final boss to win.
+  description: Five stages. Defeat the final boss to win.
   difficulty: {fileID: 11400000, guid: 9c231ddfe361f46b187286bcc19edc2c, type: 2}
   endless: 0

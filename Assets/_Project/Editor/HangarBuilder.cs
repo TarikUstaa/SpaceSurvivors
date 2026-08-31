@@ -62,37 +62,38 @@ namespace SpaceSurvivors.EditorTools
             Place(panel, new Vector2(0.5f, 0.5f), new Vector2(980, 940), Vector2.zero);
 
             var header = Img("Header", panel.transform, S("Ship_Shop/Header.png"), Color.white);
-            Place(header, new Vector2(0.5f, 1f), new Vector2(470, 74), new Vector2(0, -58));
+            Place(header, new Vector2(0.5f, 1f), new Vector2(320, 66), new Vector2(0, -52));
 
-            // wallet
+            // wallet — its own centred row under the header (the Header sprite has "SHIP SHOP"
+            // baked in, so keeping it clear avoids the text running together)
             var wallet = new GameObject("WalletGroup", typeof(RectTransform));
             wallet.transform.SetParent(panel.transform, false);
             var wRt = (RectTransform)wallet.transform;
-            wRt.anchorMin = wRt.anchorMax = wRt.pivot = new Vector2(1f, 1f);
-            wRt.sizeDelta = new Vector2(300, 56);
-            wRt.anchoredPosition = new Vector2(-40, -30);
-            var chip = Img("Chip", wallet.transform, Gen("ScrapChip.png"), Color.white);
-            var chipRt = (RectTransform)chip.transform;
-            chipRt.anchorMin = chipRt.anchorMax = chipRt.pivot = new Vector2(1f, 0.5f);
-            chipRt.sizeDelta = new Vector2(44, 44);
-            var walletText = Label("WalletText", wallet.transform, "SCRAP  0", 30, Steel);
+            wRt.anchorMin = wRt.anchorMax = wRt.pivot = new Vector2(0.5f, 1f);
+            wRt.sizeDelta = new Vector2(260, 44);
+            wRt.anchoredPosition = new Vector2(0, -104);
+            var walletText = Label("WalletText", wallet.transform, "SCRAP  0", 26, Steel);
             walletText.fontStyle = FontStyle.Bold;
             walletText.alignment = TextAnchor.MiddleRight;
             var wtRt = walletText.rectTransform;
             wtRt.anchorMin = wtRt.anchorMax = wtRt.pivot = new Vector2(1f, 0.5f);
-            wtRt.sizeDelta = new Vector2(230, 50);
-            wtRt.anchoredPosition = new Vector2(-54, 0);
+            wtRt.sizeDelta = new Vector2(210, 44);
+            wtRt.anchoredPosition = new Vector2(-40, 0);
+            var chip = Img("Chip", wallet.transform, Gen("ScrapChip.png"), Color.white);
+            var chipRt = (RectTransform)chip.transform;
+            chipRt.anchorMin = chipRt.anchorMax = chipRt.pivot = new Vector2(1f, 0.5f);
+            chipRt.sizeDelta = new Vector2(34, 34);
             var wOutline = walletText.gameObject.AddComponent<Outline>();
             wOutline.effectColor = new Color(0.05f, 0.06f, 0.09f, 0.9f);
             wOutline.effectDistance = new Vector2(1.5f, -1.5f);
 
             // ship image (centre)
             var shipImg = Img("ShipImage", panel.transform, null, Color.white);
-            Place(shipImg, new Vector2(0.5f, 0.5f), new Vector2(360, 360), new Vector2(0, 150));
+            Place(shipImg, new Vector2(0.5f, 0.5f), new Vector2(340, 340), new Vector2(0, 140));
 
             // prev / next arrows flanking the ship
-            var prev = ArrowButton("PrevButton", panel.transform, S("Ship_Shop/Backward_BTN.png"), new Vector2(-360, 150));
-            var next = ArrowButton("NextButton", panel.transform, S("Ship_Shop/Forward_BTN.png"), new Vector2(360, 150));
+            var prev = ArrowButton("PrevButton", panel.transform, S("Ship_Shop/Backward_BTN.png"), new Vector2(-360, 140));
+            var next = ArrowButton("NextButton", panel.transform, S("Ship_Shop/Forward_BTN.png"), new Vector2(360, 140));
 
             var name = Label("Name", panel.transform, "Scout", 40, new Color(1f, 0.96f, 0.82f));
             Place(name, new Vector2(0.5f, 0.5f), new Vector2(700, 54), new Vector2(0, -70));

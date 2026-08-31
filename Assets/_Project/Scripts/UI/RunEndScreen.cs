@@ -76,8 +76,8 @@ namespace SpaceSurvivors.UI
 
             if (_statsValue != null && _stats != null)
                 _statsValue.text =
-                    $"KILLS  {_stats.Kills}\nLEVEL  {_stats.Level}\n" +
-                    $"SCRAP  +{_stats.Scrap}\nWALLET  {ProfileService.Wallet}";
+                    $"KILLS  {_stats.Kills:n0}\nLEVEL  {_stats.Level}\n" +
+                    $"SCRAP  +{_stats.Scrap:n0}\nWALLET  {ProfileService.Wallet:n0}";
 
             string modeId = GameSession.SelectedMode != null ? GameSession.SelectedMode.name : "default";
             bool record = HighScoreService.Submit(modeId, survivedSeconds);

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf635bf9bc73b4821b10086089475400, type: 3}
   m_Name: MoveSpeed
   m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.UpgradeData
-  title: MoveSpeed
+  title: Thrusters
   description: +12% move speed
   icon: {fileID: 0}
   modifiers:

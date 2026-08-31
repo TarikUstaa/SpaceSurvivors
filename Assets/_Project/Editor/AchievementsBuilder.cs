@@ -143,12 +143,15 @@ namespace SpaceSurvivors.EditorTools
             panel.type = Image.Type.Sliced;
             Place(panel, new Vector2(0.5f, 0.5f), new Vector2(1180, 1040), Vector2.zero);
 
-            var header = Img("Header", panel.transform, S("Rating/Header.png"), Color.white);
-            Place(header, new Vector2(0.5f, 1f), new Vector2(470, 74), new Vector2(0, -52));
+            // The Rating/Header.png sprite has "RATING" baked in — use a plain label on the
+            // panel's dark title bar instead (matches the map-select screen).
+            var headerText = Label("HeaderText", panel.transform, "ACHIEVEMENTS", 38, new Color(0.96f, 0.98f, 1f));
+            headerText.fontStyle = FontStyle.Bold;
+            Place(headerText, new Vector2(0.5f, 1f), new Vector2(700, 66), new Vector2(0, -50));
 
-            var summary = Label("Summary", panel.transform, "0 / 0 UNLOCKED", 28, Gold);
+            var summary = Label("Summary", panel.transform, "0 / 0 UNLOCKED", 26, Gold);
             summary.fontStyle = FontStyle.Bold;
-            Place(summary, new Vector2(0.5f, 1f), new Vector2(400, 40), new Vector2(0, -108));
+            Place(summary, new Vector2(0.5f, 1f), new Vector2(400, 38), new Vector2(0, -104));
 
             // ---- 2 × 4 tile grid ----
             var tiles = new List<AchievementsScreen.Tile>();
@@ -169,21 +172,25 @@ namespace SpaceSurvivors.EditorTools
 
                 var icon = Img("Icon", bgImg.transform, a.icon, Color.white);
                 icon.preserveAspect = true;
-                Place(icon, new Vector2(0f, 0.5f), new Vector2(96, 96), new Vector2(72, 4));
+                Place(icon, new Vector2(0f, 0.5f), new Vector2(88, 88), new Vector2(66, 4));
 
                 var title = Label("Title", bgImg.transform, a.title, 25, new Color(1f, 0.95f, 0.8f));
                 title.alignment = TextAnchor.LowerLeft;
                 title.fontStyle = FontStyle.Bold;
-                Place(title, new Vector2(0f, 0.5f), new Vector2(370, 36), new Vector2(300, 40));
+                Place(title, new Vector2(0f, 0.5f), new Vector2(360, 36), new Vector2(340, 40));
+                Shadow(title);
 
                 var desc = Label("Desc", bgImg.transform, a.description, 16, Ink);
                 desc.alignment = TextAnchor.UpperLeft;
-                Place(desc, new Vector2(0f, 0.5f), new Vector2(380, 44), new Vector2(300, 2));
+                desc.horizontalOverflow = HorizontalWrapMode.Wrap;
+                Place(desc, new Vector2(0f, 0.5f), new Vector2(360, 44), new Vector2(340, 2));
+                Shadow(desc);
 
                 var progress = Label("Progress", bgImg.transform, "", 19, Steel);
                 progress.alignment = TextAnchor.LowerLeft;
                 progress.fontStyle = FontStyle.Bold;
-                Place(progress, new Vector2(0f, 0.5f), new Vector2(370, 28), new Vector2(300, -50));
+                Place(progress, new Vector2(0f, 0.5f), new Vector2(360, 28), new Vector2(340, -50));
+                Shadow(progress);
 
                 tiles.Add(new AchievementsScreen.Tile
                 {
@@ -265,7 +272,7 @@ namespace SpaceSurvivors.EditorTools
                 rt.anchoredPosition = new Vector2(-40, -304);
             }
 
-            var label = Label("Label", go.transform, "ACHIEVEMENTS", 24, new Color(0.95f, 0.98f, 1f));
+            var label = Label("Label", go.transform, "ACHIEVEMENTS", 19, new Color(0.95f, 0.98f, 1f));
             Stretch(label.rectTransform);
 
             var lso = new SerializedObject(go.GetComponent<LoadSceneButton>());
@@ -318,6 +325,14 @@ namespace SpaceSurvivors.EditorTools
         {
             rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
             rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
+        }
+
+        /// <summary>Drop shadow so tile text stays legible over the panel art's bright swoosh.</summary>
+        private static void Shadow(Text t)
+        {
+            var s = t.gameObject.AddComponent<Shadow>();
+            s.effectColor = new Color(0f, 0f, 0f, 0.75f);
+            s.effectDistance = new Vector2(1.5f, -1.5f);
         }
 
         private static void Place(Component c, Vector2 anchor, Vector2 size, Vector2 pos)

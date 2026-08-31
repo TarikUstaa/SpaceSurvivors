@@ -1,5 +1,6 @@
-using SpaceSurvivors.Core;
 using SpaceSurvivors.Combat;
+using SpaceSurvivors.Core;
+using SpaceSurvivors.Game;
 using SpaceSurvivors.Progression;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,8 +33,12 @@ namespace SpaceSurvivors.UI
         [SerializeField] private Image[] _shieldPips;
         [SerializeField] private Color _shieldPipFull = new Color(0.45f, 0.9f, 1f, 1f);
         [SerializeField] private Color _shieldPipEmpty = new Color(0.22f, 0.3f, 0.42f, 1f);
-        [Tooltip("Shows the live scrap total: persistent wallet + what's been collected this run.")]
+        [Tooltip("Shows this run's collected scrap (the wallet is a menu concept — the run-end " +
+                 "screen banks this amount).")]
         [SerializeField] private Text _scrapLabel;
+
+        private RunController _run;
+        private Canvas _canvas;
 
         private void Awake()
         {
@@ -42,6 +47,12 @@ namespace SpaceSurvivors.UI
             if (_playerHealth == null && _levelSystem != null) _playerHealth = _levelSystem.GetComponent<HealthComponent>();
             if (_shield == null) _shield = FindFirstObjectByType<ShieldComponent>();
             if (_scrap == null) _scrap = FindFirstObjectByType<ScrapCollector>();
+            _run = FindFirstObjectByType<RunController>();
+            // This component usually sits on a manager object, not under the HUD canvas —
+            // so fall back to the canvas that actually renders one of our widgets.
+            _canvas = GetComponentInParent<Canvas>();
+            if (_canvas == null && _xpFill != null) _canvas = _xpFill.canvas;
+            if (_canvas == null && _healthFill != null) _canvas = _healthFill.canvas;
         }
 
         private void OnEnable()
@@ -53,7 +64,7 @@ namespace SpaceSurvivors.UI
             }
             if (_scrap != null)
                 _scrap.ScrapCollected += HandleScrap;
-            ProfileService.Changed += RefreshScrap;
+            if (_run != null) _run.RunEnded += HandleRunEnded;
             RefreshScrap();
 
             if (_shieldGroup != null && _shield != null)
@@ -64,7 +75,18 @@ namespace SpaceSurvivors.UI
         {
             if (_levelSystem != null) _levelSystem.XpChanged -= HandleXpChanged;
             if (_scrap != null) _scrap.ScrapCollected -= HandleScrap;
-            ProfileService.Changed -= RefreshScrap;
+            if (_run != null) _run.RunEnded -= HandleRunEnded;
+        }
+
+        private void HandleRunEnded(bool won, float seconds)
+        {
+            // Stop drawing the HUD so it doesn't sit behind the score panel (kept alive so
+            // events still unwind cleanly). Resolve the canvas late — Graphic.canvas isn't
+            // populated until the widget has rendered at least once.
+            if (_canvas == null && _xpFill != null) _canvas = _xpFill.canvas;
+            if (_canvas == null && _healthFill != null) _canvas = _healthFill.canvas;
+            if (_canvas == null && _levelLabel != null) _canvas = _levelLabel.canvas;
+            if (_canvas != null) _canvas.enabled = false;
         }
 
         private void HandleXpChanged(int into, int needed)
@@ -78,8 +100,7 @@ namespace SpaceSurvivors.UI
         private void RefreshScrap()
         {
             if (_scrapLabel == null) return;
-            long total = ProfileService.Wallet + (_scrap != null ? _scrap.TotalScrap : 0);
-            _scrapLabel.text = total.ToString("n0");
+            _scrapLabel.text = (_scrap != null ? _scrap.TotalScrap : 0).ToString("n0");
         }
 
         private void Update()

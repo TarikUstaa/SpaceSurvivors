@@ -37,8 +37,8 @@ namespace SpaceSurvivors.UI
         [SerializeField] private string _menuSceneName = "MainMenu";
 
         [Header("Tile tint")]
-        [SerializeField] private Color _lockedTint = new(0.42f, 0.45f, 0.52f, 1f);
-        [SerializeField] private Color _unlockedTint = Color.white;
+        [SerializeField] private Color _lockedTint = new(0.40f, 0.43f, 0.50f, 1f);
+        [SerializeField] private Color _unlockedTint = new(0.72f, 0.77f, 0.86f, 1f);
         [SerializeField] private Color _lockedText = new(0.60f, 0.64f, 0.72f, 1f);
         [SerializeField] private Color _unlockedTitle = new(1f, 0.95f, 0.80f, 1f);
         [SerializeField] private Color _unlockedStamp = new(0.44f, 0.90f, 0.55f, 1f);

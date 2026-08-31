@@ -804,6 +804,39 @@ sis perdesi / supernova"). NO standalone MAPS menu section — the map picker op
 - **Deferred:** enemy obstacle-avoidance (they physics-bump rocks, VS-style — add an `IVelocityModifier`
   if clumping is bad in the human playtest); real painted backdrop art; drifting-asteroid variant.
 
+## QA / bug-cleanup pass (2026-08-31, after M16 — awaiting sign-off)
+User: "projeyi genel bi inceleyip, bugları temizle. wallet/scrap bağlantıları sıkıntılı. iç içe
+giren yazılar varsa düzelt, bütün ekranları incele." Reviewed every screen in play mode + fixed:
+
+- **Wallet vs run-scrap made coherent (the reported bug).** In-run HUD (`RunHud`) showed
+  `ProfileService.Wallet + ScrapCollector.TotalScrap` — a double-count, because `RunEndScreen`
+  *also* banks the run haul into the wallet on `RunEnded`. Now the HUD shows **this run's haul
+  only** (`TotalScrap`). Wallet is purely a menu concept; the run-end screen shows `SCRAP +haul`
+  then `WALLET <new total>`. Single banking seam stays `ProfileService.AddScrap` in `RunEndScreen`.
+- **HUD stayed visible behind the score panel on run end.** `RunHud` now subscribes to
+  `RunController.RunEnded` and disables its canvas. `RunHud` sits on a manager object (not under
+  the HUD canvas) so `GetComponentInParent<Canvas>()` is null — resolve the canvas late via
+  `Graphic.canvas` of a widget (`_xpFill`/`_healthFill`/`_levelLabel`). `StageIndicator` also
+  hides its `_root` on `RunEnded`.
+- **`RunEndScreen` stats** — thousands separators (`:n0`) on SCRAP / WALLET; added a `WALLET` line.
+- **Overlapping text on the CraftPix header sprites** (baked-in words "UPGRADE" / "SHIP SHOP" /
+  "RATING"). Shop + Hangar: header sprite narrowed & centred, the `SCRAP <n>` wallet chip moved to
+  its **own centred row** below it (was overlapping the header). Achievements: dropped the `RATING`
+  sprite entirely for a plain "ACHIEVEMENTS" text label; tile text columns moved right (x 300→340)
+  clear of the icon + given a `Shadow` for legibility over the tile swoosh art.
+- **Settings pop-up** — dim backdrop was alpha 0.94 (menu title bled through) and later-added
+  menu buttons (SHOP/HANGAR/ACHIEVEMENTS) drew over it. Fix: opaque dim (alpha 1.0) + `PanelToggle`
+  calls `transform.SetAsLastSibling()` on open.
+- **Upgrade display names** — `FireRate`→"Fire Rate", `MoveSpeed`→"Thrusters", `MaxHealth`→"Hull
+  Plating", `PickupRadius`→"Pickup Range", `MultiShot`→"Multi-Shot" (LevelUp screen was showing
+  raw ids).
+- **`Mode_Campaign` description** → "Five stages. Defeat the final boss to win." (was stale).
+- Scene `.unity` diffs are large because the Shop/Hangar/Achievements/MainMenu UI was rebuilt by
+  the editor builders — Unity re-serialised the hierarchies. Verified visually, no behaviour change.
+- **Verified in play mode:** MainMenu, Settings, Shop, Hangar, Achievements, MapSelect, in-run HUD
+  (`0` scrap at start), LevelUp (renamed titles), RunEnd (HUD hidden, `1,234` / `3,247` formatting).
+  No console errors. Real `profile.json` untouched (used editor-injected scrap for the RunEnd test).
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,

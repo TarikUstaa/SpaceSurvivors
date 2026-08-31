@@ -23,7 +23,11 @@ namespace SpaceSurvivors.UI
 
         private void Set(bool on)
         {
-            if (_panel != null) _panel.SetActive(on);
+            if (_panel == null) return;
+            _panel.SetActive(on);
+            // Draw on top of anything sibling builders (shop/hangar/… buttons) added later,
+            // so the dim backdrop actually covers the menu.
+            if (on) _panel.transform.SetAsLastSibling();
         }
     }
 }

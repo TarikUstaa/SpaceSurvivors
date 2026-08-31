@@ -74,37 +74,37 @@ namespace SpaceSurvivors.EditorTools
             panel.type = Image.Type.Sliced;
             Place(panel, new Vector2(0.5f, 0.5f), new Vector2(980, 900), new Vector2(0, 0));
 
-            // Header.png already carries the word "UPGRADE" — just place the plate on the
-            // panel's dark title bar, no text of our own.
+            // Header.png carries the word "UPGRADE" — keep the plate narrow so its baked text
+            // doesn't run into the wallet readout.
             var header = Img("Header", panel.transform, S("Upgrade/Header.png"), Color.white);
-            Place(header, new Vector2(0.5f, 1f), new Vector2(430, 74), new Vector2(0, -58));
+            Place(header, new Vector2(0.5f, 1f), new Vector2(300, 66), new Vector2(0, -52));
 
-            // ---- wallet, top-right of the panel ----
+            // ---- wallet, its own row just under the header (never overlapping it) ----
             var wallet = new GameObject("WalletGroup", typeof(RectTransform));
             wallet.transform.SetParent(panel.transform, false);
             var wRt = (RectTransform)wallet.transform;
-            wRt.anchorMin = wRt.anchorMax = wRt.pivot = new Vector2(1f, 1f);
-            wRt.sizeDelta = new Vector2(300, 56);
-            wRt.anchoredPosition = new Vector2(-40, -30);
-            var chip = Img("Chip", wallet.transform, Gen("ScrapChip.png"), Color.white);
-            var chipRt = (RectTransform)chip.transform;
-            chipRt.anchorMin = chipRt.anchorMax = chipRt.pivot = new Vector2(1f, 0.5f);
-            chipRt.sizeDelta = new Vector2(44, 44);
-            var walletText = Label("WalletText", wallet.transform, "SCRAP  0", 30, Steel);
+            wRt.anchorMin = wRt.anchorMax = wRt.pivot = new Vector2(0.5f, 1f);
+            wRt.sizeDelta = new Vector2(260, 44);
+            wRt.anchoredPosition = new Vector2(0, -104);
+            var walletText = Label("WalletText", wallet.transform, "SCRAP  0", 26, Steel);
             walletText.fontStyle = FontStyle.Bold;
             walletText.alignment = TextAnchor.MiddleRight;
             var wtRt = walletText.rectTransform;
             wtRt.anchorMin = wtRt.anchorMax = wtRt.pivot = new Vector2(1f, 0.5f);
-            wtRt.sizeDelta = new Vector2(230, 50);
-            wtRt.anchoredPosition = new Vector2(-54, 0);
+            wtRt.sizeDelta = new Vector2(210, 44);
+            wtRt.anchoredPosition = new Vector2(-40, 0);
+            var chip = Img("Chip", wallet.transform, Gen("ScrapChip.png"), Color.white);
+            var chipRt = (RectTransform)chip.transform;
+            chipRt.anchorMin = chipRt.anchorMax = chipRt.pivot = new Vector2(1f, 0.5f);
+            chipRt.sizeDelta = new Vector2(34, 34);
             var wOutline = walletText.gameObject.AddComponent<Outline>();
             wOutline.effectColor = new Color(0.05f, 0.06f, 0.09f, 0.9f);
             wOutline.effectDistance = new Vector2(1.5f, -1.5f);
 
             // ---- rows ----
             var rows = new List<ShopScreen.UpgradeRow>();
-            const float rowH = 168f;
-            const float top = 250f;   // y of the first row's centre, from panel centre
+            const float rowH = 166f;
+            const float top = 232f;   // y of the first row's centre, from panel centre (clears the wallet row)
             for (int i = 0; i < upgrades.Count; i++)
             {
                 var u = upgrades[i];

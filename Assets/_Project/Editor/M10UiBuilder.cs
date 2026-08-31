@@ -48,7 +48,7 @@ namespace SpaceSurvivors.EditorTools
             var group = new GameObject("MenuSettingsGroup", typeof(RectTransform));
             group.transform.SetParent(menuCanvas, false);
             Stretch((RectTransform)group.transform);
-            var dim = Img("Dim", group.transform, null, new Color(0.02f, 0.03f, 0.06f, 0.94f), raycast: true);
+            var dim = Img("Dim", group.transform, null, new Color(0.02f, 0.03f, 0.06f, 1f), raycast: true);
             Stretch((RectTransform)dim.transform);
 
             var win = Img("Window", group.transform, S("Setting/Window.png"), Color.white);

@@ -1,5 +1,6 @@
 using SpaceSurvivors.Data;
 using SpaceSurvivors.Enemies;
+using SpaceSurvivors.Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,9 @@ namespace SpaceSurvivors.UI
             bool show = !GameSession.IsEndless && _spawnDirector != null && _spawnDirector.ScheduledBossCount > 0;
             if (_root != null) _root.SetActive(show);
             enabled = show;
+
+            var run = FindFirstObjectByType<RunController>();
+            if (run != null) run.RunEnded += (_, __) => { if (_root != null) _root.SetActive(false); };
         }
 
         private void Update()
