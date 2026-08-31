@@ -233,7 +233,7 @@ MonoBehaviour:
     mode: {fileID: 11400000, guid: 137379989fcb04ceaaecb65dedfe2e60, type: 2}
   - button: {fileID: 474617885}
     mode: {fileID: 11400000, guid: cfa82207d354049cab38e764b5b051a5, type: 2}
-  _gameSceneName: Game
+  _gameSceneName: MapSelect
   _quitButton: {fileID: 1684056102}
   _descriptionLabel: {fileID: 889078359}
   _walletLabel: {fileID: 133399849}

@@ -3,8 +3,8 @@
 > Working memory log. Update after every major milestone. Newest entry on top.
 
 ## Current State
-**M1–M14b approved (2026-08-28). M14c BUILT, awaiting sign-off (2026-08-31) = achievements — 8 stat-threshold achievements (`AchievementData` metric+threshold SO + `AchievementCatalogue` in Resources), `AchievementService` static (auto-tracks via `ProfileService.Changed` → `Evaluate` → writes `unlockedAchievementIds`), `Achievements.unity` 2×4 tile grid + MainMenu ACHIEVEMENTS button. Profile schema v2→v3 (lifetimeKills / bestSurvivalSeconds / bestLevel / bossKills). Next after sign-off: M15 — environment & maps.**
-Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c follow-on). Full detail for each milestone is in its section below.
+**M1–M14c approved. M15 BUILT (revised per user), awaiting sign-off (2026-08-31) = environment & maps. The asteroid / cache / hazard field is the STANDARD ARENA (config on `EnvironmentDirector`, the same on every map — asteroids are core gameplay, not a map feature). Maps = pure BACKDROP THEMES: Milky Way / Crimson Nebula / Supernova, each a baked seamless nebula texture + sky/star tint drawn as `StarfieldParallax`'s farthest layer. No standalone MAPS menu — Campaign/Infinite → `MapSelect.unity` carousel → PLAY → Game. `Obstacle` layer (11) + physics matrix; `SpaceSurvivors.Environment` asmdef (`Obstacle` kinematic solid + HealthComponent → debris+scrap; `HazardZone` OverlapCircle ticker; `EnvironmentDirector` chunk streamer). `Data/MapData`/`MapCatalogue`, `Progression/MapService` (schema v3→v4 `selectedMapId`). Kinematic ship deflects off rocks via `Rigidbody2D.Cast` in `PlayerMovement`. Next after sign-off: M16 — balance pass.**
+Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c follow-on); enemy obstacle-avoidance `IVelocityModifier` (M15 follow-on if rocks clump enemies badly); map preview art. Full detail for each milestone is in its section below.
 
 ### M7 — Mini-boss / boss schedule (built, play-tested OK)
 - `DifficultyConfig` +`List<BossEntry> bossSchedule` (`{triggerTime, bossData, count, warningLead}`). Default entry at 180s. Wired: [{180s, MiniBoss, ×1, lead 4s}, {360s, MiniBoss, ×2, lead 4s}].
@@ -193,6 +193,7 @@ Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c foll
 | 2026-08-28 | Session follow-ons | Magnet bonus-drop (pulls every XP drop on the map); pickup size tuning; smoother ship turning (input-based ShipRotator via MoveRotation, camera look-ahead reduced). |
 | 2026-08-28 | M14b — ship shop / hangar | ✅ APPROVED 2026-08-28. Scout (free) / Vanguard / Wraith / Ronin — each = a hull sprite + run-start `StatModifier[]` via `ShipService` + `ShipApplier`. `Hangar.unity` carousel + MainMenu HANGAR button. MainMenu wallet restyled to the HUD metal look. |
 | 2026-08-31 | M14c — achievements | ⏳ BUILT, awaiting sign-off. 8 stat-threshold achievements (`AchievementData` = metric enum + threshold; `AchievementCatalogue` in `Resources/`). `AchievementService` static auto-tracks via `ProfileService.Changed` → `Evaluate()` → writes `unlockedAchievementIds` + `Save`. `Achievements.unity` 2×4 grid (`Rating/` CraftPix art) + MainMenu ACHIEVEMENTS button. Profile schema v2→v3 (`lifetimeKills` / `bestSurvivalSeconds` / `bestLevel` / `bossKills`); `ProfileService.RecordRun` extended; `RunEndScreen` calls `Evaluate()`. |
+| 2026-08-31 | M15 — environment & maps | ⏳ BUILT (revised per user), awaiting sign-off. `Obstacle` layer (11) + Physics2D matrix. New `SpaceSurvivors.Environment` asmdef: `Obstacle` (kinematic solid + `HealthComponent`; destructible raises `Destroyed` → director spawns debris VFX + `ScrapReward` scrap), `HazardZone` (`OverlapCircleNonAlloc` ticker damaging Player + Enemy), `EnvironmentDirector` (chunk streamer — deterministic per-cell RNG, pooled, far-cull; **owns the field config** — same asteroid/cache/hazard field on every map). `Data/MapData` (= backdrop theme: sky/star tint + baked nebula sprite) + `MapCatalogue` (Resources). `Progression/MapService` (static; profile schema **v3→v4** `selectedMapId`). 3 maps = **backdrops**: Milky Way / Crimson Nebula / Supernova (`Editor/BackdropTextureBaker` bakes 3 seamless 512² PNGs; `StarfieldParallax.SetBackdrop()` draws one as the farthest parallax layer). Flow: Campaign/Infinite → `MapSelect.unity` (build 5) carousel → PLAY → Game (no MAPS menu button). `PlayerMovement` gains `Rigidbody2D.Cast` obstacle deflection (`_obstacleMask`). `EnemyProjectile._blockLayers`. `StarfieldParallax.SetTint()` / `SetBackdrop()`. |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -675,6 +676,83 @@ The linchpin for M14. Everything is in `Core` (no gameplay deps → backend-port
   ACHIEVEMENTS button loads the scene. No console errors. Real `profile.json` untouched.
 - **Deferred:** in-run achievement toast / unlock animation (`Evaluate()` already returns the freshly
   unlocked list for a future notifier to consume).
+
+## M15 — Environment & Maps (built 2026-08-31, revised per user, awaiting sign-off)
+
+**User's steer (mid-M15):** asteroids/caches/hazards should be the STANDARD ARENA (they expected them
+in the base game regardless of map). Maps = pure **backdrop themes** ("samanyolu galaksisi / kırmızı
+sis perdesi / supernova"). NO standalone MAPS menu section — the map picker opens after choosing a mode.
+
+- **`Obstacle` layer = 11** (`TagManager.asset`). Physics2D matrix (`Physics2D.IgnoreLayerCollision` from
+  `EnvironmentBuilder`, **persists** to `Physics2DSettings.asset`): Obstacle collides with Enemy(6),
+  PlayerProjectile(7), Player(9), EnemyProjectile(10) only — NOT Pickup(8), not itself.
+- **New asmdef `SpaceSurvivors.Environment`** → refs Core, Data, Stats, Combat, **Progression** (for
+  `XpPickup` / `ScrapCollector` / `MapService`). Nothing references Environment back (Game asmdef
+  unchanged — the scene just hosts the components), so no cycle and the Game↛Progression boundary holds.
+- **`Environment/Obstacle`** — `[RequireComponent] Rigidbody2D (Kinematic) + Collider2D + HealthComponent
+  + PoolHandle`. `_driftSpeed` (0 = static), `_spinSpeed`, `_scrapReward` (>0 = a cache). Every obstacle
+  has a `HealthComponent`: **non-destructible** = `Obstacle_AsteroidHard` HealthData (99999 HP — shots
+  just vanish into it via the projectile's own IDamageable path, **no Projectile.cs change**);
+  **destructible** = modest HP, raises `event Destroyed(obstacle, pos, DamageInfo)` on death then despawns.
+- **`Environment/HazardZone`** — no RB/layer. `Update` runs `Physics2D.OverlapCircleNonAlloc` on
+  `_tickInterval` (0.6s), `TakeDamage(_damagePerTick=5)` on every `IDamageable` in `_radius` (2.4) whose
+  layer is in `_targetLayers` (Player + Enemy). Child `_pulse` sprite scales sine for readability.
+- **`Environment/EnvironmentDirector`** — **owns the field config** now (`_props` PropEntry[] +
+  `_propsPerCell`/`_cellSize`/`_spawnClearRadius`/`_ringRadius`), NOT the map. Same asteroid/cache/hazard
+  field on every map (asteroids = core gameplay). On `Start` calls `ApplyLook(MapService.Selected ??
+  _fallbackMap)` → camera bg + `StarfieldParallax.SetTint` + `SetBackdrop`. Keeps a
+  `Dictionary<Vector2Int, List<GameObject>>` of cells within `_ringRadius` (3) of the player's cell; each
+  cell's props are `new System.Random(HashCell(cell))` deterministic (fixed seed → backtracking stable);
+  cells past ring+1 are depopulated (pooled). On `Obstacle.Destroyed`: unsubscribe, drop from cell list
+  (so a later Depopulate can't double-release — `Pool.Release` also guards `!activeSelf`), spawn
+  `_debrisVfxPrefab`, and for a cache spawn `Clamp(scrap/5,1,5)` `ScrapPickup`s vs the `ScrapCollector`.
+  Field wired by `WireGameScene`: large w2 / small w4.5 / cache w1 / hazard w0.7, propsPerCell 5, cell 14.
+- **`Data/MapData`** = a **backdrop theme**: `id/displayName/description/previewSprite`,
+  `cameraBackground`, `starfieldTint`, `backdropSprite` (big seamless nebula tex), `backdropTint`.
+  No gameplay fields. **`Data/MapCatalogue`** — `List<MapData>` in `Resources/MapCatalogue.asset`,
+  first entry = default.
+- **`Progression/MapService`** (static, same shape as `ShipService`) — `Maps`, `Find`, `SelectedId`
+  (from `PlayerProfile.selectedMapId`, falls back to catalogue[0]), `Selected`, `Select` (→ `Save` +
+  `Changed`), `SetCatalogue`. **Profile schema v3 → v4**: added `string selectedMapId` (additive —
+  migration just bumps the version). All maps free.
+- **`Core/StarfieldParallax`** — `SetTint(Color)` recolours the star layers; **`SetBackdrop(Sprite,
+  Color)`** builds (once) / shows / hides one extra farthest tiled layer (`_backdropParallax` 0.012,
+  `_backdropDensity` 0.30) for the per-map nebula. Passing a null sprite hides it.
+- **`Editor/BackdropTextureBaker`** (`M15 Backdrop Textures`) — bakes 3 seamless (toroidal-wrapped),
+  512² PNGs at PPU 18 into `Art/Sprites/Generated/`: **Backdrop_MilkyWay** (diagonal blue band of soft
+  blobs + warm core hilites + dust lanes), **Backdrop_Nebula** (scattered red/magenta cloud blobs +
+  voids + hot cores), **Backdrop_Supernova** (hot haze + bright orange bursts with faint shock rings).
+  Modest opacity, dimmed further in-game via `backdropTint` alpha 0.6.
+- **3 maps** (`Resources/Map_*.asset`) = backdrops only: **milky_way** (Milky Way, cool blue),
+  **crimson_nebula** (Crimson Nebula, deep red "fog curtain"), **supernova** (Supernova, hot amber).
+- **`UI/MapSelectScreen`** — one-map carousel: preview Image shows the `backdropSprite` (or a sky-colour
+  swatch), name/desc, **PLAY** (`MapService.Select(current)` + `LoadScene("Game")`), prev/next, BACK
+  (→ MainMenu). Built by `Editor/MapSelectBuilder` (`MapSelect.unity`, `Ship_Shop/` CraftPix art; header
+  is a plain "SELECT MAP" label).
+- **Flow:** `MapSelectBuilder`'s `M15 Route Main-Menu through Map-select` sets `MainMenuScreen._gameSceneName
+  = "MapSelect"` and deletes any stray `MapsButton`. So Campaign/Infinite → MapSelect → PLAY → Game.
+- **`Player/PlayerMovement`** — the ship's RB is **Kinematic**, so the solver won't stop it at a rock.
+  New `_obstacleMask` + `Deflect(velocity, dt)`: `Rigidbody2D.Cast` along the intended move, cancel the
+  velocity component pointing into any hit surface → the ship slides along rocks. `_obstacleMask` wired
+  to `1<<11` by `EnvironmentBuilder`.
+- **`Combat/EnemyProjectile`** — new `_blockLayers` mask: an enemy shot hitting terrain spawns its impact
+  VFX and despawns (no damage). (Player `Projectile` needs no change — see Obstacle above.)
+- **Prefabs** (`Prefabs/Environment/`, all pooled, prewarmed on `PoolManager`): `Env_AsteroidLarge`
+  (`meteorGrey_big4`, scale 1.55, indestructible), `Env_AsteroidSmall` (`meteorBrown_big1`, ~46 HP,
+  HitFlash), `Env_ScrapCache` (`things_silver` gold-tinted, 30 HP, scrapReward 18), `Env_HazardZone`
+  (`AuraRing` orange pulse), `Env_Debris` (`meteorBrown_med3` OneShotPulse).
+- **Build scenes:** MainMenu(0) Game(1) Shop(2) Hangar(3) Achievements(4) **MapSelect(5)**.
+- **Editor:** `EnvironmentBuilder` (`M15 Setup layers + physics` / `M15 Build environment assets` (also
+  bakes backdrops + builds maps) / `M15 Wire Game scene`), `MapSelectBuilder` (`M15 Map-select scene` /
+  `M15 Route Main-Menu through Map-select`), `BackdropTextureBaker` (`M15 Backdrop Textures`).
+- **Play-tested (Claude, scratch profile `m15test.json`):** MainMenu → Campaign → MapSelect (3 backdrop
+  previews look distinct) → PLAY → Game loads with `Backdrop_<map>` on the farthest layer + matching sky
+  tint; `selectedMapId` persists. Field streams the same on every map (400+ obstacles); physics matrix
+  correct (Player/Enemy/PlayerProjectile↔Obstacle yes, Pickup no); `Rigidbody2D.Cast` from the player
+  detects the rock; small asteroid → debris VFX; cache → 3 scrap `XpPickup`s; hazard tick 100→95. No
+  MAPS menu button. No console errors. Real `profile.json` untouched.
+- **Deferred:** enemy obstacle-avoidance (they physics-bump rocks, VS-style — add an `IVelocityModifier`
+  if clumping is bad in the human playtest); real painted backdrop art; drifting-asteroid variant.
 
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in

@@ -20,6 +20,9 @@ namespace SpaceSurvivors.Combat
         [Tooltip("Layers this shot can hit (normally just Player).")]
         [SerializeField] private LayerMask _targetLayers;
 
+        [Tooltip("Layers that stop the shot with no damage (terrain / obstacles).")]
+        [SerializeField] private LayerMask _blockLayers;
+
         [Tooltip("Optional pooled one-shot VFX played where the shot lands / expires.")]
         [SerializeField] private GameObject _impactVfxPrefab;
 
@@ -78,7 +81,17 @@ namespace SpaceSurvivors.Combat
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if ((_targetLayers.value & (1 << other.gameObject.layer)) == 0) return;
+            int bit = 1 << other.gameObject.layer;
+
+            // Terrain blocks the shot dead — no damage, just a puff.
+            if ((_blockLayers.value & bit) != 0)
+            {
+                SpawnImpact();
+                _handle.Despawn();
+                return;
+            }
+
+            if ((_targetLayers.value & bit) == 0) return;
             if (other.attachedRigidbody != null && other.attachedRigidbody.gameObject == _owner) return;
 
             var target = other.GetComponentInParent<IDamageable>();

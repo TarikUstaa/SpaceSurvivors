@@ -40,7 +40,7 @@ driven by emergent build synergies.
 | M14a | Permanent upgrade shop | ✅ Damage/Hull/Thrusters/Armour bought with wallet scrap; MetaProgressionService + MetaUpgradeApplier seed the run-start StatSheet; Shop.unity + MainMenu SHOP button; new StatId.DamageResist |
 | M14b | Ship shop / hangar | ✅ Scout/Vanguard/Wraith/Ronin — each a hull sprite + run-start StatModifiers via ShipService + ShipApplier; Hangar.unity carousel + MainMenu HANGAR button |
 | M14c | Achievements | ✅ (awaiting sign-off) 8 stat-threshold achievements — `AchievementData` (metric + threshold) + `AchievementCatalogue`; `AchievementService` auto-tracks via `ProfileService.Changed` → writes `unlockedAchievementIds`; `Achievements.unity` grid + MainMenu button. Profile schema v2→v3. |
-| M15 | Environment & maps | Asteroids / obstacles, interactive/destructible objects, map variants |
+| M15 | Environment & maps | ✅ (awaiting sign-off) `Obstacle` layer + `SpaceSurvivors.Environment` asmdef (`Obstacle` / `HazardZone` / `EnvironmentDirector` chunk streamer — the asteroid/cache/hazard field is the standard arena, the same on every map); `MapData` = backdrop theme + `MapService` (schema v3→v4); 3 backdrops (Milky Way / Crimson Nebula / Supernova) baked by `BackdropTextureBaker`, drawn by `StarfieldParallax.SetBackdrop`; mode → `MapSelect.unity` carousel → PLAY → Game (no MAPS menu); kinematic-ship `Rigidbody2D.Cast` deflection |
 | M16 | Balance pass | Tuning against the targets below, playtest telemetry |
 
 *(Order is a proposal — see §8 backlog. Milestones after M10 are not locked; earlier ones stay open to revisits — the assembly split makes that safe.)*

@@ -31,9 +31,17 @@ namespace SpaceSurvivors.Player
         [Tooltip("Leave empty to auto-resolve an IMoveInput component on this GameObject.")]
         [SerializeField] private MonoBehaviour _inputSourceBehaviour;
 
+        [Header("Obstacles")]
+        [Tooltip("Layers the ship can't fly through (M15 asteroids / terrain). Empty = no blocking.")]
+        [SerializeField] private LayerMask _obstacleMask;
+
         private IMoveInput _input;
         private Rigidbody2D _body;
         private Camera _camera;
+
+        private ContactFilter2D _obstacleFilter;
+        private readonly RaycastHit2D[] _castHits = new RaycastHit2D[8];
+        private const float ObstacleSkin = 0.03f;
 
         [Tooltip("Optional. Empty = auto-resolve a StatSheet on this GameObject.")]
         [SerializeField] private SpaceSurvivors.Stats.StatSheet _stats;
@@ -53,6 +61,9 @@ namespace SpaceSurvivors.Player
             _input = _inputSourceBehaviour as IMoveInput ?? GetComponent<IMoveInput>();
             if (_stats == null) _stats = GetComponent<SpaceSurvivors.Stats.StatSheet>();
             _camera = Camera.main;
+
+            _obstacleFilter = new ContactFilter2D { useTriggers = false, useLayerMask = true };
+            _obstacleFilter.SetLayerMask(_obstacleMask);
 
             if (_config == null)
                 Debug.LogError($"{nameof(PlayerMovement)} on '{name}' has no PlayerConfig assigned.", this);
@@ -76,10 +87,31 @@ namespace SpaceSurvivors.Player
             float rate = hasInput ? _config.acceleration : _config.deceleration;
             Vector2 newVelocity = Vector2.MoveTowards(current, desiredVelocity, rate * dt);
 
-            _body.linearVelocity = newVelocity;
+            _body.linearVelocity = Deflect(newVelocity, dt);
 
             if (_config.clampToScreen)
                 ClampToScreen();
+        }
+
+        /// <summary>
+        /// The ship's body is Kinematic, so the physics solver won't stop it at an asteroid.
+        /// Sweep the collider along the intended move and cancel the velocity component that
+        /// drives into any obstacle surface — the ship slides along the rock instead of
+        /// passing through it.
+        /// </summary>
+        private Vector2 Deflect(Vector2 velocity, float dt)
+        {
+            if (_obstacleMask.value == 0 || velocity.sqrMagnitude < 0.0001f) return velocity;
+
+            float dist = velocity.magnitude * dt + ObstacleSkin;
+            int n = _body.Cast(velocity.normalized, _obstacleFilter, _castHits, dist);
+            for (int i = 0; i < n; i++)
+            {
+                Vector2 nrm = _castHits[i].normal;
+                float into = Vector2.Dot(velocity, -nrm);
+                if (into > 0f) velocity += nrm * into;
+            }
+            return velocity;
         }
 
         /// <summary>Keeps the ship inside the camera view minus a configurable margin.</summary>

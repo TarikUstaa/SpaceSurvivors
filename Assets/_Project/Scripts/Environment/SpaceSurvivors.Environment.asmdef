@@ -1,0 +1,20 @@
+{
+    "name": "SpaceSurvivors.Environment",
+    "rootNamespace": "SpaceSurvivors.Environment",
+    "references": [
+        "SpaceSurvivors.Core",
+        "SpaceSurvivors.Data",
+        "SpaceSurvivors.Stats",
+        "SpaceSurvivors.Combat",
+        "SpaceSurvivors.Progression"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

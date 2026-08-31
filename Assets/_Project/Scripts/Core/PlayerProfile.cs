@@ -15,7 +15,7 @@ namespace SpaceSurvivors.Core
     [Serializable]
     public class PlayerProfile
     {
-        public const int CurrentSchemaVersion = 3;
+        public const int CurrentSchemaVersion = 4;
 
         public int schemaVersion = CurrentSchemaVersion;
 
@@ -45,5 +45,8 @@ namespace SpaceSurvivors.Core
         public List<string> ownedShipIds = new();
         public string selectedShipId = "";
         public List<string> unlockedAchievementIds = new();
+
+        // ---- Maps (M15): all maps are free, this is just the last pick ----
+        public string selectedMapId = "";
     }
 }

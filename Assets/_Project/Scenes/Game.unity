@@ -3821,6 +3821,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Player.PlayerMovement
   _config: {fileID: 11400000, guid: f770365412cb244948f110afec7ec4a4, type: 2}
   _inputSourceBehaviour: {fileID: 0}
+  _obstacleMask:
+    serializedVersion: 2
+    m_Bits: 2048
   _stats: {fileID: 632278095}
 --- !u!50 &632278084
 Rigidbody2D:
@@ -5783,6 +5786,8 @@ MonoBehaviour:
   _tint: {r: 0.75, g: 0.82, b: 1, a: 1}
   _coverage: 3
   _baseSortingOrder: -100
+  _backdropParallax: 0.012
+  _backdropDensity: 0.3
   _layers:
   - parallax: 0.03
     brightness: 0.3
@@ -8800,6 +8805,7 @@ GameObject:
   - component: {fileID: 2065986492}
   - component: {fileID: 2065986494}
   - component: {fileID: 2065986495}
+  - component: {fileID: 2065986496}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -8838,6 +8844,16 @@ MonoBehaviour:
     count: 3
   - prefab: {fileID: 3182996874433942192, guid: 18131f4385b86496c9b1826b986dceb5, type: 3}
     count: 3
+  - prefab: {fileID: 7758887451277735320, guid: d7ea4e2375acd4907abe5d47bda2f1bd, type: 3}
+    count: 110
+  - prefab: {fileID: 620367729696799031, guid: 19d031afa22d244b080a585fc5b548a7, type: 3}
+    count: 210
+  - prefab: {fileID: 1562396439427658906, guid: f0b571d6c685a4791ae09e6abf4dad60, type: 3}
+    count: 55
+  - prefab: {fileID: 5684845667659639219, guid: c9d1750c2ebbd446ca18b595697b703e, type: 3}
+    count: 120
+  - prefab: {fileID: 8552218769029606334, guid: 877461480d44341468acc8b9f0d178fd, type: 3}
+    count: 12
 --- !u!4 &2065986488
 Transform:
   m_ObjectHideFlags: 0
@@ -8988,6 +9004,40 @@ MonoBehaviour:
   _levelSystem: {fileID: 632278093}
   _scrapCollector: {fileID: 632278094}
   _clock: {fileID: 2065986490}
+--- !u!114 &2065986496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065986486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6201a3c21c37e4ea9a18b995103de4d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Environment::SpaceSurvivors.Environment.EnvironmentDirector
+  _pool: {fileID: 2065986487}
+  _player: {fileID: 632278087}
+  _camera: {fileID: 519420031}
+  _collector: {fileID: 632278094}
+  _starfield: {fileID: 1223522665}
+  _props:
+  - prefab: {fileID: 7758887451277735320, guid: d7ea4e2375acd4907abe5d47bda2f1bd, type: 3}
+    weight: 2
+  - prefab: {fileID: 620367729696799031, guid: 19d031afa22d244b080a585fc5b548a7, type: 3}
+    weight: 4.5
+  - prefab: {fileID: 1562396439427658906, guid: f0b571d6c685a4791ae09e6abf4dad60, type: 3}
+    weight: 1
+  - prefab: {fileID: 5684845667659639219, guid: c9d1750c2ebbd446ca18b595697b703e, type: 3}
+    weight: 0.7
+  _propsPerCell: 5
+  _cellSize: 14
+  _spawnClearRadius: 5
+  _ringRadius: 3
+  _debrisVfxPrefab: {fileID: 8552218769029606334, guid: 877461480d44341468acc8b9f0d178fd, type: 3}
+  _scrapPickupPrefab: {fileID: 5738289627512471969, guid: e01ccad9e333c422783e5eae8b3928b4, type: 3}
+  _xpPerScrap: 1
+  _fallbackMap: {fileID: 11400000, guid: 8cc1bf8f9d45744c19caa698554acd33, type: 2}
 --- !u!1 &2080803189
 GameObject:
   m_ObjectHideFlags: 0
