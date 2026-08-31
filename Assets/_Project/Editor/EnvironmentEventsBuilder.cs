@@ -64,7 +64,7 @@ namespace SpaceSurvivors.EditorTools
                 if (imp.spriteImportMode != SpriteImportMode.Single) { imp.spriteImportMode = SpriteImportMode.Single; dirty = true; }
                 // Low PPU → one seamless tile is far bigger than the screen, so the nebula
                 // reads as one continuous cloud, not a repeating grid.
-                if (!Mathf.Approximately(imp.spritePixelsPerUnit, 9f)) { imp.spritePixelsPerUnit = 9f; dirty = true; }
+                if (!Mathf.Approximately(imp.spritePixelsPerUnit, 7f)) { imp.spritePixelsPerUnit = 7f; dirty = true; }
                 if (imp.wrapMode != TextureWrapMode.Repeat) { imp.wrapMode = TextureWrapMode.Repeat; dirty = true; }
                 if (!imp.mipmapEnabled) { imp.mipmapEnabled = true; dirty = true; }
                 if (imp.maxTextureSize < 1024) { imp.maxTextureSize = 1024; dirty = true; }
@@ -363,34 +363,48 @@ namespace SpaceSurvivors.EditorTools
 
         private static void BuildMaps()
         {
-            // The SBS nebulas are opaque frames — keep them well behind the action so they
-            // set mood without competing with projectiles / enemies.
-            var dim = new Color(1f, 1f, 1f, 0.2f);
-            var faint = new Color(1f, 1f, 1f, 0.14f);
+            // Each map now leans hard on THREE distinct signals so they read as different
+            // places at a glance: a strongly-hued (but dark) camera clear colour, a bold
+            // nebula at ~0.5 alpha, and a dimmed starfield tinted to match so the nebula —
+            // not our own stars — carries the mood.
             var maps = new List<MapData>
             {
                 Map("milky_way", "Milky Way", "Cold blue arms of the galactic disc drift past.",
-                    "Blue_Nebula_05", new Color(0.03f, 0.04f, 0.09f), new Color(0.78f, 0.85f, 1f), dim, ""),
+                    "Blue_Nebula_05", camBg: new Color(0.035f, 0.055f, 0.13f),
+                    starTint: new Color(0.5f, 0.58f, 0.78f), backdropTint: A(1f, 1f, 1f, 0.5f), signatureEvent: ""),
+
                 Map("crimson_nebula", "Crimson Nebula", "A curtain of hot gas glows around the arena.",
-                    "Purple_Nebula_02", new Color(0.08f, 0.03f, 0.05f), new Color(1f, 0.8f, 0.82f),
-                    new Color(1f, 0.7f, 0.75f, 0.2f), "solar_flare"),
+                    "Purple_Nebula_04", camBg: new Color(0.13f, 0.03f, 0.06f),
+                    starTint: new Color(0.72f, 0.42f, 0.5f), backdropTint: A(1f, 0.55f, 0.6f, 0.55f),
+                    signatureEvent: "solar_flare"),
+
                 Map("supernova", "Supernova", "Dying stars tear themselves apart. Shockwaves ripple past.",
-                    "Purple_Nebula_07", new Color(0.09f, 0.04f, 0.04f), new Color(1f, 0.84f, 0.72f),
-                    new Color(1f, 0.72f, 0.5f, 0.22f), "solar_flare"),
+                    "Purple_Nebula_07", camBg: new Color(0.14f, 0.06f, 0.03f),
+                    starTint: new Color(0.85f, 0.6f, 0.45f), backdropTint: A(1f, 0.62f, 0.35f, 0.55f),
+                    signatureEvent: "solar_flare"),
+
                 Map("ion_nebula", "Ion Nebula", "Charged clouds spark and hiss. The static never stops.",
-                    "Blue_Nebula_02", new Color(0.03f, 0.06f, 0.09f), new Color(0.7f, 0.95f, 1f), dim, "ion_storm"),
+                    "Blue_Nebula_02", camBg: new Color(0.02f, 0.1f, 0.12f),
+                    starTint: new Color(0.4f, 0.8f, 0.82f), backdropTint: A(0.7f, 1f, 1f, 0.55f),
+                    signatureEvent: "ion_storm"),
+
                 Map("derelict_graveyard", "Derelict Graveyard", "A dead fleet's remains hang in toxic green haze.",
-                    "Green_Nebula_05", new Color(0.04f, 0.07f, 0.05f), new Color(0.82f, 1f, 0.82f),
-                    new Color(0.8f, 1f, 0.8f, 0.2f), "derelict_convoy"),
+                    "Green_Nebula_03", camBg: new Color(0.04f, 0.11f, 0.06f),
+                    starTint: new Color(0.5f, 0.72f, 0.5f), backdropTint: A(0.75f, 1f, 0.78f, 0.55f),
+                    signatureEvent: "derelict_convoy"),
+
                 Map("deep_void", "Deep Void", "Almost nothing out here. Almost.",
-                    "Starfield_03", new Color(0.02f, 0.02f, 0.03f), new Color(0.7f, 0.74f, 0.85f),
-                    faint, "wormhole"),
+                    "Starfield_03", camBg: new Color(0.015f, 0.015f, 0.028f),
+                    starTint: new Color(0.55f, 0.58f, 0.7f), backdropTint: A(0.75f, 0.78f, 0.95f, 0.32f),
+                    signatureEvent: "wormhole"),
             };
 
             var cat = LoadOrCreate<MapCatalogue>(ResDir + "MapCatalogue.asset");
             cat.maps = maps;
             EditorUtility.SetDirty(cat);
         }
+
+        private static Color A(float r, float g, float b, float a) => new Color(r, g, b, a);
 
         private static MapData Map(string id, string name, string desc, string bgSprite,
             Color camBg, Color starTint, Color backdropTint, string signatureEvent)

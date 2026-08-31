@@ -16,8 +16,8 @@ MonoBehaviour:
   displayName: Crimson Nebula
   description: A curtain of hot gas glows around the arena.
   previewSprite: {fileID: 0}
-  cameraBackground: {r: 0.08, g: 0.03, b: 0.05, a: 1}
-  starfieldTint: {r: 1, g: 0.8, b: 0.82, a: 1}
-  backdropSprite: {fileID: 21300000, guid: b0b595d274135442cbeb9ffa5307176c, type: 3}
-  backdropTint: {r: 1, g: 0.7, b: 0.75, a: 0.2}
+  cameraBackground: {r: 0.13, g: 0.03, b: 0.06, a: 1}
+  starfieldTint: {r: 0.72, g: 0.42, b: 0.5, a: 1}
+  backdropSprite: {fileID: 21300000, guid: 635f18c3aca3744bcac2ee950d48c020, type: 3}
+  backdropTint: {r: 1, g: 0.55, b: 0.6, a: 0.55}
   signatureEventId: solar_flare

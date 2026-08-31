@@ -16,8 +16,8 @@ MonoBehaviour:
   displayName: Deep Void
   description: Almost nothing out here. Almost.
   previewSprite: {fileID: 0}
-  cameraBackground: {r: 0.02, g: 0.02, b: 0.03, a: 1}
-  starfieldTint: {r: 0.7, g: 0.74, b: 0.85, a: 1}
+  cameraBackground: {r: 0.015, g: 0.015, b: 0.028, a: 1}
+  starfieldTint: {r: 0.55, g: 0.58, b: 0.7, a: 1}
   backdropSprite: {fileID: 21300000, guid: 16d6301ccf75344dc8567920cf2d02b8, type: 3}
-  backdropTint: {r: 1, g: 1, b: 1, a: 0.14}
+  backdropTint: {r: 0.75, g: 0.78, b: 0.95, a: 0.32}
   signatureEventId: wormhole

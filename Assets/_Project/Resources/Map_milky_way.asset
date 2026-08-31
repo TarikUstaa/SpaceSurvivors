@@ -16,8 +16,8 @@ MonoBehaviour:
   displayName: Milky Way
   description: Cold blue arms of the galactic disc drift past.
   previewSprite: {fileID: 0}
-  cameraBackground: {r: 0.03, g: 0.04, b: 0.09, a: 1}
-  starfieldTint: {r: 0.78, g: 0.85, b: 1, a: 1}
+  cameraBackground: {r: 0.035, g: 0.055, b: 0.13, a: 1}
+  starfieldTint: {r: 0.5, g: 0.58, b: 0.78, a: 1}
   backdropSprite: {fileID: 21300000, guid: 63fde472add1440e38b5b94721fd0033, type: 3}
-  backdropTint: {r: 1, g: 1, b: 1, a: 0.2}
+  backdropTint: {r: 1, g: 1, b: 1, a: 0.5}
   signatureEventId: 
