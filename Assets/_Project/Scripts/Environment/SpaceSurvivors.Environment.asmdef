@@ -6,6 +6,7 @@
         "SpaceSurvivors.Data",
         "SpaceSurvivors.Stats",
         "SpaceSurvivors.Combat",
+        "SpaceSurvivors.Enemies",
         "SpaceSurvivors.Progression"
     ],
     "includePlatforms": [],

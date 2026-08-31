@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.MapData
   id: supernova
   displayName: Supernova
-  description: Dying stars tear themselves apart in the dark. Shockwaves ripple past.
+  description: Dying stars tear themselves apart. Shockwaves ripple past.
   previewSprite: {fileID: 0}
-  cameraBackground: {r: 0.07, g: 0.04, b: 0.03, a: 1}
-  starfieldTint: {r: 1, g: 0.86, b: 0.7, a: 1}
-  backdropSprite: {fileID: 21300000, guid: dc846a7869c99484ab1cd494dd3bb9c5, type: 3}
-  backdropTint: {r: 1, g: 1, b: 1, a: 0.6}
+  cameraBackground: {r: 0.09, g: 0.04, b: 0.04, a: 1}
+  starfieldTint: {r: 1, g: 0.84, b: 0.72, a: 1}
+  backdropSprite: {fileID: 21300000, guid: 2a2771758f4554eba9b47c6f0a4df3fe, type: 3}
+  backdropTint: {r: 1, g: 0.72, b: 0.5, a: 0.22}
+  signatureEventId: solar_flare

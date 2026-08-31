@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 171650f251b984c9fbc2a72d8ce990ce, type: 3}
+  m_Name: Event_solar_flare
+  m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.SpaceEventData
+  id: solar_flare
+  displayName: Solar Flare
+  announce: "\u2600  Solar flare \u2014 find cover"
+  weight: 0.8
+  earliestTime: 150
+  duration: 9
+  eventPrefab: {fileID: 2284597753037139542, guid: afc528ba244224140950a89e495dcd4d, type: 3}

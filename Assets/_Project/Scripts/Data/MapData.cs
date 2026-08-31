@@ -30,5 +30,10 @@ namespace SpaceSurvivors.Data
         public Sprite backdropSprite;
         [Tooltip("Tint for the backdrop layer.")]
         public Color backdropTint = Color.white;
+
+        [Header("Flavour")]
+        [Tooltip("Optional: a SpaceEventData.id this map rolls more often (its signature event). " +
+                 "Empty = no bias, every event equally likely.")]
+        public string signatureEventId = "";
     }
 }

@@ -8,6 +8,7 @@
         "SpaceSurvivors.Combat",
         "SpaceSurvivors.Enemies",
         "SpaceSurvivors.Progression",
+        "SpaceSurvivors.Environment",
         "SpaceSurvivors.Game",
         "Unity.InputSystem"
     ],

@@ -882,6 +882,55 @@ olunca farklı görünsünler." Downloaded **Kenney Particle Pack** (CC0) → `A
   stats 0, no achievements, no map) and `score.best.*` PlayerPrefs deleted (volume prefs kept).
   **Lesson: always `ProfileService.SetStore` a scratch store before play-mode weapon tests.**
 
+## M18 — Environment & Space Events (2026-08-31, awaiting sign-off)
+User: "haritayı güzelleştir, etrafa başka şeyler koy, uzay eventleri olsun, map ekle."
+Downloaded **SBS "Seamless Space Backgrounds"** (CC0, itch.io) → `Art/Sprites/Backgrounds/`
+(32 seamless 1024² PNGs: blue/green/purple nebulas + starfields). The `.rar` was extracted
+with `bsdtar` (macOS can't open RAR natively).
+
+- **New arena props** (Obstacle prefabs, added to `EnvironmentDirector._props`, weighted, prewarmed):
+  `Env_Wreck` (big `spaceStation_018`, indestructible cover), `Env_DebrisChunk` (`spaceParts_016`,
+  ~22 HP, drifts, 6 scrap), `Env_Crystal` (`meteorGrey_med1` cyan-tinted, ~44 HP, 26 scrap),
+  `Env_DriftMine` (neutral — arms then `Aoe.Splash` on any contact, player OR enemy),
+  `Env_BonusPod` (rare, heal + scrap burst on player touch). `Obstacle.SetDrift(Vector2)` added.
+  Drift mine visibility (user request): dark-red spiked body + wide red `WeaponOrbGlow` halo +
+  bright pulsing `star_05` light with a hard on/off blink that speeds up + slow tumble.
+- **Space events** — `Data/SpaceEventData` (SO: id/announce/weight/earliestTime/duration/prefab) +
+  `Data/SpaceEventCatalogue` (`Resources/`). `Environment/EventDirector` on Systems: one event at a
+  time, weighted roll of events past their `earliestTime`, cooldown 35–70s, first at 60s;
+  `MapData.signatureEventId` gets a ×3 weight bias so maps feel distinct; `event Action<SpaceEventData>
+  EventStarted`. `Environment/ISpaceEvent` + `SpaceEventContext` (player/pool/spawns/collector/camera/
+  duration) + `Environment/SpaceEventBehaviour` base (lifetime + auto-release of `SpawnChild`ren +
+  `OffscreenPoint` helper). Five events:
+  - **MeteorShowerEvent** — directed stream of fast `Env_AsteroidSmall` from one edge for the duration.
+  - **IonStormEvent** — `FX_IonOverlay` crackle follows the camera; every 1.8 s an EMP wave damages
+    every enemy (layer 6) within 11 u of the player. Player-favourable.
+  - **DerelictConvoyEvent** — a wreck + ring of scrap caches warps in near the player, guarded by 3
+    Grunts, drifts back out. Caches/wreck are released on timeout.
+  - **SolarFlareEvent** — 2.5 s warning strip, then a bright band (`FX_FlareBand`, OverlapBox tick)
+    sweeps the whole arena burning player + enemies. One sweep.
+  - **WormholeEvent** — `FX_Wormhole` (spinning `twirl_02`) opens; fly in → blink 16 u + scrap burst,
+    2 s cooldown.
+  - **`UI/EventBanner`** on `HudCanvas` — fades in the `announce` text for ~2.4 s. UI asmdef now refs
+    `SpaceSurvivors.Environment`.
+- **6 maps** (was 3) on the SBS nebulas: Milky Way (Blue_05) / Crimson Nebula (Purple_02, sig
+  solar_flare) / Supernova (Purple_07, sig solar_flare) / **Ion Nebula** (Blue_02, sig ion_storm) /
+  **Derelict Graveyard** (Green_05, sig derelict_convoy) / **Deep Void** (Starfield_03, sig wormhole).
+  Backgrounds imported at PPU 9 / wrap Repeat / FullRect mesh / mipmap; `MapData.backdropTint` alpha
+  ~0.2 so the nebula is mood, not midground noise. `StarfieldParallax._backdropParallax` bumped to
+  0.022, `_backdropDensity` 0.55.
+- **`Editor/EnvironmentEventsBuilder.cs`** (`SpaceSurvivors/Build/M18 Environment + Events`,
+  idempotent) does all of the above + wires the scene.
+- **asmdef:** `SpaceSurvivors.Environment` now refs `SpaceSurvivors.Enemies` (for `SpawnDirector`);
+  `SpaceSurvivors.UI` refs `SpaceSurvivors.Environment` (for `EventBanner`). No cycles.
+- **Play-tested (Claude):** builder runs clean (0 errors, "5 events"); MapSelect shows the real
+  nebulas; meteor shower streams; derelict convoy warps in with banner "◈ A derelict convoy drifts
+  near" + caches + guards; new props stream in the field. Deep visual tuning (nebula brightness /
+  prop density / event pacing & balance) is a taste call — deferred to the human playtest.
+- Known: `StarfieldParallax` still warns "Sprite Tiling … not Full Rect" for the generated star tile
+  (pre-existing, cosmetic). IonStorm has no enemy-slow (enemies have no StatSheet) — it's pure
+  damage. Event balance numbers are first-pass.
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,

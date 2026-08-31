@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.MapData
   id: milky_way
   displayName: Milky Way
-  description: The galactic core spills across the sky in a river of pale light.
+  description: Cold blue arms of the galactic disc drift past.
   previewSprite: {fileID: 0}
-  cameraBackground: {r: 0.04, g: 0.05, b: 0.1, a: 1}
-  starfieldTint: {r: 0.78, g: 0.84, b: 1, a: 1}
-  backdropSprite: {fileID: 21300000, guid: bc4c20759a4ca4908b05fc36d8b3ae96, type: 3}
-  backdropTint: {r: 1, g: 1, b: 1, a: 0.6}
+  cameraBackground: {r: 0.03, g: 0.04, b: 0.09, a: 1}
+  starfieldTint: {r: 0.78, g: 0.85, b: 1, a: 1}
+  backdropSprite: {fileID: 21300000, guid: 63fde472add1440e38b5b94721fd0033, type: 3}
+  backdropTint: {r: 1, g: 1, b: 1, a: 0.2}
+  signatureEventId: 

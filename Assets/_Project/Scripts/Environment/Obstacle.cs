@@ -74,6 +74,9 @@ namespace SpaceSurvivors.Environment
             _body.linearVelocity = Vector2.zero;
         }
 
+        /// <summary>Override the random idle drift with a specific velocity (M18 meteor shower).</summary>
+        public void SetDrift(Vector2 velocity) => _drift = velocity;
+
         private void FixedUpdate()
         {
             if (_drift != Vector2.zero)
