@@ -679,7 +679,7 @@ The linchpin for M14. Everything is in `Core` (no gameplay deps → backend-port
 - **Deferred:** in-run achievement toast / unlock animation (`Evaluate()` already returns the freshly
   unlocked list for a future notifier to consume).
 
-## M16 — Balance pass (built 2026-08-31, awaiting human playtest sign-off)
+## M16 — Balance pass (committed `10b2e08` 2026-08-31; difficulty feel pending human playtest)
 
 **User's calls:** Campaign win ≈ 15 min (4 bosses / 5 stages); GDD-faithful — no elites in the first 3:00.
 
