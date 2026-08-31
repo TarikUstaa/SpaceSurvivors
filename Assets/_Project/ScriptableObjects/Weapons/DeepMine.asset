@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.WeaponData
   displayName: Deep Mine
   kind: 2
-  projectilePrefab: {fileID: 3948092009784328404, guid: 4b19b5cfba14449ab807d57d0810d773, type: 3}
+  projectilePrefab: {fileID: 3948092009784328404, guid: 9962c1e70d1754a0a9842d2370924a11, type: 3}
   projectileSpeed: 12
   projectileLifetime: 8
   impactVfxPrefab: {fileID: 0}
@@ -29,6 +29,7 @@ MonoBehaviour:
   orbitRadius: 2.2
   orbitDegreesPerSecond: 200
   orbitHitInterval: 0.4
+  auraTint: {r: 0.4, g: 0.85, b: 1, a: 0.16}
   aimRange: 8
   evolvesInto: {fileID: 0}
   evolutionCatalyst: {fileID: 0}

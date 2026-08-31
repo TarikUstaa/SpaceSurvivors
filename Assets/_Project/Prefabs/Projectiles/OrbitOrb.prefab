@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6002163130880019518}
   - component: {fileID: 8078999012340993266}
   - component: {fileID: 1417094525032453249}
+  - component: {fileID: 3075496528964861273}
   m_Layer: 7
   m_Name: OrbitOrb
   m_TagString: Untagged
@@ -31,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.52, y: 0.52, z: 0.52}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -62,7 +63,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: b3886dd5d99204860aec062847fc4b77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,10 +84,10 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 6
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7095517312020913376, guid: 83f3d309861c641c8af1aec68612d9e3, type: 3}
-  m_Color: {r: 0.5, g: 0.95, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: e793bc4d18e3d48a4be8b9863e8acb2d, type: 3}
+  m_Color: {r: 0.2, g: 1, b: 0.8, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -170,7 +171,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.42
+  m_Radius: 0.80769247
 --- !u!114 &1417094525032453249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,3 +184,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03b10d03314314b2ba6a8be62794b6c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SpaceSurvivors.Combat::SpaceSurvivors.Combat.OrbHit
+--- !u!114 &3075496528964861273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 922210939790612854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cefed99ffce94353ab21b88bff518c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Combat::SpaceSurvivors.Combat.VfxSpinPulse
+  _spinDegreesPerSecond: 90
+  _pulseAmount: 0.16
+  _pulseFrequency: 3

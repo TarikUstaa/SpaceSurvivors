@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.WeaponData
   displayName: Nova Core
   kind: 0
-  projectilePrefab: {fileID: 6096417419290807909, guid: ca256b4471ff443de82aeb5bf4f10037, type: 3}
+  projectilePrefab: {fileID: 6096417419290807909, guid: c3ff455786385435cb6420e1f87354ab, type: 3}
   projectileSpeed: 11
   projectileLifetime: 3
   impactVfxPrefab: {fileID: 0}
@@ -29,6 +29,7 @@ MonoBehaviour:
   orbitRadius: 2.2
   orbitDegreesPerSecond: 200
   orbitHitInterval: 0.4
+  auraTint: {r: 0.4, g: 0.85, b: 1, a: 0.16}
   aimRange: 12
   evolvesInto: {fileID: 0}
   evolutionCatalyst: {fileID: 0}

@@ -22,14 +22,17 @@ namespace SpaceSurvivors.Combat
 
         private CircleCollider2D _ring;
         private Transform _view;
+        private SpriteRenderer _viewRenderer;
         private float _viewSpriteWorld = 1f;
+        private float _pulsePhase;
         private readonly HashSet<Collider2D> _inside = new();
         private readonly List<Collider2D> _tick = new();
         private float _cooldown;
 
         public WeaponData Data => _data;
 
-        public void Configure(WeaponData data, StatSheet stats, GameObject owner, Sprite ringSprite)
+        public void Configure(WeaponData data, StatSheet stats, GameObject owner, Sprite ringSprite,
+            Material ringMaterial = null)
         {
             _data = data;
             _stats = stats;
@@ -47,13 +50,14 @@ namespace SpaceSurvivors.Combat
             {
                 var go = new GameObject("AuraView");
                 go.transform.SetParent(transform, false);
-                var sr = go.AddComponent<SpriteRenderer>();
-                sr.sprite = ringSprite;
-                sr.color = new Color(0.4f, 0.85f, 1f, 0.16f);
-                sr.sortingOrder = -1;
+                _viewRenderer = go.AddComponent<SpriteRenderer>();
+                _viewRenderer.sprite = ringSprite;
+                _viewRenderer.sortingOrder = -1;
+                if (ringMaterial != null) _viewRenderer.sharedMaterial = ringMaterial;
                 _view = go.transform;
                 _viewSpriteWorld = Mathf.Max(0.01f, ringSprite.rect.width / ringSprite.pixelsPerUnit);
             }
+            if (_viewRenderer != null) _viewRenderer.color = data.auraTint;
         }
 
         private void OnTriggerEnter2D(Collider2D other) { if (IsEnemy(other)) _inside.Add(other); }
@@ -71,7 +75,18 @@ namespace SpaceSurvivors.Combat
 
             float radius = _data.orbitRadius;
             if (_ring != null) _ring.radius = radius;
-            if (_view != null) _view.localScale = Vector3.one * (radius * 2f / _viewSpriteWorld);
+            if (_view != null)
+            {
+                _view.localScale = Vector3.one * (radius * 2f / _viewSpriteWorld);
+                _view.Rotate(0f, 0f, 24f * Time.deltaTime);
+            }
+            if (_viewRenderer != null)
+            {
+                _pulsePhase += Time.deltaTime * 3f;
+                var c = _data.auraTint;
+                c.a *= 0.75f + 0.25f * Mathf.Sin(_pulsePhase);
+                _viewRenderer.color = c;
+            }
 
             _cooldown -= Time.deltaTime;
             if (_cooldown > 0f) return;

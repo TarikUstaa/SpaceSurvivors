@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.WeaponData
   displayName: Void Lance
   kind: 0
-  projectilePrefab: {fileID: 2859035036909757543, guid: 005f29caf4b7743ee8ef4d09333332f4, type: 3}
+  projectilePrefab: {fileID: 2859035036909757543, guid: ea8e64a05ab8d4df09be21d4e66356b6, type: 3}
   projectileSpeed: 60
   projectileLifetime: 1.4
   impactVfxPrefab: {fileID: 0}
@@ -29,6 +29,7 @@ MonoBehaviour:
   orbitRadius: 2.2
   orbitDegreesPerSecond: 200
   orbitHitInterval: 0.4
+  auraTint: {r: 0.4, g: 0.85, b: 1, a: 0.16}
   aimRange: 18
   evolvesInto: {fileID: 0}
   evolutionCatalyst: {fileID: 0}

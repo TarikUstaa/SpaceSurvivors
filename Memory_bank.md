@@ -837,6 +837,51 @@ giren yazılar varsa düzelt, bütün ekranları incele." Reviewed every screen 
   (`0` scrap at start), LevelUp (renamed titles), RunEnd (HUD hidden, `1,234` / `3,247` formatting).
   No console errors. Real `profile.json` untouched (used editor-injected scrap for the RunEnd test).
 
+## M17 — Weapon visual pass (2026-08-31, awaiting sign-off)
+User: "silahları daha iyi bir hale getir. orbiter'daki + ları plazma toplarına çevir. evolve
+olunca farklı görünsünler." Downloaded **Kenney Particle Pack** (CC0) → `Art/Particles/PNG
+(Transparent)/` (80 sprites).
+
+- **`Editor/WeaponVfxBuilder.cs`** (`SpaceSurvivors/Build/M17 Weapon VFX`) — idempotent one-shot:
+  1. `FixParticleImporters` — the 80 Kenney PNGs → Sprite / Single / PPU 512.
+  2. `BakeOrb` — Kenney's circles are all rings/bubbles, so bake `Art/Sprites/Generated/
+     WeaponOrb.png` (solid disc, full alpha to 55% r then soft edge) + `WeaponOrbGlow.png`.
+  3. `CreateAdditiveMaterial` → `Art/Particles/WeaponGlow.mat` on **`Sprites/Default`**
+     (NOT additive — a custom premultiplied-additive shader + ACES tonemapping both washed the
+     coloured cores to white; alpha-blend keeps the tint, Bloom does the glow).
+  4. `CreateVolumeProfile` → `Assets/Settings/PostProcess/GameVolume.asset` with **Bloom**
+     (threshold 0.55, intensity 0.7, scatter 0.5), no Tonemapping. `WireGameScene` adds a
+     `Global Volume` GO + sets `Main Camera` `renderPostProcessing = true`.
+  5. `StyleBaseProjectiles` — per weapon: core sprite (`WeaponOrb` for orbs, `trace_04/06`
+     for bolts) + colour identity (Laser cyan / Missile orange / Plasma violet / Scatter amber
+     / Rail blue-white / Orbiter teal / Mine red) + `TrailRenderer` (colour-gradient, width =
+     rootScale*0.5) + `Combat/TrailReset` (clears the trail on pool respawn — else a recycled
+     shot streaks across the screen) + `Combat/VfxSpinPulse` (pulse on orbs, spin on Orbiter).
+     Root scale is retuned and the `CircleCollider2D` radius compensated so the hitbox is
+     unchanged.
+  6. `BuildEvolutionPrefabs` — **the base + evolved weapon shared ONE projectile prefab**; now
+     `CopyAsset`s each base to `Prefabs/Projectiles/Evo_*` (fileIDs preserved so the ref
+     resolves), restyles it distinctly, and repoints the evolved `WeaponData.projectilePrefab`.
+     Prism = white tri-bolt, Cluster = red + `flame_03` glow, Nova = `magic_04` spinning star,
+     Buckshot = bigger amber, VoidLance = deep-violet long trail, **EventHorizon = dark-violet
+     orbs with a spinning `twirl_02` vortex glow**, DeepMine = brighter red.
+  7. `BuildMuzzleFlash` — pooled `MuzzleFlash.prefab` (`muzzle_03`, `OneShotPulse` 0.08s),
+     spawned in `WeaponController.FireWeapon` oriented to the shot.
+  8. `StyleAuras` — new `WeaponData.auraTint` (data-driven ring colour); `AuraWeapon` reworked
+     to use it + a slow spin + sine alpha pulse. `WeaponController._muzzleFlashPrefab` +
+     `_auraRingMaterial` fields added.
+- **Play-tested (Claude):** orbiter orbs are now glowing teal balls (no more "+"), scatter =
+  orange comets, EventHorizon evo = purple black-hole vortex orbs (visibly different from base
+  Orbiter). Bloom on. LevelUp / RunEnd / HUD-hide still fine. No console errors.
+- **Heavy iteration** to land the look: additive→alpha-blend, dropped a custom shader and ACES
+  tonemapping (both whitewashed colours), baked a real solid-disc orb sprite (Kenney has none).
+  Fine-tuning (exact sizes / missile orange saturation / muzzle-flash visibility) is a taste
+  call — deferred to the human playtest.
+- **⚠ Real `profile.json` polluted during testing** (RunEndScreen auto-banks scrap on run end;
+  I injected scrap + let runs end). User chose FULL RESET: profile.json wiped to a clean slate (wallet 0, all lifetime/run
+  stats 0, no achievements, no map) and `score.best.*` PlayerPrefs deleted (volume prefs kept).
+  **Lesson: always `ProfileService.SetStore` a scratch store before play-mode weapon tests.**
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,

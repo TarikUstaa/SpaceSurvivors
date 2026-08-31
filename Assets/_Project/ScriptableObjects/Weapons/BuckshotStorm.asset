@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.WeaponData
   displayName: Buckshot Storm
   kind: 0
-  projectilePrefab: {fileID: 4488963362962184266, guid: de8ba067790ca463eab1a5606a456cd8, type: 3}
+  projectilePrefab: {fileID: 4488963362962184266, guid: 6289d144db22d48ce9235bfb7e38edd1, type: 3}
   projectileSpeed: 18
   projectileLifetime: 0.7
   impactVfxPrefab: {fileID: 0}
@@ -29,6 +29,7 @@ MonoBehaviour:
   orbitRadius: 2.2
   orbitDegreesPerSecond: 200
   orbitHitInterval: 0.4
+  auraTint: {r: 0.4, g: 0.85, b: 1, a: 0.16}
   aimRange: 8
   evolvesInto: {fileID: 0}
   evolutionCatalyst: {fileID: 0}

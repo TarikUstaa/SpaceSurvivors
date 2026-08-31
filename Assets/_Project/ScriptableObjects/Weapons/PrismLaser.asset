@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: PrismLaser
   m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.WeaponData
   displayName: Prism Laser
-  projectilePrefab: {fileID: 884662056660416809, guid: 383b3243bb93949959337e2e61cc2f55, type: 3}
+  kind: 0
+  projectilePrefab: {fileID: 884662056660416809, guid: a11b150423c01494eb3e059115b41955, type: 3}
   projectileSpeed: 46
   projectileLifetime: 1.8
   impactVfxPrefab: {fileID: 4782339784006803847, guid: 93b71bfb7025a4c12a2e798d50029907, type: 3}
@@ -22,6 +23,13 @@ MonoBehaviour:
   projectilesPerShot: 5
   spreadAngle: 26
   pierce: 2
+  explosionRadius: 0
+  splashDamageFraction: 0.6
+  explosionVfxPrefab: {fileID: 0}
+  orbitRadius: 2.2
+  orbitDegreesPerSecond: 200
+  orbitHitInterval: 0.4
+  auraTint: {r: 0.4, g: 0.85, b: 1, a: 0.16}
   aimRange: 15
   evolvesInto: {fileID: 0}
   evolutionCatalyst: {fileID: 0}

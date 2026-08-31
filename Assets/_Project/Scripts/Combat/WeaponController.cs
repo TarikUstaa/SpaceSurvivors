@@ -60,6 +60,13 @@ namespace SpaceSurvivors.Combat
         [Tooltip("Faint ring sprite for Aura weapons (optional).")]
         [SerializeField] private Sprite _auraRingSprite;
 
+        [Tooltip("Optional additive material for the Aura ring glow.")]
+        [SerializeField] private Material _auraRingMaterial;
+
+        [Tooltip("Optional pooled one-shot flash spawned at the muzzle each time a projectile " +
+                 "weapon fires. Oriented to the shot direction.")]
+        [SerializeField] private GameObject _muzzleFlashPrefab;
+
         private readonly List<Slot> _slots = new();
         private IAimStrategy _aim;
         private readonly List<GameObject> _specialRigs = new();
@@ -147,7 +154,7 @@ namespace SpaceSurvivors.Combat
                         go.AddComponent<MineLayer>().Configure(d, _pool, _stats, transform, gameObject);
                         break;
                     case WeaponKind.Aura:
-                        go.AddComponent<AuraWeapon>().Configure(d, _stats, gameObject, _auraRingSprite);
+                        go.AddComponent<AuraWeapon>().Configure(d, _stats, gameObject, _auraRingSprite, _auraRingMaterial);
                         break;
                 }
                 _specialRigs.Add(go);
@@ -191,6 +198,9 @@ namespace SpaceSurvivors.Combat
             float baseAngle = Mathf.Atan2(baseDir.y, baseDir.x) * Mathf.Rad2Deg;
             float step = count > 1 ? data.spreadAngle / (count - 1) : 0f;
             float start = count > 1 ? -data.spreadAngle * 0.5f : 0f;
+
+            if (_muzzleFlashPrefab != null)
+                _pool.Spawn(_muzzleFlashPrefab, origin, Quaternion.Euler(0f, 0f, baseAngle));
 
             for (int i = 0; i < count; i++)
             {

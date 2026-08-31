@@ -66,6 +66,10 @@ namespace SpaceSurvivors.Data
         [Tooltip("Seconds before an orb can hit the same enemy again.")]
         [Min(0.05f)] public float orbitHitInterval = 0.4f;
 
+        [Header("Aura (kind = Aura)")]
+        [Tooltip("Ring colour for an Aura weapon's glow. Alpha scales how strong the glow reads.")]
+        public Color auraTint = new Color(0.4f, 0.85f, 1f, 0.16f);
+
         [Header("Targeting")]
         [Tooltip("Radius the auto-aim searches for enemies. Also the projectile cull range guide.")]
         [Min(0f)] public float aimRange = 8f;

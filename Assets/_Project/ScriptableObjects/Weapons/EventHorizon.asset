@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.WeaponData
   displayName: Event Horizon
   kind: 1
-  projectilePrefab: {fileID: 922210939790612854, guid: 66ff3db8df16b4d8292e3923cbb71c87, type: 3}
+  projectilePrefab: {fileID: 922210939790612854, guid: f35332219d7814c7391782f3922bcd55, type: 3}
   projectileSpeed: 12
   projectileLifetime: 2
   impactVfxPrefab: {fileID: 0}
@@ -29,6 +29,7 @@ MonoBehaviour:
   orbitRadius: 3.2
   orbitDegreesPerSecond: 260
   orbitHitInterval: 0.3
+  auraTint: {r: 0.4, g: 0.85, b: 1, a: 0.16}
   aimRange: 8
   evolvesInto: {fileID: 0}
   evolutionCatalyst: {fileID: 0}

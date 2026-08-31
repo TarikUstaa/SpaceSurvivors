@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.WeaponData
   displayName: Cluster Missile
   kind: 0
-  projectilePrefab: {fileID: 3591483356676906937, guid: 3334315342df24dc59b99afbede056c9, type: 3}
+  projectilePrefab: {fileID: 3591483356676906937, guid: de6e87d5f667942c4b0caceffac170e9, type: 3}
   projectileSpeed: 22
   projectileLifetime: 3
   impactVfxPrefab: {fileID: 880833947769362508, guid: ce7dc3b2176344e44b9b888f3f4cb426, type: 3}
@@ -29,6 +29,7 @@ MonoBehaviour:
   orbitRadius: 2.2
   orbitDegreesPerSecond: 200
   orbitHitInterval: 0.4
+  auraTint: {r: 0.4, g: 0.85, b: 1, a: 0.16}
   aimRange: 12
   evolvesInto: {fileID: 0}
   evolutionCatalyst: {fileID: 0}
