@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6699ad602bfe4d05bb8419655aba13d, type: 3}
+  m_Name: Ach_scrap_baron
+  m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.AchievementData
+  id: scrap_baron
+  title: Scrap Baron
+  description: Earn 5,000 scrap in total.
+  icon: {fileID: -4947266630110024882, guid: 6b7b6ffa4a56a49cc80962d92e9b9225, type: 3}
+  metric: 4
+  threshold: 5000

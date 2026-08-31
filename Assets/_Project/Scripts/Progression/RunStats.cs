@@ -22,6 +22,8 @@ namespace SpaceSurvivors.Progression
         public int Level => _levelSystem != null ? _levelSystem.CurrentLevel : 1;
         public int Scrap => _scrapCollector != null ? _scrapCollector.TotalScrap : 0;
         public float Seconds => _clock != null ? _clock.Elapsed : 0f;
+        /// <summary>Scheduled bosses the player killed this run.</summary>
+        public int BossesDefeated => _spawnDirector != null ? _spawnDirector.BossesDefeated : 0;
 
         private void Awake()
         {

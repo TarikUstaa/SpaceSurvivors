@@ -67,8 +67,9 @@ namespace SpaceSurvivors.Core
 
         private static void Migrate(PlayerProfile profile)
         {
-            // v1 → v2: metaUpgradeLevels added (M14a). Nothing to translate — a missing/null
-            // dict just deserialises to null; normalise it so callers never null-check.
+            // v1 → v2: metaUpgradeLevels added (M14a). v2 → v3: lifetime-stat counters added
+            // (M14c) — additive numeric fields, a missing key just deserialises to 0.
+            // Nothing to translate; only normalise the collections so callers never null-check.
             profile.metaUpgradeLevels ??= new System.Collections.Generic.Dictionary<string, int>();
             profile.ownedShipIds ??= new System.Collections.Generic.List<string>();
             profile.unlockedAchievementIds ??= new System.Collections.Generic.List<string>();

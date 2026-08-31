@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6699ad602bfe4d05bb8419655aba13d, type: 3}
+  m_Name: Ach_full_hangar
+  m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.AchievementData
+  id: full_hangar
+  title: Full Hangar
+  description: Own every ship in the hangar.
+  icon: {fileID: 1577856489068930602, guid: bcdf2eef5b6ef4ddd8e1b35839ad4b50, type: 3}
+  metric: 7
+  threshold: 0

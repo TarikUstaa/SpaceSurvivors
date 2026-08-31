@@ -3,8 +3,8 @@
 > Working memory log. Update after every major milestone. Newest entry on top.
 
 ## Current State
-**M1–M14b approved (2026-08-28). M14b = ship shop / hangar (buy + equip ships — Scout/Vanguard/Wraith/Ronin; each = a hull sprite + run-start StatModifiers via ShipService + ShipApplier; Hangar.unity carousel + MainMenu HANGAR button). MainMenu wallet restyled to the HUD metal look. Next: M14c — achievements.**
-Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is in its section below.
+**M1–M14b approved (2026-08-28). M14c BUILT, awaiting sign-off (2026-08-31) = achievements — 8 stat-threshold achievements (`AchievementData` metric+threshold SO + `AchievementCatalogue` in Resources), `AchievementService` static (auto-tracks via `ProfileService.Changed` → `Evaluate` → writes `unlockedAchievementIds`), `Achievements.unity` 2×4 tile grid + MainMenu ACHIEVEMENTS button. Profile schema v2→v3 (lifetimeKills / bestSurvivalSeconds / bestLevel / bossKills). Next after sign-off: M15 — environment & maps.**
+Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c follow-on). Full detail for each milestone is in its section below.
 
 ### M7 — Mini-boss / boss schedule (built, play-tested OK)
 - `DifficultyConfig` +`List<BossEntry> bossSchedule` (`{triggerTime, bossData, count, warningLead}`). Default entry at 180s. Wired: [{180s, MiniBoss, ×1, lead 4s}, {360s, MiniBoss, ×2, lead 4s}].
@@ -192,6 +192,7 @@ Deferred: gameplay music (needs a CC0 pack). Full detail for each milestone is i
 | 2026-08-28 | M14a — permanent upgrade shop | ✅ APPROVED 2026-08-28. Damage/Hull/Thrusters/Armour lines bought with wallet scrap; `MetaProgressionService` + `MetaUpgradeApplier` seed the run-start `StatSheet`; `Shop.unity` + MainMenu SHOP button. New `StatId.DamageResist`. Profile schema v1→v2 (`metaUpgradeLevels`). |
 | 2026-08-28 | Session follow-ons | Magnet bonus-drop (pulls every XP drop on the map); pickup size tuning; smoother ship turning (input-based ShipRotator via MoveRotation, camera look-ahead reduced). |
 | 2026-08-28 | M14b — ship shop / hangar | ✅ APPROVED 2026-08-28. Scout (free) / Vanguard / Wraith / Ronin — each = a hull sprite + run-start `StatModifier[]` via `ShipService` + `ShipApplier`. `Hangar.unity` carousel + MainMenu HANGAR button. MainMenu wallet restyled to the HUD metal look. |
+| 2026-08-31 | M14c — achievements | ⏳ BUILT, awaiting sign-off. 8 stat-threshold achievements (`AchievementData` = metric enum + threshold; `AchievementCatalogue` in `Resources/`). `AchievementService` static auto-tracks via `ProfileService.Changed` → `Evaluate()` → writes `unlockedAchievementIds` + `Save`. `Achievements.unity` 2×4 grid (`Rating/` CraftPix art) + MainMenu ACHIEVEMENTS button. Profile schema v2→v3 (`lifetimeKills` / `bestSurvivalSeconds` / `bestLevel` / `bossKills`); `ProfileService.RecordRun` extended; `RunEndScreen` calls `Evaluate()`. |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -624,6 +625,56 @@ The linchpin for M14. Everything is in `Core` (no gameplay deps → backend-port
   auto-equipped, → EQUIPPED); start run → hull sprite = `playerShip3_orange`, MaxHealth
   100→135, MoveSpeed 6→5.40. MainMenu HANGAR button works. No console errors. Real profile
   reset to 0.
+
+## M14c — Achievements (built 2026-08-31, awaiting sign-off)
+
+- **`Data/AchievementData`** — `id`, `title`, `description`, `Sprite icon`, `AchievementMetric metric`,
+  `long threshold`. No unlock state here — that lives in `PlayerProfile.unlockedAchievementIds`.
+  **`AchievementMetric`** enum: LifetimeKills, BestKillsInRun, BestSurvivalSeconds, RunsPlayed,
+  LifetimeScrap, BossKills, BestLevel, ShipsOwned, MetaUpgradeLevels. Every metric resolves to
+  one non-decreasing number → an achievement is just "value ≥ target", no per-achievement code.
+  **`Data/AchievementCatalogue`** — `List<AchievementData>` in `Resources/AchievementCatalogue.asset`.
+- **Profile schema v2 → v3** — added lifetime counters `lifetimeKills` (long), `bestSurvivalSeconds`
+  (int), `bestLevel` (int), `bossKills` (int). Additive numeric fields — migration just bumps the
+  version, missing keys deserialise to 0. `ProfileService.RecordRun(kills)` → `RecordRun(kills, level,
+  survivedSeconds, bossesDefeated)`, folds them all in. `RunStats.BossesDefeated` getter added
+  (reads `SpawnDirector.BossesDefeated`).
+- **`Progression/AchievementService`** (static, same shape as `ShipService` / `MetaProgressionService`)
+  — `All`, `Find(id)`, `Value(a)` (metric → profile/meta-service number), `Target(a)` (`threshold`,
+  or the full ship count when metric = ShipsOwned and threshold ≤ 0), `Progress01(a)`, `IsUnlocked(a)`
+  (recorded OR condition met now), `Evaluate()` (records newly-earned, `Save` + `Changed` once,
+  returns the new ones), `SetCatalogue`, `Changed`. `[RuntimeInitializeOnLoadMethod] Boot()` wires
+  `ProfileService.Changed += () => Evaluate()` — so any scrap-bank / run-record / ship-or-upgrade
+  purchase auto-checks achievements (ProfileService.Changed only fires at run end + on shop buys,
+  never per-frame; `Save()` doesn't raise it, so no recursion).
+- **`RunEndScreen`** — after banking scrap + `RecordRun(...)`, calls `AchievementService.Evaluate()`.
+- **`UI/AchievementsScreen`** — one tile per catalogue entry: icon, title, description, and either a
+  green "✓ UNLOCKED" stamp or a "value / target" progress line (survival metrics render m:ss).
+  Locked tiles dim icon + text. Summary "N / M UNLOCKED". `Start()` also calls `Evaluate()` (catch
+  up on unlocks earned elsewhere). Prefab-style, wired by the builder.
+- **`Editor/AchievementsBuilder`** — MenuItems `M14c Seed achievement catalogue` (creates/updates
+  `Resources/Ach_*.asset` + `AchievementCatalogue.asset` from a hardcoded `Seed[]`), `M14c
+  Achievements scene` (builds `Achievements.unity` — `Rating/` CraftPix art, 2×4 grid, registers in
+  Build Settings), `M14c Main-Menu Achievements button` (ACHIEVEMENTS button under HANGAR).
+- Build scenes: MainMenu (0), Game (1), Shop (2), Hangar (3), **Achievements (4)**.
+- **The 8 achievements:**
+  | id | title | metric ≥ threshold | icon |
+  |----|-------|--------------------|------|
+  | first_blood | First Blood | LifetimeKills ≥ 1 | star_bronze |
+  | swarm_culler | Swarm Culler | LifetimeKills ≥ 500 | star_silver |
+  | exterminator | Exterminator | LifetimeKills ≥ 5000 | star_gold |
+  | survivor | Survivor | BestSurvivalSeconds ≥ 300 | Clock_Icon |
+  | unbreakable | Unbreakable | BestSurvivalSeconds ≥ 600 | shield_gold |
+  | giant_slayer | Giant Slayer | BossKills ≥ 1 | bolt_gold |
+  | scrap_baron | Scrap Baron | LifetimeScrap ≥ 5000 | ScrapChip |
+  | full_hangar | Full Hangar | ShipsOwned ≥ all (threshold 0) | playerShip3_orange |
+- **Play-tested (Claude, scratch store `ach_m14ctest.json`):** clean profile → 0/8, all locked, correct
+  progress lines. Injected lifetimeKills 600 / survival 330s / scrap 5200 / bossKills 2 → `Evaluate()`
+  returned 5, screen showed 5/8 with First Blood / Swarm Culler / Survivor / Giant Slayer / Scrap Baron
+  green-stamped, the rest still counting ("600 / 5,000", "5:30 / 10:00", "1 / 4"). MainMenu
+  ACHIEVEMENTS button loads the scene. No console errors. Real `profile.json` untouched.
+- **Deferred:** in-run achievement toast / unlock animation (`Evaluate()` already returns the freshly
+  unlocked list for a future notifier to consume).
 
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in

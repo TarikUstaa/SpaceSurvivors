@@ -67,9 +67,12 @@ namespace SpaceSurvivors.UI
             if (_stats != null)
             {
                 ProfileService.AddScrap(_stats.Scrap);
-                ProfileService.RecordRun(_stats.Kills);
+                ProfileService.RecordRun(_stats.Kills, _stats.Level, survivedSeconds, _stats.BossesDefeated);
             }
             ProfileService.Save();
+
+            // Lifetime stats are now up to date — unlock any achievements they earned (M14c).
+            AchievementService.Evaluate();
 
             if (_statsValue != null && _stats != null)
                 _statsValue.text =

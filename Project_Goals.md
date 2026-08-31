@@ -39,7 +39,7 @@ driven by emergent build synergies.
 | M13 | Persistent meta core | ✅ PlayerProfile DTO + IProfileStore/LocalJsonProfileStore (Newtonsoft) + ProfileService seam; run scrap → wallet on run end; wallet on MainMenu + HUD |
 | M14a | Permanent upgrade shop | ✅ Damage/Hull/Thrusters/Armour bought with wallet scrap; MetaProgressionService + MetaUpgradeApplier seed the run-start StatSheet; Shop.unity + MainMenu SHOP button; new StatId.DamageResist |
 | M14b | Ship shop / hangar | ✅ Scout/Vanguard/Wraith/Ronin — each a hull sprite + run-start StatModifiers via ShipService + ShipApplier; Hangar.unity carousel + MainMenu HANGAR button |
-| M14c | Achievements | Event bus + achievement defs + unlock tracking + screen. Needs M13. |
+| M14c | Achievements | ✅ (awaiting sign-off) 8 stat-threshold achievements — `AchievementData` (metric + threshold) + `AchievementCatalogue`; `AchievementService` auto-tracks via `ProfileService.Changed` → writes `unlockedAchievementIds`; `Achievements.unity` grid + MainMenu button. Profile schema v2→v3. |
 | M15 | Environment & maps | Asteroids / obstacles, interactive/destructible objects, map variants |
 | M16 | Balance pass | Tuning against the targets below, playtest telemetry |
 

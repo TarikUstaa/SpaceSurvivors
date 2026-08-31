@@ -68,12 +68,18 @@ namespace SpaceSurvivors.Core
             return true;
         }
 
-        /// <summary>Record that a run finished, for lifetime history stats.</summary>
-        public static void RecordRun(int kills)
+        /// <summary>Record that a run finished, folding its figures into the lifetime stats
+        /// that drive achievements (M14c). Called once per run by the end screen.</summary>
+        public static void RecordRun(int kills, int level, float survivedSeconds, int bossesDefeated)
         {
             EnsureLoaded();
             _current.runsPlayed++;
+            _current.lifetimeKills += Math.Max(0, kills);
+            _current.bossKills += Math.Max(0, bossesDefeated);
             if (kills > _current.bestKills) _current.bestKills = kills;
+            if (level > _current.bestLevel) _current.bestLevel = level;
+            int secs = Math.Max(0, (int)survivedSeconds);
+            if (secs > _current.bestSurvivalSeconds) _current.bestSurvivalSeconds = secs;
             Changed?.Invoke();
         }
 

@@ -15,7 +15,7 @@ namespace SpaceSurvivors.Core
     [Serializable]
     public class PlayerProfile
     {
-        public const int CurrentSchemaVersion = 2;
+        public const int CurrentSchemaVersion = 3;
 
         public int schemaVersion = CurrentSchemaVersion;
 
@@ -25,9 +25,17 @@ namespace SpaceSurvivors.Core
         /// <summary>Total scrap ever earned — a lifetime stat, never decremented.</summary>
         public long lifetimeScrap;
 
-        // ---- Run history ----
+        // ---- Run history / lifetime stats (feed M14c achievements) ----
         public int runsPlayed;
         public int bestKills;
+        /// <summary>Enemies destroyed across every run.</summary>
+        public long lifetimeKills;
+        /// <summary>Longest single run, whole seconds.</summary>
+        public int bestSurvivalSeconds;
+        /// <summary>Highest level reached in any run.</summary>
+        public int bestLevel;
+        /// <summary>Scheduled bosses defeated across every run.</summary>
+        public int bossKills;
 
         // ---- Meta progression (M14a): permanent stat upgrades bought with wallet scrap ----
         /// <summary>Owned level per meta-upgrade id. Absent id = level 0.</summary>
