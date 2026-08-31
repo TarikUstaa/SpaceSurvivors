@@ -17,13 +17,13 @@ namespace SpaceSurvivors.Core
         [SerializeField] private Transform _target;
 
         [Tooltip("Approx. seconds for the camera to catch up to the target. 0 = snap.")]
-        [SerializeField, Min(0f)] private float _smoothTime = 0.18f;
+        [SerializeField, Min(0f)] private float _smoothTime = 0.12f;
 
         [Tooltip("How far ahead of the target's motion the camera leads, in seconds of travel.")]
-        [SerializeField, Min(0f)] private float _lookAhead = 0.15f;
+        [SerializeField, Min(0f)] private float _lookAhead = 0.09f;
 
         [Tooltip("Max look-ahead offset in world units, so fast movement doesn't shove the view too far.")]
-        [SerializeField, Min(0f)] private float _maxLookAhead = 2.5f;
+        [SerializeField, Min(0f)] private float _maxLookAhead = 1.4f;
 
         private Vector3 _velocity;
         private Vector3 _lookAheadPos;

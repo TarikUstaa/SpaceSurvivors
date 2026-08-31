@@ -3042,9 +3042,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: SpaceSurvivors.Core::SpaceSurvivors.Core.CameraFollow
   _target: {fileID: 632278087}
-  _smoothTime: 0.18
-  _lookAhead: 0.15
-  _maxLookAhead: 2.5
+  _smoothTime: 0.12
+  _lookAhead: 0.09
+  _maxLookAhead: 1.4
 --- !u!1 &525259192
 GameObject:
   m_ObjectHideFlags: 0
@@ -3847,7 +3847,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!114 &632278085
 MonoBehaviour:
   m_ObjectHideFlags: 0

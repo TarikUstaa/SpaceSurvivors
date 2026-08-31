@@ -46,7 +46,9 @@ namespace SpaceSurvivors.Player
             // Cache references once — never GetComponent in Update (AI_Guidelines §4).
             _body = GetComponent<Rigidbody2D>();
             _body.gravityScale = 0f;
-            _body.freezeRotation = true;
+            // Rotation is driven by ShipRotator via MoveRotation, so it must NOT be frozen.
+            // The body is Kinematic — collisions can't spin it anyway.
+            _body.constraints = RigidbodyConstraints2D.None;
 
             _input = _inputSourceBehaviour as IMoveInput ?? GetComponent<IMoveInput>();
             if (_stats == null) _stats = GetComponent<SpaceSurvivors.Stats.StatSheet>();
