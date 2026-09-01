@@ -1028,6 +1028,24 @@ of the project; the fonts are plain `Font` assets.
   preview thumbnail colour is stale `MapData.previewSprite` data (separate). Deferred:
   meta-screen headers could also move to Audiowide; gameplay music.
 
+## Post-M20 goals (user, 2026-09-01 — after first real playthrough)
+Not started. Order not locked — awaiting the user's pick of which to build first. Full table in
+`Project_Goals.md §4 "Post-M20 goals"`.
+- **G1 — Swarm mechanic.** After a set time in a run, a big *scheduled wave* of enemies floods
+  in (not the normal trickle). Likely fits the M18 `EventDirector` / `SpaceEventBehaviour`
+  pattern, or a new hook in `SpawnDirector`. Needs its own telegraph + `EventBanner`. Tune
+  count / first-time / interval / duration.
+- **G2 — Player ↔ enemy readability.** In a busy fight the player is hard to pick out. Stronger
+  player silhouette / outline / colour; enemy colour-coding by archetype; clearer telegraphs;
+  possibly dim/desaturate enemies against a brighter player.
+- **G3 — Skill / upgrade balance pass.** `UpgradeService` catalogue + evolution tree + passives
+  rebalanced (some over/underpowered in practice). Pairs with the M16 `BalanceConfig` tooling.
+- **G4 — More enemies on screen.** Push spawn counts / density past M16. Watch pooling perf and
+  G2 — more enemies makes readability worse, so do G2 first or alongside.
+- **G5 — Replace the Mine weapon.** Drop **Mine Layer** and (if nothing else needs it) the
+  `Trail` `WeaponKind` — currently only the Deep Mine evolution uses it. Add new weapon(s) in
+  its slot. Pure content on the existing weapon system + `UpgradeService` catalogue.
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,

@@ -50,6 +50,18 @@ driven by emergent build synergies.
 
 *(Order is a proposal — see §8 backlog. Milestones after M10 are not locked; earlier ones stay open to revisits — the assembly split makes that safe.)*
 
+### Post-M20 goals (user, 2026-09-01 — after first real playthrough)
+
+Order not locked; grouped by theme. Details / decisions to be worked out per milestone.
+
+| # | Goal | Notes |
+|---|------|-------|
+| G1 | **Swarm mechanic** | After a set time in a run, a big **swarm of enemies** floods in (a scheduled wave, not a trickle). Likely fits the `EventDirector` / `SpaceEventBehaviour` pattern (M18) or a new hook in `SpawnDirector`. Needs its own telegraph + banner. Tune count / interval / duration. |
+| G2 | **Player ↔ enemy readability** | Player and enemies must read apart at a glance in a busy fight — stronger player silhouette / outline / colour, enemy colour-coding by archetype, clearer telegraphs, maybe dim/desaturate enemies vs a bright player. |
+| G3 | **Skill / upgrade balance pass** | In-run upgrade choices (`UpgradeService` catalogue, evolutions, passives) rebalanced — some are over/underpowered in practice. Pairs with the M16 balance tooling. |
+| G4 | **More enemies on screen** | Bump spawn counts / density further (beyond M16). Watch perf (pooling headroom) + G2 readability — more enemies makes the readability problem worse, so G2 first or together. |
+| G5 | **Replace the Mine weapon** | Drop **Mine Layer** (and its `Trail` `WeaponKind` if nothing else uses it — currently only Deep Mine evolution) and add new weapon(s) in its place. New content on the existing weapon system. |
+
 ### Game modes (M8)
 - **Campaign** — a finite run in scripted stages. Timed countdowns escalate the fight; a
   **mini-boss** partway through, then a **final boss** as stage 3. Defeat the final boss to
