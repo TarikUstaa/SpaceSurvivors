@@ -979,6 +979,55 @@ camera background across most of the map. Now: sprite assigned first, quad sized
 `EnvironmentEventsBuilder.ImportBackgrounds` carries the import settings. Verified in play at a
 far-from-origin position: nebula fills the frame, soft not blocky.
 
+## M20 — Main-menu redesign ("Plan A") + meta-screen skin (2026-09-01, committed — awaiting sign-off)
+User: "ana ekranı daha güzel bir hale getir." Presented 3 directions, user picked **Plan A —
+a living space diorama behind the UI** (no gameplay music for now). Fonts downloaded (Google,
+OFL) to `Art/Fonts/`: **Orbitron** (8 weights), **Rajdhani** (5), **Audiowide** (logo, added
+later). Kept the whole UI on legacy `UnityEngine.UI.Text` (no TMP) — consistent with the rest
+of the project; the fonts are plain `Font` assets.
+
+- **`Editor/MainMenuBuilder.cs`** (`SpaceSurvivors/Build/M20 Main Menu redesign`, idempotent) —
+  restyle + augment of `MainMenu.unity` (does NOT rebuild it, so the M10 settings panel /
+  PanelToggle / Shop-Hangar-Achievements buttons stay wired). Bakes `Art/Sprites/Generated/
+  MenuPanel.png` (rounded translucent glass, 9-slice border 16) + `MenuVignette.png` (radial
+  dim for text legibility). Camera: `renderPostProcessing = true` + a `MenuVolume` global Volume
+  on the M17 `GameVolume.asset` (bloom). World: `MenuWorld` root with `MenuStarfield`
+  (`StarfieldParallax`) + `MenuShowcase` (ship + engine glow + 5 drifting rocks) at z = 6 (in
+  front of the ortho near-clip). Canvas: kills BG / Subtitle / WalletChip; logo = two-line
+  Audiowide lock-up ("S P A C E" small-wide over big "SURVIVORS", `TitleShadow` dupe + Outline +
+  bloom); glass `MenuPanel` buttons; `PilotRecord` card (`MenuStatsReadout` — best time / kills
+  / scrap / achievements from `ProfileService` + `AchievementService`); `MetaRow`
+  HorizontalLayoutGroup for the 4 meta buttons; small QUIT bottom-right; `VersionLabel`.
+- **`UI/MenuDiorama.cs`** (Camera) — slow Lissajous drift + mouse-lean; feeds
+  `MapService.Selected`'s nebula/tint into `StarfieldParallax` (`SetBackdrop`/`SetTint` in
+  `Start`, after the field builds its layers). `_camera` also gets the map's `cameraBackground`.
+- **`UI/MenuShowcase.cs`** — cosmetic: selected-ship sprite (bob + sway), engine-glow pulse,
+  rocks drift + wrap at `_wrapRadius` 10 and **bounce off `_keepOutRadius` 8.5** (the centred
+  button column is a tall strip, not a disc — a plain circle didn't protect it).
+- **`UI/MenuStatsReadout.cs`** — 4 labels, refresh on `ProfileService.Changed` /
+  `AchievementService.Changed`.
+- **`Editor/MetaScreenSkinner.cs`** (`SpaceSurvivors/Build/M20 Skin meta screens`, idempotent) —
+  same treatment for **Hangar / Achievements / Shop / MapSelect** + the **main-menu settings
+  panel**. Per scene: camera post + `MenuVolume`; `MenuBackdrop` (`StarfieldParallax` +
+  `MenuDiorama`, no ship, calmer drift); disable `Background`; add `Vignette`; `Panel`/`Window`
+  → glass `MenuPanel`; disable the CraftPix baked-text `Header`/`HeaderText` → a clean Orbitron
+  `SkinTitle` ("HANGAR"/"ACHIEVEMENTS"/"UPGRADES"/"SELECT MAP"/"SETTINGS"); font walk (big →
+  Orbitron-Bold, values → Rajdhani-SemiBold, rest → Rajdhani-Medium; near-white → ice-blue);
+  button walk → glass (arrow buttons kept for their glyph); `Tile_*`/`Row_*`/`*Frame` → glass
+  inset. Settings modal: opaque `Dim` (regression guard — QA fixed this once), opaque
+  `WindowFill` backing behind the translucent MenuPanel, `LayoutSettingsRows` re-spaces the
+  slider/toggle rows + CLOSE. `CenterWalletRow` (HLG-centres "SCRAP n" under the title),
+  `FixBottomButtons` (lifts Back / primary buttons off the frame), `TightenTileGrid` +
+  `panelHeight: 1000` for Achievements (2×4 grid was flush against the frame — tighten pitch
+  180→150, shrink card so it fits the screen and Back clears).
+- **Play-tested (Claude) every screen** — all cohesive, fonts crisp, nebula + ship + parallax
+  alive on the menu, meta screens match, settings modal solid, Back buttons clear. Camera drift
+  speed / logo size / vignette strength / nebula brightness are taste calls for the human
+  playtest.
+- Known: arrow buttons (Hangar/MapSelect) still CraftPix blue (small, functional); MapSelect
+  preview thumbnail colour is stale `MapData.previewSprite` data (separate). Deferred:
+  meta-screen headers could also move to Audiowide; gameplay music.
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,
