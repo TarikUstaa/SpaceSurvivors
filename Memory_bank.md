@@ -967,6 +967,18 @@ odd counts keep the weapon's full designed `spreadAngle` (Prism 5 / Scatter 5 / 
 Cluster 3 unchanged); even counts pack a little tighter with a guaranteed on-target shot.
 Laser (spread 18°): count 2 → offsets `[0°, +9°]`. Verified in play mode.
 
+**Nebula backdrop fix (same M19 commit).** User: "arkaplanlar sadece belli bölgelerde çalışıyor
+ve çok piksel piksel." Two bugs in `StarfieldParallax.SetBackdrop`: (1) `size` was assigned
+*before* `sprite` — in Tiled draw mode a fresh sprite resets `size` to the sprite's native
+dimensions, so the quad was one tile; (2) the quad was `viewW*coverage` (~54u) but the parallax
+wrap slid it by up to one full tile (~266u at the old PPU), pushing it clean off-screen → bare
+camera background across most of the map. Now: sprite assigned first, quad sized
+`(view*coverage + 2*tileWorld)` so it overhangs by a tile on every side. Pixelation: PPU 7 → 32
+(the camera saw ~12% of the 1024² tile blown up 8×), `textureCompression` Normal → CompressedHQ
+(gradient blocking), Bilinear + mipmaps + maxTextureSize 2048; `_backdropDensity` 0.55 → 1.
+`EnvironmentEventsBuilder.ImportBackgrounds` carries the import settings. Verified in play at a
+far-from-origin position: nebula fills the frame, soft not blocky.
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,

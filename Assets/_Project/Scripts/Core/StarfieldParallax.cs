@@ -133,29 +133,36 @@ namespace SpaceSurvivors.Core
                 return;
             }
 
+            float density = Mathf.Max(0.05f, _backdropDensity);
+            float viewH = _camera.orthographicSize * 2f;
+            float viewW = viewH * _camera.aspect;
+            // World-space distance over which the tiled nebula repeats (also the parallax
+            // wrap period). The backdrop quad has to stay covering the view across a full
+            // wrap cycle in each axis, so it must overhang by one tile on every side —
+            // otherwise the quad slides off and you see bare camera background in patches.
+            float tileWorld = (sprite.rect.width / sprite.pixelsPerUnit) / density;
+            float spanW = (viewW * _coverage + 2f * tileWorld) * density;
+            float spanH = (viewH * _coverage + 2f * tileWorld) * density;
+
             if (_backdropSr == null)
             {
-                float density = Mathf.Max(0.05f, _backdropDensity);
-                float viewH = _camera.orthographicSize * 2f;
-                float viewW = viewH * _camera.aspect;
-
                 var go = new GameObject("Backdrop");
                 go.transform.SetParent(_camera.transform, false);
                 go.transform.localPosition = new Vector3(0f, 0f, 30f);
-                go.transform.localScale = new Vector3(1f / density, 1f / density, 1f);
 
                 _backdropSr = go.AddComponent<SpriteRenderer>();
                 _backdropSr.drawMode = SpriteDrawMode.Tiled;
                 _backdropSr.tileMode = SpriteTileMode.Continuous;
-                _backdropSr.size = new Vector2(viewW * _coverage * density, viewH * _coverage * density);
                 _backdropSr.sortingOrder = _baseSortingOrder - _layers.Length - 1;
                 _backdropTf = go.transform;
             }
 
+            _backdropTf.localScale = new Vector3(1f / density, 1f / density, 1f);
             _backdropSr.enabled = true;
-            _backdropSr.sprite = sprite;
+            _backdropSr.sprite = sprite;                 // assign the sprite first —
+            _backdropSr.size = new Vector2(spanW, spanH); // in Tiled mode a new sprite resets size
             _backdropSr.color = tint;
-            _backdropTileSize = (sprite.rect.width / sprite.pixelsPerUnit) / Mathf.Max(0.05f, _backdropDensity);
+            _backdropTileSize = tileWorld;
         }
 
         private void LateUpdate()

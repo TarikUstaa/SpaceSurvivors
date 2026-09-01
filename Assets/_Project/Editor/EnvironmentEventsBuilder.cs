@@ -62,12 +62,17 @@ namespace SpaceSurvivors.EditorTools
                 bool dirty = false;
                 if (imp.textureType != TextureImporterType.Sprite) { imp.textureType = TextureImporterType.Sprite; dirty = true; }
                 if (imp.spriteImportMode != SpriteImportMode.Single) { imp.spriteImportMode = SpriteImportMode.Single; dirty = true; }
-                // Low PPU → one seamless tile is far bigger than the screen, so the nebula
-                // reads as one continuous cloud, not a repeating grid.
-                if (!Mathf.Approximately(imp.spritePixelsPerUnit, 7f)) { imp.spritePixelsPerUnit = 7f; dirty = true; }
+                // PPU sets how much of the 1024² tile fills the screen. Too low (7) and the
+                // camera sees ~12% of the image blown up 8× → pixel mush. ~32 shows about half
+                // the tile per screen: sharp enough, tile repeat ≈ 2 screen-widths (gentle).
+                if (!Mathf.Approximately(imp.spritePixelsPerUnit, 32f)) { imp.spritePixelsPerUnit = 32f; dirty = true; }
                 if (imp.wrapMode != TextureWrapMode.Repeat) { imp.wrapMode = TextureWrapMode.Repeat; dirty = true; }
+                if (imp.filterMode != FilterMode.Bilinear) { imp.filterMode = FilterMode.Bilinear; dirty = true; }
                 if (!imp.mipmapEnabled) { imp.mipmapEnabled = true; dirty = true; }
-                if (imp.maxTextureSize < 1024) { imp.maxTextureSize = 1024; dirty = true; }
+                if (imp.maxTextureSize < 2048) { imp.maxTextureSize = 2048; dirty = true; }
+                // Normal compression blocks up the smooth nebula gradients — use HQ.
+                if (imp.textureCompression != TextureImporterCompression.CompressedHQ)
+                { imp.textureCompression = TextureImporterCompression.CompressedHQ; dirty = true; }
 
                 // Tiled draw mode needs a Full Rect mesh or the edges clip.
                 var st = new TextureImporterSettings();
@@ -484,7 +489,7 @@ namespace SpaceSurvivors.EditorTools
                 new SerializedObject(starfield).Do(so =>
                 {
                     so.FindProperty("_backdropParallax").floatValue = 0.022f;
-                    so.FindProperty("_backdropDensity").floatValue = 0.55f;
+                    so.FindProperty("_backdropDensity").floatValue = 1f; // 1 = tile at the sprite's native size (with PPU 32 ≈ 2 screen-widths)
                 });
 
             // 4. Event banner on the HUD canvas.
