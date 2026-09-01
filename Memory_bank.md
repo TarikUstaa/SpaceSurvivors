@@ -1035,9 +1035,14 @@ Not started. Order not locked — awaiting the user's pick of which to build fir
   in (not the normal trickle). Likely fits the M18 `EventDirector` / `SpaceEventBehaviour`
   pattern, or a new hook in `SpawnDirector`. Needs its own telegraph + `EventBanner`. Tune
   count / first-time / interval / duration.
-- **G2 — Player ↔ enemy readability.** In a busy fight the player is hard to pick out. Stronger
-  player silhouette / outline / colour; enemy colour-coding by archetype; clearer telegraphs;
-  possibly dim/desaturate enemies against a brighter player.
+- **G2 — Player ↔ enemy readability. ⏸ DEFERRED 2026-09-01.** Attempted (M21, `M21ReadabilityBuilder`
+  + `PlayerBeacon` + `EnemyData.tint` + `EnemyBrain`/`HitFlash` edits): a pulsing cyan glow halo
+  behind the player + player sort order 0→20 + a dark/threat rim child on every enemy + optional
+  archetype tint. The **player-glow + sort-order** half was a clear win; the enemy recolour
+  (threat tints, then dark rim, then red rim) all read *worse* than the natural Kenney sprites —
+  user rejected. **Fully reverted, nothing committed** (`git restore` back to `904dfff`). Revisit
+  only alongside an enemy **art pass** — distinct per-archetype silhouettes — not tints over the
+  current art. The player-beacon idea is worth keeping for that future pass.
 - **G3 — Skill / upgrade balance pass.** `UpgradeService` catalogue + evolution tree + passives
   rebalanced (some over/underpowered in practice). Pairs with the M16 `BalanceConfig` tooling.
 - **G4 — More enemies on screen.** Push spawn counts / density past M16. Watch pooling perf and
