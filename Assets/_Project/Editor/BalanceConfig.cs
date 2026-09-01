@@ -29,28 +29,47 @@ namespace SpaceSurvivors.EditorTools
             var mini = Load<EnemyData>(Enm + "MiniBoss.asset");
             var final = Load<EnemyData>(Enm + "FinalBoss.asset");
 
-            // ---- roster timing (iter-5) — the player wants challenge + variety far sooner, so
-            //      the "first 3:00 is chaff only" rule is dropped: every archetype is in by ~2:40.
+            // ---- roster timing (iter-6) — every archetype in by ~2:40. Shooter promoted from
+            //      a rare 0.6 to a full 1.0: ranged fire is the main thing that punishes a
+            //      player kiting in a straight line, and the sim showed straight-line kiting
+            //      was risk-free. Swarmer (the fast chaser) also up a touch. ----
             SetEnemy("Grunt",    earliest: 0f,   weight: 1.0f);
-            SetEnemy("Swarmer",  earliest: 15f,  weight: 1.4f);
-            SetEnemy("Shooter",  earliest: 40f,  weight: 0.6f);
-            SetEnemy("Charger",  earliest: 75f,  weight: 0.6f);
-            SetEnemy("Splitter", earliest: 100f, weight: 0.55f);
-            SetEnemy("Brute",    earliest: 160f, weight: 0.45f);
+            SetEnemy("Swarmer",  earliest: 25f,  weight: 1.3f);
+            SetEnemy("Shooter",  earliest: 40f,  weight: 0.9f);
+            SetEnemy("Charger",  earliest: 80f,  weight: 0.7f);
+            SetEnemy("Splitter", earliest: 110f, weight: 0.55f);
+            SetEnemy("Brute",    earliest: 170f, weight: 0.45f);
 
-            // ---- iter-5: MUCH denser. The old curves peaked at 8-10 enemies/s and the screen
-            //      felt thin the whole run. These ramp to bullet-heaven density (20-26/s mid-run)
-            //      and the swarm event (EventDirector, every 60s) dumps ~34 more on top. Infinite
-            //      still ramps a touch gentler than Campaign so infinite runs last longer. ----
+            // ---- enemy base move speed (iter-6). Everything was ~2 u/s vs the player's 6, so
+            //      kiting was free. Bring the chasers up so an un-invested player gets caught
+            //      late-run (the DifficultyConfig speedMultiplier then ramps this further). ----
+            SetEnemySpeed("Grunt",    2.6f);
+            SetEnemySpeed("Swarmer",  4.0f);
+            SetEnemySpeed("Shooter",  2.7f);
+            SetEnemySpeed("Charger",  2.3f);
+            SetEnemySpeed("Splitter", 2.1f);
+            SetEnemySpeed("Brute",    1.25f);
+
+            // ---- iter-6b: density + threat pass. iter-5's screen sat at 10-25 enemies all
+            //      run and a competent kiting bot never dropped below ~90% HP. Changes:
+            //      * SpawnDirector now biases spawns toward the player's heading and enemies
+            //        far-cull later — so a given spawn rate is FELT much harder than before.
+            //      * because of that, the first ~90s is pulled *below* iter-5 (a fresh Laser
+            //        build gets swamped otherwise — iter-6a killed the bot at 0:59), then the
+            //        curve ramps far past iter-5 from 5:00 on where the real problem was.
+            //      * health & speed multipliers ramp harder: enemies get genuinely tanky and
+            //        fast the longer you survive (per the user — count AND hp scale with time).
+            //      Infinite still ramps gentler than Campaign so infinite runs last longer. ----
             infinite.spawnRatePerSecond = Curve(
-                (0, 0.7f), (20, 1.5f), (45, 2.6f), (90, 4f), (150, 5.8f),
-                (300, 8.5f), (480, 12f), (720, 16f), (1080, 21f), (1500, 25f));
+                (0, 0.5f), (25, 1f), (60, 1.8f), (110, 3f), (180, 4.6f),
+                (300, 7f), (480, 12f), (720, 19f), (1080, 29f), (1500, 40f), (2400, 55f));
             infinite.healthMultiplier = Curve(
-                (0, 1f), (60, 1.12f), (150, 1.42f), (180, 1.58f),
-                (300, 2.2f), (480, 3.2f), (720, 4.4f), (1080, 6.4f), (1500, 8.8f));
+                (0, 1f), (60, 1.12f), (180, 1.6f), (360, 2.5f), (600, 4f),
+                (900, 6f), (1200, 8.5f), (1500, 11.5f), (2400, 20f));
             infinite.speedMultiplier = Curve(
-                (0, 1f), (120, 1.04f), (300, 1.1f), (600, 1.18f), (1080, 1.28f), (1500, 1.4f));
-            infinite.maxAliveEnemies = 400;
+                (0, 1f), (60, 1.03f), (180, 1.1f), (360, 1.22f),
+                (600, 1.36f), (900, 1.5f), (1500, 1.7f));
+            infinite.maxAliveEnemies = 550;
             infinite.bossSchedule = new List<BossEntry>
             {
                 Boss(180f, mini, 1, 4f),
@@ -61,14 +80,14 @@ namespace SpaceSurvivors.EditorTools
             };
 
             campaign.spawnRatePerSecond = Curve(
-                (0, 0.8f), (20, 1.8f), (45, 3f), (90, 4.8f), (150, 7f),
-                (240, 10f), (360, 14f), (540, 18f), (780, 23f), (900, 26f));
+                (0, 0.7f), (25, 1.4f), (60, 2.5f), (110, 4f), (180, 6f),
+                (240, 9f), (360, 15f), (540, 23f), (780, 32f), (900, 38f));
             campaign.healthMultiplier = Curve(
-                (0, 1f), (60, 1.15f), (150, 1.5f), (180, 1.7f),
-                (300, 2.6f), (480, 4f), (720, 5.8f), (900, 7.2f));
+                (0, 1f), (60, 1.18f), (150, 1.6f), (180, 1.9f), (360, 3.2f),
+                (540, 4.8f), (720, 6.5f), (900, 8.2f));
             campaign.speedMultiplier = Curve(
-                (0, 1f), (120, 1.05f), (180, 1.1f), (400, 1.18f), (700, 1.27f), (900, 1.34f));
-            campaign.maxAliveEnemies = 420;
+                (0, 1f), (60, 1.04f), (180, 1.13f), (360, 1.28f), (600, 1.42f), (900, 1.58f));
+            campaign.maxAliveEnemies = 480;
             campaign.bossSchedule = new List<BossEntry>
             {
                 Boss(180f, mini, 1, 4f),   // stage 1 -> 2
@@ -124,6 +143,16 @@ namespace SpaceSurvivors.EditorTools
             var so = new SerializedObject(e);
             so.FindProperty("earliestSpawnTime").floatValue = earliest;
             so.FindProperty("spawnWeight").floatValue = weight;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(e);
+        }
+
+        private static void SetEnemySpeed(string name, float moveSpeed)
+        {
+            var e = Load<EnemyData>(Enm + name + ".asset");
+            if (e == null) return;
+            var so = new SerializedObject(e);
+            so.FindProperty("moveSpeed").floatValue = moveSpeed;
             so.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(e);
         }

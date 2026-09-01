@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16e629fa4daf144978695abb6bde4ec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Enemies.EnemyBrain
-  _farCullRadius: 45
+  _farCullRadius: 55
 --- !u!114 &891074179887565822
 MonoBehaviour:
   m_ObjectHideFlags: 0

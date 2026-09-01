@@ -46,7 +46,7 @@ namespace SpaceSurvivors.Environment
                  "and able to overlap it.")]
         [SerializeField] private SpaceEventData _swarmEvent;
         [SerializeField, Min(0f)] private float _firstSwarmAt = 60f;
-        [SerializeField, Min(5f)] private float _swarmInterval = 60f;
+        [SerializeField, Min(5f)] private float _swarmInterval = 45f;
 
         /// <summary>Fired when an event starts — carries the data so the UI can announce it.</summary>
         public event Action<SpaceEventData> EventStarted;

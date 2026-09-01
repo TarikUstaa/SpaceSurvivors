@@ -17,5 +17,5 @@ MonoBehaviour:
   announce: "\u26A0  Swarm incoming \u2014 brace"
   weight: 0
   earliestTime: 60
-  duration: 16
+  duration: 20
   eventPrefab: {fileID: 9056149845601325007, guid: 2595e47c2c62c40be9156f73b9fbbe73, type: 3}

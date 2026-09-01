@@ -65,7 +65,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ac60ab641671a4903aa0d6f4d1fae965, type: 2}
   - {fileID: 11400000, guid: fc504e0fb25cc4413988cebe6806cf6a, type: 2}
   - {fileID: 11400000, guid: 38e9ee3f5089149f8a7ea7ecca2395b6, type: 2}
-  _totalEnemies: 34
+  _baseEnemies: 30
+  _enemiesPerMinute: 9
+  _maxEnemies: 150
   _edges: 2
   _rampInSeconds: 3
   _burstSize: {x: 2, y: 4}

@@ -17,10 +17,10 @@ MonoBehaviour:
   deathVfxPrefab: {fileID: 8153368564366023220, guid: 74ac4a2c83beb4bf3ab7b5c4e3828035, type: 3}
   specialLootPrefab: {fileID: 0}
   baseHealth: 120
-  moveSpeed: 1.1
+  moveSpeed: 1.25
   contactDamage: 18
   contactInterval: 0.7
   scrapValue: 8
-  earliestSpawnTime: 160
+  earliestSpawnTime: 170
   spawnWeight: 0.45
   cullWhenFarOffscreen: 1

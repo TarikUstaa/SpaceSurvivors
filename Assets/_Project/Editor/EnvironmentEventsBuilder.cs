@@ -334,6 +334,10 @@ namespace SpaceSurvivors.EditorTools
                 rp.arraySize = swarmRoster.Length;
                 for (int i = 0; i < swarmRoster.Length; i++)
                     rp.GetArrayElementAtIndex(i).objectReferenceValue = swarmRoster[i];
+                // Scales with run time: ~30 at minute 1, ~120 at minute 10, hard cap 150.
+                so.FindProperty("_baseEnemies").intValue = 30;
+                so.FindProperty("_enemiesPerMinute").floatValue = 9f;
+                so.FindProperty("_maxEnemies").intValue = 150;
             });
         }
 
@@ -363,9 +367,9 @@ namespace SpaceSurvivors.EditorTools
                     weight: 0.7f, earliest: 120f, duration: 20f, "Event_Wormhole"),
             };
             // The swarm is NOT in the random rotation — it runs on EventDirector's fixed
-            // 60s track. Its SpaceEventData still needs to exist for that reference.
+            // 45s track. Its SpaceEventData still needs to exist for that reference.
             MakeEventData("swarm", "Swarm", "⚠  Swarm incoming — brace",
-                weight: 0f, earliest: 60f, duration: 16f, "Event_Swarm");
+                weight: 0f, earliest: 60f, duration: 20f, "Event_Swarm");
             EditorUtility.SetDirty(cat);
             return cat;
         }
@@ -480,7 +484,7 @@ namespace SpaceSurvivors.EditorTools
                     AssetDatabase.LoadAssetAtPath<SpaceEventData>(
                         HealthDir.Replace("Config/", "Events/") + "Event_swarm.asset");
                 so.FindProperty("_firstSwarmAt").floatValue = 60f;
-                so.FindProperty("_swarmInterval").floatValue = 60f;
+                so.FindProperty("_swarmInterval").floatValue = 45f;
             });
 
             // 2. Extend the streamed prop table + prewarm.

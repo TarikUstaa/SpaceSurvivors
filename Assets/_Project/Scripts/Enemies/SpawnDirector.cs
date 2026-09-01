@@ -28,11 +28,21 @@ namespace SpaceSurvivors.Enemies
         [Tooltip("Extra world units beyond the screen edge that enemies appear at.")]
         [SerializeField, Min(0f)] private float _offscreenMargin = 2f;
 
+        [Tooltip("Fraction of spawns placed in the arc the player is moving toward (the rest " +
+                 "ring the screen uniformly). Keeps the horde in front of a fast kiter instead " +
+                 "of spawning behind them where it's immediately left behind and far-culled.")]
+        [SerializeField, Range(0f, 1f)] private float _leadBias = 0.6f;
+        [Tooltip("Half-angle (degrees) of that lead arc, centred on the player's heading.")]
+        [SerializeField, Range(10f, 180f)] private float _leadArcDegrees = 75f;
+
         [Header("Debug")]
         [SerializeField] private bool _logEverySpawn = false;
 
         private float _accumulator;
         private int _aliveCount;
+        private Vector2 _lastPlayerPos;
+        private Vector2 _playerHeading;
+        private bool _haveLastPos;
         private bool[] _bossFired;
         private int _bossEntriesSpawned;
         private int _bossesAlive;
@@ -82,6 +92,7 @@ namespace SpaceSurvivors.Enemies
             if (_pool == null || _player == null || _config == null || _camera == null) return;
 
             float now = Now;
+            TrackPlayerHeading();
             CheckBossSchedule(now);
             _accumulator += _config.SpawnRateAt(now) * Time.deltaTime;
 
@@ -214,6 +225,19 @@ namespace SpaceSurvivors.Enemies
             return null;
         }
 
+        private void TrackPlayerHeading()
+        {
+            Vector2 p = _player.position;
+            if (_haveLastPos)
+            {
+                Vector2 delta = p - _lastPlayerPos;
+                if (delta.sqrMagnitude > 1e-4f)
+                    _playerHeading = Vector2.Lerp(_playerHeading, delta.normalized, 0.12f).normalized;
+            }
+            _lastPlayerPos = p;
+            _haveLastPos = true;
+        }
+
         private Vector3 GetOffscreenPosition()
         {
             float h = _camera.orthographicSize;
@@ -221,13 +245,25 @@ namespace SpaceSurvivors.Enemies
             Vector2 c = _camera.transform.position;
             float m = _offscreenMargin;
 
-            switch (Random.Range(0, 4))
+            // Pick a compass direction: mostly the arc the player is heading into (so the
+            // spawn stays relevant), the rest anywhere around the screen.
+            float ang;
+            if (_playerHeading.sqrMagnitude > 1e-4f && Random.value < _leadBias)
             {
-                case 0:  return new Vector3(c.x - w - m, Random.Range(c.y - h, c.y + h), 0f); // left
-                case 1:  return new Vector3(c.x + w + m, Random.Range(c.y - h, c.y + h), 0f); // right
-                case 2:  return new Vector3(Random.Range(c.x - w, c.x + w), c.y + h + m, 0f); // top
-                default: return new Vector3(Random.Range(c.x - w, c.x + w), c.y - h - m, 0f); // bottom
+                float baseAng = Mathf.Atan2(_playerHeading.y, _playerHeading.x);
+                ang = baseAng + Random.Range(-_leadArcDegrees, _leadArcDegrees) * Mathf.Deg2Rad;
             }
+            else
+            {
+                ang = Random.value * Mathf.PI * 2f;
+            }
+
+            // Cast that direction out to the screen rectangle + margin.
+            Vector2 dir = new(Mathf.Cos(ang), Mathf.Sin(ang));
+            float tx = (w + m) / Mathf.Max(1e-4f, Mathf.Abs(dir.x));
+            float ty = (h + m) / Mathf.Max(1e-4f, Mathf.Abs(dir.y));
+            float t = Mathf.Min(tx, ty);
+            return new Vector3(c.x + dir.x * t, c.y + dir.y * t, 0f);
         }
     }
 }
