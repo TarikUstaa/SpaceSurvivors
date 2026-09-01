@@ -21,6 +21,6 @@ MonoBehaviour:
   contactDamage: 4
   contactInterval: 0.5
   scrapValue: 2
-  earliestSpawnTime: 50
-  spawnWeight: 0.55
+  earliestSpawnTime: 40
+  spawnWeight: 0.6
   cullWhenFarOffscreen: 1

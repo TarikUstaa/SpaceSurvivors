@@ -28,48 +28,46 @@ namespace SpaceSurvivors.EditorTools
             var mini = Load<EnemyData>(Enm + "MiniBoss.asset");
             var final = Load<EnemyData>(Enm + "FinalBoss.asset");
 
-            // ---- roster timing (shared) — first 3:00 is Grunt / Swarmer / Shooter only ----
+            // ---- roster timing (iter-5) — the player wants challenge + variety far sooner, so
+            //      the "first 3:00 is chaff only" rule is dropped: every archetype is in by ~2:40.
             SetEnemy("Grunt",    earliest: 0f,   weight: 1.0f);
-            SetEnemy("Swarmer",  earliest: 20f,  weight: 1.3f);
-            SetEnemy("Shooter",  earliest: 50f,  weight: 0.55f);
-            SetEnemy("Charger",  earliest: 185f, weight: 0.55f);
-            SetEnemy("Splitter", earliest: 210f, weight: 0.5f);
-            SetEnemy("Brute",    earliest: 300f, weight: 0.4f);
+            SetEnemy("Swarmer",  earliest: 15f,  weight: 1.4f);
+            SetEnemy("Shooter",  earliest: 40f,  weight: 0.6f);
+            SetEnemy("Charger",  earliest: 75f,  weight: 0.6f);
+            SetEnemy("Splitter", earliest: 100f, weight: 0.55f);
+            SetEnemy("Brute",    earliest: 160f, weight: 0.45f);
 
-            // ---- Infinite: endless escalation. Iter-1 first 3:00 was fine (HP held 60-80, never
-            //      threatened) but the mid/late game was trivial for a focused build; iter-2's
-            //      harder EARLY ramp killed the bot at 0:90. So: keep iter-1's first 3:00 exactly,
-            //      then ramp HP/spawn hard so the snowball loses the race by ~15-20 min. ----
+            // ---- iter-5: MUCH denser. The old curves peaked at 8-10 enemies/s and the screen
+            //      felt thin the whole run. These ramp to bullet-heaven density (20-26/s mid-run)
+            //      and the swarm event (EventDirector, every 60s) dumps ~34 more on top. Infinite
+            //      still ramps a touch gentler than Campaign so infinite runs last longer. ----
             infinite.spawnRatePerSecond = Curve(
-                (0, 0.35f), (30, 0.65f), (60, 1.05f), (120, 1.7f), (180, 2.4f),
-                (300, 4f), (480, 6f), (700, 9f), (1000, 13f));
+                (0, 0.7f), (20, 1.5f), (45, 2.6f), (90, 4f), (150, 5.8f),
+                (300, 8.5f), (480, 12f), (720, 16f), (1080, 21f), (1500, 25f));
             infinite.healthMultiplier = Curve(
-                (0, 1f), (60, 1.12f), (150, 1.45f), (180, 1.6f),
-                (300, 2.6f), (480, 4.2f), (700, 7f), (1000, 11f));
+                (0, 1f), (60, 1.12f), (150, 1.42f), (180, 1.58f),
+                (300, 2.2f), (480, 3.2f), (720, 4.4f), (1080, 6.4f), (1500, 8.8f));
             infinite.speedMultiplier = Curve(
-                (0, 1f), (120, 1.05f), (180, 1.09f), (400, 1.17f), (800, 1.29f), (1100, 1.4f));
-            infinite.maxAliveEnemies = 280;
+                (0, 1f), (120, 1.04f), (300, 1.1f), (600, 1.18f), (1080, 1.28f), (1500, 1.4f));
+            infinite.maxAliveEnemies = 400;
             infinite.bossSchedule = new List<BossEntry>
             {
                 Boss(180f, mini, 1, 4f),
                 Boss(420f, mini, 2, 4f),
-                Boss(660f, mini, 3, 4f),
-                Boss(900f, final, 1, 5f),
-                Boss(1200f, final, 2, 5f),
+                Boss(720f, mini, 3, 4f),
+                Boss(1080f, final, 1, 5f),
+                Boss(1500f, final, 2, 5f),
             };
 
-            // ---- Campaign: paced to a ~15-min, 5-stage win. Iter-1 early ramp (kept), then a
-            //      firm — but slightly gentler than Infinite — mid/late so the final-boss stage
-            //      is a climax, not a wall. ----
             campaign.spawnRatePerSecond = Curve(
-                (0, 0.35f), (30, 0.65f), (60, 1.05f), (120, 1.7f), (180, 2.35f),
-                (300, 3.6f), (480, 5.2f), (660, 6.6f), (900, 8f));
+                (0, 0.8f), (20, 1.8f), (45, 3f), (90, 4.8f), (150, 7f),
+                (240, 10f), (360, 14f), (540, 18f), (780, 23f), (900, 26f));
             campaign.healthMultiplier = Curve(
-                (0, 1f), (60, 1.12f), (150, 1.45f), (180, 1.6f),
-                (300, 2.4f), (480, 3.7f), (720, 5.3f), (900, 6.5f));
+                (0, 1f), (60, 1.15f), (150, 1.5f), (180, 1.7f),
+                (300, 2.6f), (480, 4f), (720, 5.8f), (900, 7.2f));
             campaign.speedMultiplier = Curve(
-                (0, 1f), (120, 1.05f), (180, 1.09f), (400, 1.15f), (700, 1.24f), (900, 1.3f));
-            campaign.maxAliveEnemies = 240;
+                (0, 1f), (120, 1.05f), (180, 1.1f), (400, 1.18f), (700, 1.27f), (900, 1.34f));
+            campaign.maxAliveEnemies = 420;
             campaign.bossSchedule = new List<BossEntry>
             {
                 Boss(180f, mini, 1, 4f),   // stage 1 -> 2

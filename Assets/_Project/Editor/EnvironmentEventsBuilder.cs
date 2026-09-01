@@ -318,6 +318,23 @@ namespace SpaceSurvivors.EditorTools
                 so.FindProperty("_exitVfxPrefab").objectReferenceValue = flash;
                 so.FindProperty("_scrapPickupPrefab").objectReferenceValue = scrapPickup;
             });
+
+            // G1 — swarm: a wall of fast chaff (+ a little spice) pours in from the edges.
+            EnemyData Roster(string n) =>
+                AssetDatabase.LoadAssetAtPath<EnemyData>("Assets/_Project/ScriptableObjects/Enemies/" + n + ".asset");
+            var swarmRoster = new[]
+            {
+                Roster("Grunt"), Roster("Grunt"), Roster("Grunt"),
+                Roster("Swarmer"), Roster("Swarmer"),
+                Roster("Charger"), Roster("Shooter"),
+            };
+            MakeEvent<SwarmEvent>("Event_Swarm", so =>
+            {
+                var rp = so.FindProperty("_roster");
+                rp.arraySize = swarmRoster.Length;
+                for (int i = 0; i < swarmRoster.Length; i++)
+                    rp.GetArrayElementAtIndex(i).objectReferenceValue = swarmRoster[i];
+            });
         }
 
         private static void MakeEvent<T>(string name, Action<SerializedObject> configure) where T : Component
@@ -345,6 +362,10 @@ namespace SpaceSurvivors.EditorTools
                 MakeEventData("wormhole", "Wormhole", "◉  A wormhole tears open",
                     weight: 0.7f, earliest: 120f, duration: 20f, "Event_Wormhole"),
             };
+            // The swarm is NOT in the random rotation — it runs on EventDirector's fixed
+            // 60s track. Its SpaceEventData still needs to exist for that reference.
+            MakeEventData("swarm", "Swarm", "⚠  Swarm incoming — brace",
+                weight: 0f, earliest: 60f, duration: 16f, "Event_Swarm");
             EditorUtility.SetDirty(cat);
             return cat;
         }
@@ -455,6 +476,11 @@ namespace SpaceSurvivors.EditorTools
                 so.FindProperty("_camera").objectReferenceValue = Camera.main;
                 so.FindProperty("_catalogue").objectReferenceValue =
                     AssetDatabase.LoadAssetAtPath<SpaceEventCatalogue>(ResDir + "SpaceEventCatalogue.asset");
+                so.FindProperty("_swarmEvent").objectReferenceValue =
+                    AssetDatabase.LoadAssetAtPath<SpaceEventData>(
+                        HealthDir.Replace("Config/", "Events/") + "Event_swarm.asset");
+                so.FindProperty("_firstSwarmAt").floatValue = 60f;
+                so.FindProperty("_swarmInterval").floatValue = 60f;
             });
 
             // 2. Extend the streamed prop table + prewarm.

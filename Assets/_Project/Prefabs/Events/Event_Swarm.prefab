@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9056149845601325007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7746488313725587961}
+  - component: {fileID: 3902785508844380995}
+  - component: {fileID: 8224838317715972795}
+  m_Layer: 0
+  m_Name: Event_Swarm
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7746488313725587961
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056149845601325007}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3902785508844380995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056149845601325007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff9ecd9c2bc44ec9a3c61096081e3c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Core::SpaceSurvivors.Core.PoolHandle
+--- !u!114 &8224838317715972795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056149845601325007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac545206f04148179c5aa2d6bc03e54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Environment::SpaceSurvivors.Environment.SwarmEvent
+  _roster:
+  - {fileID: 11400000, guid: fa99b996c37ca47e1973f66fac906c81, type: 2}
+  - {fileID: 11400000, guid: fa99b996c37ca47e1973f66fac906c81, type: 2}
+  - {fileID: 11400000, guid: fa99b996c37ca47e1973f66fac906c81, type: 2}
+  - {fileID: 11400000, guid: ac60ab641671a4903aa0d6f4d1fae965, type: 2}
+  - {fileID: 11400000, guid: ac60ab641671a4903aa0d6f4d1fae965, type: 2}
+  - {fileID: 11400000, guid: fc504e0fb25cc4413988cebe6806cf6a, type: 2}
+  - {fileID: 11400000, guid: 38e9ee3f5089149f8a7ea7ecca2395b6, type: 2}
+  _totalEnemies: 34
+  _edges: 2
+  _rampInSeconds: 3
+  _burstSize: {x: 2, y: 4}
+  _edgeSpread: 6.5

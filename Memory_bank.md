@@ -196,6 +196,7 @@ Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c foll
 | 2026-08-31 | M14c — achievements | ⏳ BUILT, awaiting sign-off. 8 stat-threshold achievements (`AchievementData` = metric enum + threshold; `AchievementCatalogue` in `Resources/`). `AchievementService` static auto-tracks via `ProfileService.Changed` → `Evaluate()` → writes `unlockedAchievementIds` + `Save`. `Achievements.unity` 2×4 grid (`Rating/` CraftPix art) + MainMenu ACHIEVEMENTS button. Profile schema v2→v3 (`lifetimeKills` / `bestSurvivalSeconds` / `bestLevel` / `bossKills`); `ProfileService.RecordRun` extended; `RunEndScreen` calls `Evaluate()`. |
 | 2026-08-31 | M16 — balance pass | ⏳ BUILT, awaiting human playtest sign-off. `Editor/BalanceConfig` = one-shot applier for all difficulty curves / roster timing / boss schedules / XP curve / upgrade stack ceilings. `Editor/BalancePlaytest` = telemetry harness (orbit-the-horde autopilot via `Player/ExternalMoveInput` shim, CSV to persistentDataPath). Iter-3: first 3:00 gentle (Grunt/Swarmer/Shooter only, mini-boss @180) then a hard mid/late ramp (spawn 2.4→13/s, HP-mult 1.6→11); Campaign = 4-boss / 5-stage / ~15-min arc; Damage/FireRate maxStacks 5→4 / 8→6. Bot noisy on survivability → the feel needs human hands. |
 | 2026-08-31 | M15 — environment & maps | ✅ committed `18de62c`. `Obstacle` layer (11) + Physics2D matrix. New `SpaceSurvivors.Environment` asmdef: `Obstacle` (kinematic solid + `HealthComponent`; destructible raises `Destroyed` → director spawns debris VFX + `ScrapReward` scrap), `HazardZone` (`OverlapCircleNonAlloc` ticker damaging Player + Enemy), `EnvironmentDirector` (chunk streamer — deterministic per-cell RNG, pooled, far-cull; **owns the field config** — same asteroid/cache/hazard field on every map). `Data/MapData` (= backdrop theme: sky/star tint + baked nebula sprite) + `MapCatalogue` (Resources). `Progression/MapService` (static; profile schema **v3→v4** `selectedMapId`). 3 maps = **backdrops**: Milky Way / Crimson Nebula / Supernova (`Editor/BackdropTextureBaker` bakes 3 seamless 512² PNGs; `StarfieldParallax.SetBackdrop()` draws one as the farthest parallax layer). Flow: Campaign/Infinite → `MapSelect.unity` (build 5) carousel → PLAY → Game (no MAPS menu button). `PlayerMovement` gains `Rigidbody2D.Cast` obstacle deflection (`_obstacleMask`). `EnemyProjectile._blockLayers`. `StarfieldParallax.SetTint()` / `SetBackdrop()`. |
+| 2026-09-01 | G1 + G4 — swarm mechanic + denser spawns | ⏳ committed, awaiting sign-off. **G1:** `Environment/SwarmEvent` (`SpaceEventBehaviour`) pours ~34 real enemies from 1–2 screen edges over ~16s, on `EventDirector`'s own fixed 60s track (`_swarmEvent` / `_firstSwarmAt` / `_swarmInterval`; `Fire`→`FireEvent(data, bool trackActive)` so it overlaps the random rotation). Removed from random `SpaceEventCatalogue`. `Editor/EnvironmentEventsBuilder` builds `Event_Swarm.prefab` + `Event_swarm.asset` + wires the scene. **G4:** `Editor/BalanceConfig` iter-5 — Infinite spawn peaks 25/s, Campaign 26/s (were ~8), `maxAliveEnemies` 400/420, roster fully in by ~2:40. Verified ~360 on screen @ 465 fps. Multishot train-stagger tried + reverted (kept M19 fan). |
 
 ## Tweaks (2026-08-28)
 - `ScrapPickup.prefab` scale 0.35 → 0.6, colour brighter gold (user: XP drops too small).
@@ -1029,12 +1030,19 @@ of the project; the fonts are plain `Font` assets.
   meta-screen headers could also move to Audiowide; gameplay music.
 
 ## Post-M20 goals (user, 2026-09-01 — after first real playthrough)
-Not started. Order not locked — awaiting the user's pick of which to build first. Full table in
-`Project_Goals.md §4 "Post-M20 goals"`.
-- **G1 — Swarm mechanic.** After a set time in a run, a big *scheduled wave* of enemies floods
-  in (not the normal trickle). Likely fits the M18 `EventDirector` / `SpaceEventBehaviour`
-  pattern, or a new hook in `SpawnDirector`. Needs its own telegraph + `EventBanner`. Tune
-  count / first-time / interval / duration.
+Order not locked. Full table in `Project_Goals.md §4 "Post-M20 goals"`.
+G1 + G4 BUILT & committed as one bundle 2026-09-01 (awaiting sign-off). G3 next (in progress).
+- **G1 — Swarm mechanic. ✅ BUILT 2026-09-01 (awaiting sign-off).** `Environment/SwarmEvent`
+  (`SpaceEventBehaviour` subclass) pours ~34 real enemies in from 1–2 screen edges over ~16s.
+  Runs on `EventDirector`'s **own fixed track** — new serialized fields `_swarmEvent` /
+  `_firstSwarmAt` (60s) / `_swarmInterval` (60s) / `_nextSwarmTime`; `Fire` → `FireEvent(data,
+  bool trackActive)` so the swarm track (`trackActive:false`) never blocks / is blocked by the
+  random rotation and can overlap it. Removed from the random `SpaceEventCatalogue` (5 random
+  events now). Enemies are real (loot / XP / alive-count, NOT `SpawnChildren`, not auto-released
+  — you must kill them). Reuses `UI/EventBanner`. Assets built by `Editor/EnvironmentEventsBuilder`
+  (`MakeEvent<SwarmEvent>` → `Prefabs/Events/Event_Swarm.prefab`; `Event_swarm.asset` weight 0 /
+  earliest 60 / duration 16, created outside `cat.events`; WireScene wires the EventDirector).
+  Roster weighted Grunt×3 / Swarmer×2 / Charger / Shooter.
 - **G2 — Player ↔ enemy readability. ⏸ DEFERRED 2026-09-01.** Attempted (M21, `M21ReadabilityBuilder`
   + `PlayerBeacon` + `EnemyData.tint` + `EnemyBrain`/`HitFlash` edits): a pulsing cyan glow halo
   behind the player + player sort order 0→20 + a dark/threat rim child on every enemy + optional
@@ -1045,8 +1053,15 @@ Not started. Order not locked — awaiting the user's pick of which to build fir
   current art. The player-beacon idea is worth keeping for that future pass.
 - **G3 — Skill / upgrade balance pass.** `UpgradeService` catalogue + evolution tree + passives
   rebalanced (some over/underpowered in practice). Pairs with the M16 `BalanceConfig` tooling.
-- **G4 — More enemies on screen.** Push spawn counts / density past M16. Watch pooling perf and
-  G2 — more enemies makes readability worse, so do G2 first or alongside.
+- **G4 — More enemies on screen. ✅ BUILT 2026-09-01 (awaiting sign-off).** `Editor/BalanceConfig`
+  iter-5. Old curves peaked ~8/s → screen felt thin all run. New Infinite spawn
+  `(0,0.7)(20,1.5)(45,2.6)(90,4)(150,5.8)(300,8.5)(480,12)(720,16)(1080,21)(1500,25)`; Campaign
+  `(0,0.8)(20,1.8)(45,3)(90,4.8)(150,7)(240,10)(360,14)(540,18)(780,23)(900,26)`. `maxAliveEnemies`
+  400 / 420. Roster timing pulled way in: Grunt 0 / Swarmer 15 / Shooter 40 / Charger 75 /
+  Splitter 100 / Brute 160 — every archetype by ~2:40 (old "first 3:00 chaff only" rule dropped).
+  Infinite ramps gentler than Campaign so infinite runs last longer. Verified ~360 on screen at
+  3:20 @ 465 fps (2.2 ms/frame). Multishot train-stagger tried here + reverted (kept M19 fan). At
+  this density the deferred G2 readability problem resurfaces — revisit player-glow half later.
 - **G5 — Replace the Mine weapon.** Drop **Mine Layer** and (if nothing else needs it) the
   `Trail` `WeaponKind` — currently only the Deep Mine evolution uses it. Add new weapon(s) in
   its slot. Pure content on the existing weapon system + `UpgradeService` catalogue.

@@ -41,11 +41,19 @@ namespace SpaceSurvivors.Environment
         [Tooltip("Extra weight multiplier for the current map's signature event.")]
         [SerializeField, Min(1f)] private float _signatureBias = 3f;
 
+        [Header("Swarm (fixed cadence, own track)")]
+        [Tooltip("The swarm event. Fires on a strict interval, independent of the random rotation " +
+                 "and able to overlap it.")]
+        [SerializeField] private SpaceEventData _swarmEvent;
+        [SerializeField, Min(0f)] private float _firstSwarmAt = 60f;
+        [SerializeField, Min(5f)] private float _swarmInterval = 60f;
+
         /// <summary>Fired when an event starts — carries the data so the UI can announce it.</summary>
         public event Action<SpaceEventData> EventStarted;
 
         private readonly List<SpaceEventData> _pickable = new();
         private float _nextRollTime;
+        private float _nextSwarmTime;
         private GameObject _active;
 
         private void Awake()
@@ -58,21 +66,36 @@ namespace SpaceSurvivors.Environment
             if (_catalogue == null) _catalogue = Resources.Load<SpaceEventCatalogue>("SpaceEventCatalogue");
         }
 
-        private void Start() => _nextRollTime = Mathf.Max(_firstEventAt, Elapsed + _cooldownRange.x);
+        private void Start()
+        {
+            _nextRollTime = Mathf.Max(_firstEventAt, Elapsed + _cooldownRange.x);
+            _nextSwarmTime = Mathf.Max(_firstSwarmAt, Elapsed);
+        }
 
         private float Elapsed => _clock != null ? _clock.Elapsed : Time.timeSinceLevelLoad;
 
         private void Update()
         {
-            if (_catalogue == null || _pool == null || _player == null) return;
-            if (_active != null && _active.activeInHierarchy) return;   // one at a time
-            if (Elapsed < _nextRollTime) return;
+            if (_pool == null || _player == null) return;
+            float now = Elapsed;
+
+            // Swarm — strict cadence, its own track. Overlaps the random rotation freely.
+            if (_swarmEvent != null && _swarmEvent.eventPrefab != null && now >= _nextSwarmTime)
+            {
+                FireEvent(_swarmEvent, trackActive: false);
+                _nextSwarmTime = now + _swarmInterval;
+            }
+
+            // Random weighted events — one at a time.
+            if (_catalogue == null) return;
+            if (_active != null && _active.activeInHierarchy) return;
+            if (now < _nextRollTime) return;
 
             var data = Roll();
-            if (data == null) { _nextRollTime = Elapsed + 10f; return; } // nothing eligible yet — retry soon
+            if (data == null) { _nextRollTime = now + 10f; return; } // nothing eligible yet — retry soon
 
-            Fire(data);
-            _nextRollTime = Elapsed + data.duration + UnityEngine.Random.Range(_cooldownRange.x, _cooldownRange.y);
+            FireEvent(data, trackActive: true);
+            _nextRollTime = now + data.duration + UnityEngine.Random.Range(_cooldownRange.x, _cooldownRange.y);
         }
 
         private SpaceEventData Roll()
@@ -102,11 +125,11 @@ namespace SpaceSurvivors.Environment
         private float Weight(SpaceEventData e, string signatureId)
             => e.weight * (!string.IsNullOrEmpty(signatureId) && e.id == signatureId ? _signatureBias : 1f);
 
-        private void Fire(SpaceEventData data)
+        private void FireEvent(SpaceEventData data, bool trackActive)
         {
             var go = _pool.Spawn(data.eventPrefab, _player.position, Quaternion.identity);
             if (go == null) return;
-            _active = go;
+            if (trackActive) _active = go;
 
             if (go.TryGetComponent(out ISpaceEvent ev))
                 ev.Begin(new SpaceEventContext(_player, _pool, _spawns, _collector, _camera, data.duration));

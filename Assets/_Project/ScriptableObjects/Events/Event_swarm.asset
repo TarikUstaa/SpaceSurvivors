@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 171650f251b984c9fbc2a72d8ce990ce, type: 3}
+  m_Name: Event_swarm
+  m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.SpaceEventData
+  id: swarm
+  displayName: Swarm
+  announce: "\u26A0  Swarm incoming \u2014 brace"
+  weight: 0
+  earliestTime: 60
+  duration: 16
+  eventPrefab: {fileID: 9056149845601325007, guid: 2595e47c2c62c40be9156f73b9fbbe73, type: 3}
