@@ -196,7 +196,8 @@ Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c foll
 | 2026-08-31 | M14c — achievements | ⏳ BUILT, awaiting sign-off. 8 stat-threshold achievements (`AchievementData` = metric enum + threshold; `AchievementCatalogue` in `Resources/`). `AchievementService` static auto-tracks via `ProfileService.Changed` → `Evaluate()` → writes `unlockedAchievementIds` + `Save`. `Achievements.unity` 2×4 grid (`Rating/` CraftPix art) + MainMenu ACHIEVEMENTS button. Profile schema v2→v3 (`lifetimeKills` / `bestSurvivalSeconds` / `bestLevel` / `bossKills`); `ProfileService.RecordRun` extended; `RunEndScreen` calls `Evaluate()`. |
 | 2026-08-31 | M16 — balance pass | ⏳ BUILT, awaiting human playtest sign-off. `Editor/BalanceConfig` = one-shot applier for all difficulty curves / roster timing / boss schedules / XP curve / upgrade stack ceilings. `Editor/BalancePlaytest` = telemetry harness (orbit-the-horde autopilot via `Player/ExternalMoveInput` shim, CSV to persistentDataPath). Iter-3: first 3:00 gentle (Grunt/Swarmer/Shooter only, mini-boss @180) then a hard mid/late ramp (spawn 2.4→13/s, HP-mult 1.6→11); Campaign = 4-boss / 5-stage / ~15-min arc; Damage/FireRate maxStacks 5→4 / 8→6. Bot noisy on survivability → the feel needs human hands. |
 | 2026-08-31 | M15 — environment & maps | ✅ committed `18de62c`. `Obstacle` layer (11) + Physics2D matrix. New `SpaceSurvivors.Environment` asmdef: `Obstacle` (kinematic solid + `HealthComponent`; destructible raises `Destroyed` → director spawns debris VFX + `ScrapReward` scrap), `HazardZone` (`OverlapCircleNonAlloc` ticker damaging Player + Enemy), `EnvironmentDirector` (chunk streamer — deterministic per-cell RNG, pooled, far-cull; **owns the field config** — same asteroid/cache/hazard field on every map). `Data/MapData` (= backdrop theme: sky/star tint + baked nebula sprite) + `MapCatalogue` (Resources). `Progression/MapService` (static; profile schema **v3→v4** `selectedMapId`). 3 maps = **backdrops**: Milky Way / Crimson Nebula / Supernova (`Editor/BackdropTextureBaker` bakes 3 seamless 512² PNGs; `StarfieldParallax.SetBackdrop()` draws one as the farthest parallax layer). Flow: Campaign/Infinite → `MapSelect.unity` (build 5) carousel → PLAY → Game (no MAPS menu button). `PlayerMovement` gains `Rigidbody2D.Cast` obstacle deflection (`_obstacleMask`). `EnemyProjectile._blockLayers`. `StarfieldParallax.SetTint()` / `SetBackdrop()`. |
-| 2026-09-01 | G3 — skill / upgrade balance | ⏳ committed, awaiting sign-off. `Editor/BalanceConfig.TuneUpgrades()` owns weight/value/stack-ceiling for all 16 level-up choices in one place. FireRate 6→5 / +18%, MoveSpeed 6→4 / +10%, Haste w0.9→0.5 & 5→3, MaxHealth +25→30 & 6→5, MultiShot w0.35→0.5, Damage max 4→5. `WeaponController._maxWeapons = 6` slot cap (+ `IsFull`); `UpgradeService.Roll` stops offering new weapons at cap. Built during a play session → not yet playtested. |
+| 2026-09-01 | Playtest fixes — threat/density scale with time | ⏳ committed `dba5f81`, awaiting sign-off. Sim playtest of G1/G3/G4 found **no threat after ~90s** (kiting bot never below ~90% HP in 8 min; screen stuck at 10-25 enemies). Fixes: `SpawnDirector` **lead-biased spawn placement** (60% into a 75° arc toward player heading — `_leadBias`/`_leadArcDegrees`); `SwarmEvent` **v2 scales with run time** (`30 + 9×min`, cap 150; interval 60→45s, duration 16→20s); `BalanceConfig` iter-6b — enemy base speeds up (Swarmer 3.1→4.0 etc.), speed/HP multipliers ramp harder & further, spawn curve gentler first 90s then steeper, maxAlive 550/480; enemy prefab `_farCullRadius` 45→55. Verified early game now dangerous; **mid/late still eases once a build snowballs** — iter-6c drafted. Also: `StarTile.png` spriteMeshType Tight→FullRect (kills the parallax tiling warning). |
+| 2026-09-01 | G3 — skill / upgrade balance | ⏳ committed `72043d8`, awaiting sign-off. `Editor/BalanceConfig.TuneUpgrades()` owns weight/value/stack-ceiling for all 16 level-up choices in one place. FireRate 6→5 / +18%, MoveSpeed 6→4 / +10%, Haste w0.9→0.5 & 5→3, MaxHealth +25→30 & 6→5, MultiShot w0.35→0.5, Damage max 4→5. `WeaponController._maxWeapons = 6` slot cap (+ `IsFull`); `UpgradeService.Roll` stops offering new weapons at cap. Verified in sim: slot cap holds at 6, all evolutions fire. |
 | 2026-09-01 | G1 + G4 — swarm mechanic + denser spawns | ⏳ committed, awaiting sign-off. **G1:** `Environment/SwarmEvent` (`SpaceEventBehaviour`) pours ~34 real enemies from 1–2 screen edges over ~16s, on `EventDirector`'s own fixed 60s track (`_swarmEvent` / `_firstSwarmAt` / `_swarmInterval`; `Fire`→`FireEvent(data, bool trackActive)` so it overlaps the random rotation). Removed from random `SpaceEventCatalogue`. `Editor/EnvironmentEventsBuilder` builds `Event_Swarm.prefab` + `Event_swarm.asset` + wires the scene. **G4:** `Editor/BalanceConfig` iter-5 — Infinite spawn peaks 25/s, Campaign 26/s (were ~8), `maxAliveEnemies` 400/420, roster fully in by ~2:40. Verified ~360 on screen @ 465 fps. Multishot train-stagger tried + reverted (kept M19 fan). |
 
 ## Tweaks (2026-08-28)
@@ -1044,6 +1045,11 @@ G1 + G4 BUILT & committed as one bundle 2026-09-01 (awaiting sign-off). G3 next 
   (`MakeEvent<SwarmEvent>` → `Prefabs/Events/Event_Swarm.prefab`; `Event_swarm.asset` weight 0 /
   earliest 60 / duration 16, created outside `cat.events`; WireScene wires the EventDirector).
   Roster weighted Grunt×3 / Swarmer×2 / Charger / Shooter.
+  **v2 (`dba5f81`):** size scales with run time — `SwarmEvent._baseEnemies 30 + _enemiesPerMinute
+  9 × minutes`, `_maxEnemies` 150 (was a flat `_totalEnemies 34` that a mid-game build shredded
+  in ~2s). Reads `RunClock.Elapsed` in `OnBegin`. Bigger swarms get a heavier burst. Cadence
+  `_swarmInterval` 60→45s, `Event_swarm` duration 16→20s. In the sim it's the main threat in the
+  first ~3 min (HP drops to 65 during a swarm, recovers between).
 - **G2 — Player ↔ enemy readability. ⏸ DEFERRED 2026-09-01.** Attempted (M21, `M21ReadabilityBuilder`
   + `PlayerBeacon` + `EnemyData.tint` + `EnemyBrain`/`HitFlash` edits): a pulsing cyan glow halo
   behind the player + player sort order 0→20 + a dark/threat rim child on every enemy + optional
@@ -1073,15 +1079,30 @@ G1 + G4 BUILT & committed as one bundle 2026-09-01 (awaiting sign-off). G3 next 
   edited directly in YAML (builder code matches, so a future `M16 Apply balance` run is
   idempotent). Deferred candidate if Shield still feels weak at G4 density: buff
   `ShieldComponent` (`_rechargeTime` 6→~4.5, `_barrierDamage` 6→~8) — it's a scene object.
-- **G4 — More enemies on screen. ✅ BUILT 2026-09-01 (awaiting sign-off).** `Editor/BalanceConfig`
-  iter-5. Old curves peaked ~8/s → screen felt thin all run. New Infinite spawn
-  `(0,0.7)(20,1.5)(45,2.6)(90,4)(150,5.8)(300,8.5)(480,12)(720,16)(1080,21)(1500,25)`; Campaign
-  `(0,0.8)(20,1.8)(45,3)(90,4.8)(150,7)(240,10)(360,14)(540,18)(780,23)(900,26)`. `maxAliveEnemies`
-  400 / 420. Roster timing pulled way in: Grunt 0 / Swarmer 15 / Shooter 40 / Charger 75 /
-  Splitter 100 / Brute 160 — every archetype by ~2:40 (old "first 3:00 chaff only" rule dropped).
-  Infinite ramps gentler than Campaign so infinite runs last longer. Verified ~360 on screen at
-  3:20 @ 465 fps (2.2 ms/frame). Multishot train-stagger tried here + reverted (kept M19 fan). At
-  this density the deferred G2 readability problem resurfaces — revisit player-glow half later.
+- **G4 — More enemies on screen + threat. 🟡 iter-6b BUILT 2026-09-01 `dba5f81` (early game fixed,
+  mid/late open).** iter-5 (`(0,0.7)…(1500,25)` infinite) gave a denser screen on paper but a
+  **sim playtest showed zero threat after ~90s** — a kiting bot never dropped below ~90% HP in 8
+  min and the screen sat at 10–25 enemies (player DPS > spawn rate; enemies ~2 u/s vs player 6;
+  random spawn placement left them behind a kiter to far-cull). iter-6b:
+  * `SpawnDirector` **lead-biased placement** — tracks player heading, 60% of spawns land in a
+    75° arc toward it (`_leadBias` 0.6 / `_leadArcDegrees` 75, deserialize onto the scene
+    instance). Horde stays in play instead of trailing off.
+  * **enemy base move speed up**: Grunt 2.2→2.6, Swarmer 3.1→**4.0**, Shooter 2.4→2.7,
+    Charger 2.0→2.3, Splitter 1.9→2.1, Brute 1.1→1.25 (new `SetEnemySpeed` helper in BalanceConfig).
+  * **speed & health multipliers ramp harder & further** — infinite HP ×4 by 10 min, ×11.5 by
+    25 min, ×20 by 40 min; speed ×1.7 late. Count AND hp climb with time (user's ask).
+  * spawn curve: first ~90s pulled *below* iter-5 (lead-spawn makes each enemy hit harder — an
+    all-hard version, "iter-6a", killed the bot at 0:59), then ramps past iter-5 from 5:00 on.
+    infinite `(0,0.5)(25,1)(60,1.8)(110,3)(180,4.6)(300,7)(480,12)(720,19)(1080,29)(1500,40)(2400,55)`.
+    `maxAliveEnemies` 550 / 480.
+  * enemy prefab `_farCullRadius` 45→55 (direct YAML on the 6 non-boss prefabs) so a trailing
+    horde can form.
+  * Roster: Shooter promoted to ~full weight (0.6→0.9, ranged fire punishes straight-line
+    kiting), Swarmer to 25s.
+  Verified: first ~3 min genuinely dangerous, HP oscillates 65–115. **Still open:** past ~3 min
+  a snowballed build trivialises the lulls between swarms (kill-rate ~12/s > spawn ~6–10/s).
+  iter-6c drafted (infinite spawn to 70/s, HP ×22, swarm 9→13/min, maxAlive 600) — needs a longer
+  sim / the human playthrough (the sim bot has +220% pickup radius and out-levels a real player).
 - **G5 — Replace the Mine weapon.** Drop **Mine Layer** and (if nothing else needs it) the
   `Trail` `WeaponKind` — currently only the Deep Mine evolution uses it. Add new weapon(s) in
   its slot. Pure content on the existing weapon system + `UpgradeService` catalogue.
