@@ -18,5 +18,5 @@ MonoBehaviour:
   modifiers: []
   special: 1
   weaponToGrant: {fileID: 11400000, guid: 6c380f95db8ea4aeab2d39de84b0c075, type: 2}
-  weight: 0.7
+  weight: 0.55
   maxStacks: 1

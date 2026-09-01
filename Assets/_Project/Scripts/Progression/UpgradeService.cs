@@ -51,7 +51,8 @@ namespace SpaceSurvivors.Progression
             var available = _catalogue
                 .Where(u => u != null && (u.maxStacks == 0 || TakenCount(u) < u.maxStacks))
                 .Where(u => u.special != UpgradeData.SpecialEffect.GrantWeapon
-                            || (u.weaponToGrant != null && !_weapons.HasWeapon(u.weaponToGrant)))
+                            || (u.weaponToGrant != null && !_weapons.HasWeapon(u.weaponToGrant)
+                                && !_weapons.IsFull))
                 .ToList();
 
             while (offers.Count < count && available.Count > 0)

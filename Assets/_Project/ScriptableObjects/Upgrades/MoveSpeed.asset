@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: MoveSpeed
   m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.UpgradeData
   title: Thrusters
-  description: +12% move speed
+  description: +10% move speed
   icon: {fileID: 0}
   modifiers:
   - stat: 0
     op: 1
-    value: 0.12
+    value: 0.1
   special: 0
   weaponToGrant: {fileID: 0}
-  weight: 0.9
-  maxStacks: 6
+  weight: 0.85
+  maxStacks: 4

@@ -54,6 +54,11 @@ namespace SpaceSurvivors.Combat
         [Header("Loadout")]
         [SerializeField] private List<WeaponData> _startingWeapons = new();
 
+        [Tooltip("Hard cap on how many weapons the ship can hold at once. Evolutions swap in " +
+                 "place and never count against this. Keeps late-run builds about choosing a " +
+                 "loadout instead of collecting every gun.")]
+        [SerializeField, Min(1)] private int _maxWeapons = 6;
+
         [Tooltip("Where projectiles spawn. Empty = this transform.")]
         [SerializeField] private Transform _muzzle;
 
@@ -101,10 +106,13 @@ namespace SpaceSurvivors.Combat
                 AddWeapon(w);
         }
 
-        /// <summary>Grant a weapon at runtime. Ignores nulls / duplicates.</summary>
+        /// <summary>True once the ship is carrying its maximum number of weapons.</summary>
+        public bool IsFull => _slots.Count >= _maxWeapons;
+
+        /// <summary>Grant a weapon at runtime. Ignores nulls / duplicates / a full loadout.</summary>
         public void AddWeapon(WeaponData data)
         {
-            if (data == null || _slots.Exists(s => s.Data == data)) return;
+            if (data == null || IsFull || _slots.Exists(s => s.Data == data)) return;
             _slots.Add(new Slot { Data = data, CooldownLeft = 0f });
             SyncSpecialWeapons();
         }

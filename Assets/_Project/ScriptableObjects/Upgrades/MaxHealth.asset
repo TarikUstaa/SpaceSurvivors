@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: MaxHealth
   m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.UpgradeData
   title: Hull Plating
-  description: +25 max HP (heals too)
+  description: +30 max HP (heals too)
   icon: {fileID: 0}
   modifiers:
   - stat: 1
     op: 0
-    value: 25
+    value: 30
   special: 0
   weaponToGrant: {fileID: 0}
-  weight: 0.9
-  maxStacks: 6
+  weight: 0.95
+  maxStacks: 5

@@ -196,6 +196,7 @@ Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c foll
 | 2026-08-31 | M14c — achievements | ⏳ BUILT, awaiting sign-off. 8 stat-threshold achievements (`AchievementData` = metric enum + threshold; `AchievementCatalogue` in `Resources/`). `AchievementService` static auto-tracks via `ProfileService.Changed` → `Evaluate()` → writes `unlockedAchievementIds` + `Save`. `Achievements.unity` 2×4 grid (`Rating/` CraftPix art) + MainMenu ACHIEVEMENTS button. Profile schema v2→v3 (`lifetimeKills` / `bestSurvivalSeconds` / `bestLevel` / `bossKills`); `ProfileService.RecordRun` extended; `RunEndScreen` calls `Evaluate()`. |
 | 2026-08-31 | M16 — balance pass | ⏳ BUILT, awaiting human playtest sign-off. `Editor/BalanceConfig` = one-shot applier for all difficulty curves / roster timing / boss schedules / XP curve / upgrade stack ceilings. `Editor/BalancePlaytest` = telemetry harness (orbit-the-horde autopilot via `Player/ExternalMoveInput` shim, CSV to persistentDataPath). Iter-3: first 3:00 gentle (Grunt/Swarmer/Shooter only, mini-boss @180) then a hard mid/late ramp (spawn 2.4→13/s, HP-mult 1.6→11); Campaign = 4-boss / 5-stage / ~15-min arc; Damage/FireRate maxStacks 5→4 / 8→6. Bot noisy on survivability → the feel needs human hands. |
 | 2026-08-31 | M15 — environment & maps | ✅ committed `18de62c`. `Obstacle` layer (11) + Physics2D matrix. New `SpaceSurvivors.Environment` asmdef: `Obstacle` (kinematic solid + `HealthComponent`; destructible raises `Destroyed` → director spawns debris VFX + `ScrapReward` scrap), `HazardZone` (`OverlapCircleNonAlloc` ticker damaging Player + Enemy), `EnvironmentDirector` (chunk streamer — deterministic per-cell RNG, pooled, far-cull; **owns the field config** — same asteroid/cache/hazard field on every map). `Data/MapData` (= backdrop theme: sky/star tint + baked nebula sprite) + `MapCatalogue` (Resources). `Progression/MapService` (static; profile schema **v3→v4** `selectedMapId`). 3 maps = **backdrops**: Milky Way / Crimson Nebula / Supernova (`Editor/BackdropTextureBaker` bakes 3 seamless 512² PNGs; `StarfieldParallax.SetBackdrop()` draws one as the farthest parallax layer). Flow: Campaign/Infinite → `MapSelect.unity` (build 5) carousel → PLAY → Game (no MAPS menu button). `PlayerMovement` gains `Rigidbody2D.Cast` obstacle deflection (`_obstacleMask`). `EnemyProjectile._blockLayers`. `StarfieldParallax.SetTint()` / `SetBackdrop()`. |
+| 2026-09-01 | G3 — skill / upgrade balance | ⏳ committed, awaiting sign-off. `Editor/BalanceConfig.TuneUpgrades()` owns weight/value/stack-ceiling for all 16 level-up choices in one place. FireRate 6→5 / +18%, MoveSpeed 6→4 / +10%, Haste w0.9→0.5 & 5→3, MaxHealth +25→30 & 6→5, MultiShot w0.35→0.5, Damage max 4→5. `WeaponController._maxWeapons = 6` slot cap (+ `IsFull`); `UpgradeService.Roll` stops offering new weapons at cap. Built during a play session → not yet playtested. |
 | 2026-09-01 | G1 + G4 — swarm mechanic + denser spawns | ⏳ committed, awaiting sign-off. **G1:** `Environment/SwarmEvent` (`SpaceEventBehaviour`) pours ~34 real enemies from 1–2 screen edges over ~16s, on `EventDirector`'s own fixed 60s track (`_swarmEvent` / `_firstSwarmAt` / `_swarmInterval`; `Fire`→`FireEvent(data, bool trackActive)` so it overlaps the random rotation). Removed from random `SpaceEventCatalogue`. `Editor/EnvironmentEventsBuilder` builds `Event_Swarm.prefab` + `Event_swarm.asset` + wires the scene. **G4:** `Editor/BalanceConfig` iter-5 — Infinite spawn peaks 25/s, Campaign 26/s (were ~8), `maxAliveEnemies` 400/420, roster fully in by ~2:40. Verified ~360 on screen @ 465 fps. Multishot train-stagger tried + reverted (kept M19 fan). |
 
 ## Tweaks (2026-08-28)
@@ -1051,8 +1052,27 @@ G1 + G4 BUILT & committed as one bundle 2026-09-01 (awaiting sign-off). G3 next 
   user rejected. **Fully reverted, nothing committed** (`git restore` back to `904dfff`). Revisit
   only alongside an enemy **art pass** — distinct per-archetype silhouettes — not tints over the
   current art. The player-beacon idea is worth keeping for that future pass.
-- **G3 — Skill / upgrade balance pass.** `UpgradeService` catalogue + evolution tree + passives
-  rebalanced (some over/underpowered in practice). Pairs with the M16 `BalanceConfig` tooling.
+- **G3 — Skill / upgrade balance pass. ✅ BUILT 2026-09-01 (awaiting sign-off).** All 16 level-up
+  choices retuned in one place: `Editor/BalanceConfig.TuneUpgrades()` (called from `Apply()`) now
+  owns weight / per-stack value / stack ceiling for every `UpgradeData` — replaced the old
+  `SetUpgradeMaxStacks` with a fuller `SetUpgrade(name, weight, maxStacks, modValue?, desc?)`
+  helper. Stack ceilings on the 8 evolution catalysts double as "picks to evolve".
+  Numbers: Damage w1.0 / max **5** (Laser→Prism @5); FireRate w**0.85** / **+18%** / max **5**
+  (PlasmaOrb→NovaCore @5 — was the runaway passive, multiplies weapon + mine cadence);
+  MaxHealth w0.95 / **+30** / max **5** (StaticField→IonStorm @5); MoveSpeed w**0.85** / **+10%**
+  / max **4** (MineLayer→DeepMine @4 — was an unreachable 6; also curbs the kiting snowball);
+  MultiShot w**0.5** / max 3 (Missile→Cluster @3 — was w0.35, almost never offered);
+  Pierce w**0.8** / max 4; Haste w**0.5** / max **3** (RailSpike→VoidLance @3 — proj speed is a
+  near-dead stat, only wanted as a catalyst); PickupRadius w**0.55** / max **3** (Orbiter→
+  EventHorizon @3); Shield unchanged (0.9 / max 4). Weapon-grant cards: GetMissiles 0.8, most
+  0.7, GetMineLayer **0.55** (slated for G5 removal).
+  **Weapon slot cap:** `WeaponController._maxWeapons = 6` + `IsFull`; `AddWeapon` refuses when
+  full; evolutions (`EvolveWeapon`) swap in place and never count. `UpgradeService.Roll` drops
+  GrantWeapon offers once `_weapons.IsFull`. New field deserialises to 6 on the existing scene
+  instance (inline initializer). Play-mode was active when built → NOT yet playtested; assets
+  edited directly in YAML (builder code matches, so a future `M16 Apply balance` run is
+  idempotent). Deferred candidate if Shield still feels weak at G4 density: buff
+  `ShieldComponent` (`_rechargeTime` 6→~4.5, `_barrierDamage` 6→~8) — it's a scene object.
 - **G4 — More enemies on screen. ✅ BUILT 2026-09-01 (awaiting sign-off).** `Editor/BalanceConfig`
   iter-5. Old curves peaked ~8/s → screen felt thin all run. New Infinite spawn
   `(0,0.7)(20,1.5)(45,2.6)(90,4)(150,5.8)(300,8.5)(480,12)(720,16)(1080,21)(1500,25)`; Campaign

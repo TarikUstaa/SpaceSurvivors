@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: FireRate
   m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.UpgradeData
   title: Fire Rate
-  description: +20% fire rate
+  description: +18% fire rate
   icon: {fileID: 0}
   modifiers:
   - stat: 3
     op: 1
-    value: 0.2
+    value: 0.18
   special: 0
   weaponToGrant: {fileID: 0}
-  weight: 1
-  maxStacks: 6
+  weight: 0.85
+  maxStacks: 5

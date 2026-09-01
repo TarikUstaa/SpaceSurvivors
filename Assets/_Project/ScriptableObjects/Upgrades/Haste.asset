@@ -21,5 +21,5 @@ MonoBehaviour:
     value: 0.15
   special: 0
   weaponToGrant: {fileID: 0}
-  weight: 0.9
-  maxStacks: 5
+  weight: 0.5
+  maxStacks: 3
