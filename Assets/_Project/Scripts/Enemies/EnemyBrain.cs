@@ -88,7 +88,10 @@ namespace SpaceSurvivors.Enemies
 
         private void FixedUpdate()
         {
-            if (!_active || _target == null) return;
+            // Defensive: a burst of NREs was seen here once at very high enemy counts right
+            // after the player died. Guard the cached refs so a torn-down instance that gets
+            // one more physics tick can't spam the console.
+            if (!_active || _target == null || _body == null) return;
 
             if (_data != null && _data.cullWhenFarOffscreen)
             {
