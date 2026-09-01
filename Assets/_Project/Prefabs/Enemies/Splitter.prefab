@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 1644860483864368449}
   - component: {fileID: 5359175003549878773}
   - component: {fileID: 889929836465671343}
+  - component: {fileID: 918226204666643873}
   m_Layer: 6
   m_Name: Splitter
   m_TagString: Untagged
@@ -292,3 +293,21 @@ MonoBehaviour:
   _childData: {fileID: 11400000, guid: 0b7980ce96a9943ce81fe945b1b7ecc9, type: 2}
   _childCount: 3
   _scatterRadius: 0.7
+--- !u!114 &918226204666643873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3021558036218403421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b44e62bdad984ecb878ed7d6ea7734f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Enemies::SpaceSurvivors.Enemies.ObstacleAvoidance
+  _lookAhead: 2.3
+  _probeRadius: 0.508
+  _strength: 1.3
+  _obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 2048

@@ -196,15 +196,24 @@ namespace SpaceSurvivors.Combat
             int count = Mathf.Max(1, data.projectilesPerShot + Mathf.Max(0, extra));
 
             float baseAngle = Mathf.Atan2(baseDir.y, baseDir.x) * Mathf.Rad2Deg;
-            float step = count > 1 ? data.spreadAngle / (count - 1) : 0f;
-            float start = count > 1 ? -data.spreadAngle * 0.5f : 0f;
+            // Fan from the centre outward: shot 0 goes dead on the aim line, the rest
+            // peel off in alternating pairs around it (i -> tier 0, +1, -1, +2, -2, …).
+            // A symmetric fan left the middle empty on an even count, so an even
+            // multishot straddled the target and whiffed — this keeps one shot on
+            // target for any projectile count. Odd counts still cover the weapon's
+            // full designed spread; even counts pack a little tighter (no centre
+            // slot to anchor the designed width).
+            float divisor = count <= 1 ? 1f : (count & 1) == 1 ? count - 1 : count;
+            float spacing = count > 1 ? data.spreadAngle / divisor : 0f;
 
             if (_muzzleFlashPrefab != null)
                 _pool.Spawn(_muzzleFlashPrefab, origin, Quaternion.Euler(0f, 0f, baseAngle));
 
             for (int i = 0; i < count; i++)
             {
-                float angle = baseAngle + start + step * i;
+                int tier = (i + 1) / 2;
+                float sign = (i & 1) == 1 ? 1f : -1f;
+                float angle = baseAngle + sign * tier * spacing;
                 Vector2 dir = new(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
 
                 GameObject go = _pool.Spawn(data.projectilePrefab, origin, Quaternion.identity);

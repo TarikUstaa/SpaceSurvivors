@@ -931,6 +931,42 @@ with `bsdtar` (macOS can't open RAR natively).
   (pre-existing, cosmetic). IonStorm has no enemy-slow (enemies have no StatSheet) — it's pure
   damage. Event balance numbers are first-pass.
 
+## M18 follow-up — maps made visually distinct (committed `83a310a` 2026-08-31)
+User: "maplerde sanki çok değişiklik olmamış gibi." Nebula alpha 0.2 was too faint — all 6 maps
+read the same. Fixes in `EnvironmentEventsBuilder.BuildMaps`: `backdropTint` alpha 0.2 → ~0.55
+(0.32 for Deep Void), strongly-hued dark `cameraBackground` per map, `starfieldTint` dimmed +
+hue-matched to each nebula, background PPU 9 → 7, some nebula picks swapped. 6 maps now clearly
+distinct (Crimson = red, Ion = teal, etc.).
+
+## M19 — Enemy obstacle avoidance + multishot fan fix (2026-09-01, committed — awaiting sign-off)
+Two changes, one commit.
+
+**Enemy obstacle avoidance.** Chasers used to grind into asteroids/wrecks on a straight line to
+the player. New `Enemies/ObstacleAvoidance.cs` — an `IVelocityModifier` (same pattern as
+`SeparationSteering`, auto-collected by `EnemyBrain`):
+- one forward `Physics2D.CircleCast` (ContactFilter2D → Obstacle layer 11) probes the path
+- on a hit: cancels the velocity component driving into the surface, adds a slide-along-tangent +
+  small push-off force, scaled by proximity (`1 - dist/lookAhead`)
+- head-on tie-break: a stable per-instance random `_sideBias` picks which way to round it
+- one cast per enemy per FixedUpdate — no worse than separation's existing OverlapCircle
+- `Editor/EnemyAvoidanceBuilder.cs` (`SpaceSurvivors/Build/M19 Enemy obstacle avoidance`,
+  idempotent) adds + tunes it on the 6 non-boss prefabs (Grunt/Shooter/Charger/Splitter/
+  SplitterMite/Brute); `_probeRadius` computed from each prefab's own `CircleCollider2D` × scale
+  + 0.14 clearance; per-archetype `_lookAhead` (1.6–2.6) and `_strength` (1.1–1.5). MiniBoss /
+  FinalBoss deliberately excluded — they plough through.
+- Play-tested (Claude): obstacle 2 u dead ahead → enemy velocity deviates 76.7°, inward-dot
+  1.00 → 0.23 (rounds the rock); no obstacle → 0° deviation, full speed (no false positives).
+  `strength` feel is a taste call for the human playtest.
+
+**Multishot fan fix.** User: "multishot 2 iken lazer ortadan ikiye ayrılıp düşmanın yanından
+geçiyor." `WeaponController.FireWeapon` built a symmetric fan (`start = -spread/2`,
+`step = spread/(count-1)`) — an even count left the middle empty, so 2 shots straddled the
+target and whiffed. Now **centre-out**: shot 0 goes dead on the aim line, the rest peel off in
+alternating pairs (`i → tier 0, +1, -1, +2, -2 …`). `divisor = (count odd) ? count-1 : count` →
+odd counts keep the weapon's full designed `spreadAngle` (Prism 5 / Scatter 5 / Buckshot 7 /
+Cluster 3 unchanged); even counts pack a little tighter with a guaranteed on-target shot.
+Laser (spread 18°): count 2 → offsets `[0°, +9°]`. Verified in play mode.
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,

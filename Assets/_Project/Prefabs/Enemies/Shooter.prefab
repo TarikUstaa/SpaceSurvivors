@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 6495536942034421106}
   - component: {fileID: 1704882487632294652}
   - component: {fileID: 1117098591220131799}
+  - component: {fileID: 3169236857775228152}
   m_Layer: 6
   m_Name: Shooter
   m_TagString: Untagged
@@ -301,3 +302,21 @@ MonoBehaviour:
   _spreadAngle: 0
   _aimJitter: 4
   _firstShotDelay: 1.2
+--- !u!114 &3169236857775228152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8767936997795639362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b44e62bdad984ecb878ed7d6ea7734f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Enemies::SpaceSurvivors.Enemies.ObstacleAvoidance
+  _lookAhead: 2.4
+  _probeRadius: 0.42
+  _strength: 1.5
+  _obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 2048
