@@ -261,7 +261,7 @@ namespace SpaceSurvivors.EditorTools
             Style("Laser", mat, new Look
             {
                 core = "trace_06", coreColor = new Color(0.5f, 0.95f, 1f),
-                rootScale = 0.5f, trail = false,
+                rootScale = 0.85f, trail = false,   // bigger — with no trail the bare bolt read too small
             });
             Style("Missile", mat, new Look
             {
@@ -324,6 +324,7 @@ namespace SpaceSurvivors.EditorTools
                 root.transform.localScale = Vector3.one * newScale;
                 foreach (var c in root.GetComponentsInChildren<CircleCollider2D>(true)) c.radius *= k;
                 foreach (var c in root.GetComponentsInChildren<BoxCollider2D>(true)) c.size *= k;
+                foreach (var c in root.GetComponentsInChildren<CapsuleCollider2D>(true)) c.size *= k;
             }
 
             // Core = the root SpriteRenderer. A small, saturated shape; the Bloom volume is
@@ -487,7 +488,7 @@ namespace SpaceSurvivors.EditorTools
             Evolve("Laser", "Evo_PrismBolt", "PrismLaser", mat, new Look
             {
                 core = "trace_06", coreColor = new Color(0.9f, 1f, 1f),
-                rootScale = 0.72f, trail = false, pulse = 0.1f,
+                rootScale = 1.1f, trail = false, pulse = 0.1f,
             });
             Evolve("Missile", "Evo_ClusterMissile", "ClusterMissile", mat, new Look
             {

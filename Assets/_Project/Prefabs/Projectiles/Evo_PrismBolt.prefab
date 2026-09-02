@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2515441819416798425}
   - component: {fileID: 2580170024538110414}
   - component: {fileID: 7715517132302668451}
-  - component: {fileID: 3258117827669012919}
+  - component: {fileID: 145831540643948475}
   m_Layer: 7
   m_Name: Evo_PrismBolt
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.72, y: 0.72, z: 0.72}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -159,7 +159,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.15, y: 0.5}
+  m_Size: {x: 0.09818183, y: 0.32727274}
   m_Direction: 0
 --- !u!114 &2580170024538110414
 MonoBehaviour:
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bff9ecd9c2bc44ec9a3c61096081e3c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Core.PoolHandle
---- !u!114 &3258117827669012919
+--- !u!114 &145831540643948475
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
