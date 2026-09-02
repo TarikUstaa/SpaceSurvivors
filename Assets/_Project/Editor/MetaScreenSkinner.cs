@@ -31,7 +31,7 @@ namespace SpaceSurvivors.EditorTools
         [MenuItem("SpaceSurvivors/Build/M20 Skin meta screens")]
         private static void Build()
         {
-            SkinScene("Assets/_Project/Scenes/Hangar.unity", "HANGAR");
+            SkinScene("Assets/_Project/Scenes/Hangar.unity", "HANGAR", primaryY: 168f, backY: 70f);
             SkinScene("Assets/_Project/Scenes/Achievements.unity", "ACHIEVEMENTS", tightenGrid: true, panelHeight: 1000f);
             SkinScene("Assets/_Project/Scenes/Shop.unity", "UPGRADES");
             SkinScene("Assets/_Project/Scenes/MapSelect.unity", "SELECT MAP");
@@ -39,7 +39,8 @@ namespace SpaceSurvivors.EditorTools
             Debug.Log("[MetaScreenSkinner] meta screens skinned.");
         }
 
-        private static void SkinScene(string path, string title, bool tightenGrid = false, float panelHeight = 0f)
+        private static void SkinScene(string path, string title, bool tightenGrid = false,
+                                      float panelHeight = 0f, float primaryY = 184f, float backY = 84f)
         {
             var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
 
@@ -85,7 +86,7 @@ namespace SpaceSurvivors.EditorTools
             RefontAndReskin(canvas);
             CenterWalletRow(canvas);
             if (tightenGrid && panel != null) TightenTileGrid(panel);
-            FixBottomButtons(panel != null ? panel : canvas);
+            FixBottomButtons(panel != null ? panel : canvas, primaryY, backY);
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
@@ -319,14 +320,16 @@ namespace SpaceSurvivors.EditorTools
         }
 
         /// <summary>The builders anchor the bottom Back / primary buttons so close to the
-        /// panel edge that their rounded corners touch the frame. Lift them clear.</summary>
-        private static void FixBottomButtons(Transform panel)
+        /// panel edge that their rounded corners touch the frame. Lift them clear.
+        /// <paramref name="primaryY"/> / <paramref name="backY"/> let a crowded screen (Hangar
+        /// — three stat lines sit right above the primary button) push both buttons lower.</summary>
+        private static void FixBottomButtons(Transform panel, float primaryY = 184f, float backY = 84f)
         {
             var primary = FindDeep(panel, "ActionButton") ?? FindDeep(panel, "PlayButton");
             if (primary != null)
             {
                 var rt = (RectTransform)primary;
-                rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, 184f);
+                rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, primaryY);
             }
 
             var back = FindDeep(panel, "BackButton");
@@ -334,7 +337,7 @@ namespace SpaceSurvivors.EditorTools
             {
                 var rt = (RectTransform)back;
                 rt.sizeDelta = new Vector2(280f, 68f);
-                rt.anchoredPosition = new Vector2(0f, primary != null ? 84f : 60f);
+                rt.anchoredPosition = new Vector2(0f, primary != null ? backY : 60f);
             }
         }
 

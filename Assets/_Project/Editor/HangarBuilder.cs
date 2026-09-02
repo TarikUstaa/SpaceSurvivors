@@ -101,12 +101,12 @@ namespace SpaceSurvivors.EditorTools
             var desc = Label("Desc", panel.transform, "", 20, new Color(0.72f, 0.82f, 0.95f));
             Place(desc, new Vector2(0.5f, 0.5f), new Vector2(760, 44), new Vector2(0, -118));
 
-            // Top-aligned + small enough that Ronin's three modifier lines can't spill down
-            // onto the action button below (measured: 3 lines @ 17 clear the button by ~20px).
-            var stats = Label("Stats", panel.transform, "", 17, Gold);
+            // Top-aligned so Ronin's three modifier lines grow down from a fixed point; the
+            // action button is pushed lower (MetaScreenSkinner primaryButtonY) to make room.
+            var stats = Label("Stats", panel.transform, "", 22, Gold);
             stats.alignment = TextAnchor.UpperCenter;
-            stats.lineSpacing = 0.95f;
-            Place(stats, new Vector2(0.5f, 0.5f), new Vector2(760, 130), new Vector2(0, -196));
+            stats.lineSpacing = 1f;
+            Place(stats, new Vector2(0.5f, 0.5f), new Vector2(760, 130), new Vector2(0, -188));
 
             // action button
             var actionGo = new GameObject("ActionButton", typeof(RectTransform), typeof(Image), typeof(Button));
