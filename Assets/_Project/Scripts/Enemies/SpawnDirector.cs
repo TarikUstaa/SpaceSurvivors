@@ -169,7 +169,9 @@ namespace SpaceSurvivors.Enemies
                 yield return new WaitForSeconds(entry.warningLead);
 
             EnemyData data = entry.bossData;
-            float hp = data.baseHealth * Mathf.Lerp(1f, _config.HealthMultiplierAt(scheduledAt), 0.5f);
+            // Scale the boss's (already large) base HP toward the current time-of-run health
+            // multiplier — weighted high so a late boss is a real wall, not just chip damage.
+            float hp = data.baseHealth * Mathf.Lerp(1f, _config.HealthMultiplierAt(scheduledAt), 0.7f);
             float speedMul = _config.SpeedMultiplierAt(scheduledAt);
 
             for (int n = 0; n < Mathf.Max(1, entry.count); n++)

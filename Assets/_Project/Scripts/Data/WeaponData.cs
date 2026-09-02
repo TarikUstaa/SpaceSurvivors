@@ -7,6 +7,15 @@ namespace SpaceSurvivors.Data
     /// these at runtime; upgrades will later layer modifiers on top (M6). One asset per
     /// weapon archetype — Laser, Missile, ShieldPulse… (AI_Guidelines §3, zero magic numbers).
     /// </summary>
+    /// <summary>How a projectile weapon lays out its extra (multishot) projectiles.</summary>
+    public enum MultishotShape
+    {
+        /// <summary>Spread across <see cref="WeaponData.spreadAngle"/>, centred on the aim line.</summary>
+        Fan,
+        /// <summary>All dead straight, spawned <see cref="WeaponData.streamGap"/> apart — a burst / stream.</summary>
+        Stream,
+    }
+
     /// <summary>How a weapon delivers its damage.</summary>
     public enum WeaponKind
     {
@@ -45,8 +54,16 @@ namespace SpaceSurvivors.Data
         [Min(0f)] public float damage = 10f;
         [Tooltip("How many projectiles leave per shot.")]
         [Min(1)] public int projectilesPerShot = 1;
-        [Tooltip("Total fan angle (degrees) the projectiles spread across. 0 = all parallel.")]
+        [Tooltip("Total fan angle (degrees) the projectiles spread across. 0 = all parallel. " +
+                 "Ignored when multishotShape = Stream.")]
         [Min(0f)] public float spreadAngle = 0f;
+        [Tooltip("Fan: extra projectiles spread across spreadAngle around the aim line. " +
+                 "Stream: they all fire dead straight, spawned a short gap apart so they read " +
+                 "as a back-to-back burst (an auto-weapon feel that becomes a solid stream as " +
+                 "projectile count climbs).")]
+        public MultishotShape multishotShape = MultishotShape.Fan;
+        [Tooltip("Stream shape only — world-unit spacing between consecutive projectiles.")]
+        [Min(0.02f)] public float streamGap = 0.35f;
         [Tooltip("Extra targets a projectile passes through before despawning. 0 = hits one.")]
         [Min(0)] public int pierce = 0;
 

@@ -50,6 +50,12 @@ namespace SpaceSurvivors.EditorTools
             SetEnemySpeed("Splitter", 2.1f);
             SetEnemySpeed("Brute",    1.25f);
 
+            // ---- boss health (iter-6c playtest: bosses died in ~2s, no fight). Big base bump;
+            //      SpawnDirector then scales it by the time-of-arrival health multiplier
+            //      (Lerp weight 0.7) so a 12-min mini-boss is far tougher than the 3-min one. ----
+            SetEnemyHealth("MiniBoss",  3500f);
+            SetEnemyHealth("FinalBoss", 14000f);
+
             // ---- iter-6c: density + threat pass. iter-6b fixed the first ~3 min (swarms are a
             //      real threat) but past 3:00 a snowballed build's kill rate (~12/s) still
             //      outran the spawn rate in the lulls between swarms — HP pinned at max again.
@@ -150,6 +156,16 @@ namespace SpaceSurvivors.EditorTools
             if (e == null) return;
             var so = new SerializedObject(e);
             so.FindProperty("moveSpeed").floatValue = moveSpeed;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(e);
+        }
+
+        private static void SetEnemyHealth(string name, float baseHealth)
+        {
+            var e = Load<EnemyData>(Enm + name + ".asset");
+            if (e == null) return;
+            var so = new SerializedObject(e);
+            so.FindProperty("baseHealth").floatValue = baseHealth;
             so.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(e);
         }
