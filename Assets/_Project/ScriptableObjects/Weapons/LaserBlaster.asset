@@ -21,8 +21,6 @@ MonoBehaviour:
   damage: 10
   projectilesPerShot: 1
   spreadAngle: 18
-  multishotShape: 1
-  streamGap: 1
   pierce: 0
   aimRange: 14
   evolvesInto: {fileID: 11400000, guid: 28213704c09614b7a94ba8b4c4942dc0, type: 2}

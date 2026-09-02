@@ -4048,8 +4048,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: de244b8e2031f4f2ab00cd2d38ba0f6e, type: 2}
   _maxWeapons: 6
   _muzzle: {fileID: 0}
-  _auraRingSprite: {fileID: 21300000, guid: 72437e808795b44bb93a715fa16a1532, type: 3}
-  _auraRingMaterial: {fileID: 0}
+  _auraRingSprite: {fileID: 21300000, guid: 9c5c90c603f8c4bdc9a28d805d9c9436, type: 3}
+  _auraRingMaterial: {fileID: 2100000, guid: b3886dd5d99204860aec062847fc4b77, type: 2}
   _muzzleFlashPrefab: {fileID: 691872743061841841, guid: 80762e8dcacdf48fb85960ce0a759da5, type: 3}
 --- !u!114 &632278092
 MonoBehaviour:

@@ -77,16 +77,14 @@ namespace SpaceSurvivors.Combat
             if (_ring != null) _ring.radius = radius;
             if (_view != null)
             {
-                // 1.13× so the sprite's bright rim (~0.87 of its own radius) lands on the
-                // actual damage boundary rather than inside it.
-                _view.localScale = Vector3.one * (radius * 2f / _viewSpriteWorld * 1.13f);
+                _view.localScale = Vector3.one * (radius * 2f / _viewSpriteWorld);
                 _view.Rotate(0f, 0f, 24f * Time.deltaTime);
             }
             if (_viewRenderer != null)
             {
                 _pulsePhase += Time.deltaTime * 3f;
                 var c = _data.auraTint;
-                c.a *= 0.85f + 0.15f * Mathf.Sin(_pulsePhase); // gentle breathe, never fades out
+                c.a *= 0.75f + 0.25f * Mathf.Sin(_pulsePhase);
                 _viewRenderer.color = c;
             }
 

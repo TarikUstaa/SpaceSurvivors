@@ -22,16 +22,14 @@ MonoBehaviour:
   damage: 11
   projectilesPerShot: 1
   spreadAngle: 0
-  multishotShape: 0
-  streamGap: 1
   pierce: 0
   explosionRadius: 0
   splashDamageFraction: 0.6
   explosionVfxPrefab: {fileID: 0}
-  orbitRadius: 4.4
+  orbitRadius: 3.6
   orbitDegreesPerSecond: 200
   orbitHitInterval: 0.4
-  auraTint: {r: 0.82, g: 0.55, b: 1, a: 0.6}
+  auraTint: {r: 0.78, g: 0.55, b: 1, a: 0.24}
   aimRange: 8
   evolvesInto: {fileID: 0}
   evolutionCatalyst: {fileID: 0}

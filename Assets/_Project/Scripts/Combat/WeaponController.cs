@@ -204,24 +204,6 @@ namespace SpaceSurvivors.Combat
             int count = Mathf.Max(1, data.projectilesPerShot + Mathf.Max(0, extra));
 
             float baseAngle = Mathf.Atan2(baseDir.y, baseDir.x) * Mathf.Rad2Deg;
-
-            if (data.multishotShape == MultishotShape.Stream)
-            {
-                if (_muzzleFlashPrefab != null)
-                    _pool.Spawn(_muzzleFlashPrefab, origin, Quaternion.Euler(0f, 0f, baseAngle));
-
-                // All dead straight, each spawned a little further along the aim line so the
-                // volley reads as a tight back-to-back burst instead of one fat blob.
-                for (int i = 0; i < count; i++)
-                {
-                    Vector2 pos = origin + baseDir * (i * data.streamGap);
-                    GameObject g = _pool.Spawn(data.projectilePrefab, pos, Quaternion.identity);
-                    if (g != null && g.TryGetComponent(out Projectile p))
-                        p.Launch(baseDir, data, shot, _pool, gameObject);
-                }
-                return;
-            }
-
             // Fan from the centre outward: shot 0 goes dead on the aim line, the rest
             // peel off in alternating pairs around it (i -> tier 0, +1, -1, +2, -2, …).
             // A symmetric fan left the middle empty on an even count, so an even
