@@ -63,7 +63,7 @@ namespace SpaceSurvivors.Data
                  "projectile count climbs).")]
         public MultishotShape multishotShape = MultishotShape.Fan;
         [Tooltip("Stream shape only — world-unit spacing between consecutive projectiles.")]
-        [Min(0.02f)] public float streamGap = 0.35f;
+        [Min(0.02f)] public float streamGap = 1f;
         [Tooltip("Extra targets a projectile passes through before despawning. 0 = hits one.")]
         [Min(0)] public int pierce = 0;
 
