@@ -88,9 +88,9 @@ namespace SpaceSurvivors.Enemies
 
         private void FixedUpdate()
         {
-            // Defensive: a burst of NREs was seen here once at very high enemy counts right
-            // after the player died. Guard the cached refs so a torn-down instance that gets
-            // one more physics tick can't spam the console.
+            // Defensive: a burst of NREs was seen here at very high enemy counts as a run
+            // ended. Guard the cached refs (and skip any torn-down modifier below) so an
+            // instance getting one extra physics tick during teardown can't spam the console.
             if (!_active || _target == null || _body == null) return;
 
             if (_data != null && _data.cullWhenFarOffscreen)
@@ -109,8 +109,10 @@ namespace SpaceSurvivors.Enemies
                 : Vector2.zero;
 
             // Layer steering tweaks (separation, hazard-avoidance, …) on top of the base move.
-            for (int i = 0; i < _modifiers.Length; i++)
-                velocity = _modifiers[i].Modify(velocity, _body.position, _speed, dt);
+            if (_modifiers != null)
+                for (int i = 0; i < _modifiers.Length; i++)
+                    if (_modifiers[i] is MonoBehaviour mb && mb != null)
+                        velocity = _modifiers[i].Modify(velocity, _body.position, _speed, dt);
 
             _body.linearVelocity = velocity;
         }

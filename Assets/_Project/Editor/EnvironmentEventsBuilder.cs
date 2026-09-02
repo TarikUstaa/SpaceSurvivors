@@ -334,10 +334,10 @@ namespace SpaceSurvivors.EditorTools
                 rp.arraySize = swarmRoster.Length;
                 for (int i = 0; i < swarmRoster.Length; i++)
                     rp.GetArrayElementAtIndex(i).objectReferenceValue = swarmRoster[i];
-                // Scales with run time: ~30 at minute 1, ~120 at minute 10, hard cap 150.
+                // Scales with run time (iter-6c): ~30 at minute 1, ~160 at minute 10, cap 180.
                 so.FindProperty("_baseEnemies").intValue = 30;
-                so.FindProperty("_enemiesPerMinute").floatValue = 9f;
-                so.FindProperty("_maxEnemies").intValue = 150;
+                so.FindProperty("_enemiesPerMinute").floatValue = 13f;
+                so.FindProperty("_maxEnemies").intValue = 180;
             });
         }
 

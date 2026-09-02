@@ -50,26 +50,23 @@ namespace SpaceSurvivors.EditorTools
             SetEnemySpeed("Splitter", 2.1f);
             SetEnemySpeed("Brute",    1.25f);
 
-            // ---- iter-6b: density + threat pass. iter-5's screen sat at 10-25 enemies all
-            //      run and a competent kiting bot never dropped below ~90% HP. Changes:
-            //      * SpawnDirector now biases spawns toward the player's heading and enemies
-            //        far-cull later — so a given spawn rate is FELT much harder than before.
-            //      * because of that, the first ~90s is pulled *below* iter-5 (a fresh Laser
-            //        build gets swamped otherwise — iter-6a killed the bot at 0:59), then the
-            //        curve ramps far past iter-5 from 5:00 on where the real problem was.
-            //      * health & speed multipliers ramp harder: enemies get genuinely tanky and
-            //        fast the longer you survive (per the user — count AND hp scale with time).
+            // ---- iter-6c: density + threat pass. iter-6b fixed the first ~3 min (swarms are a
+            //      real threat) but past 3:00 a snowballed build's kill rate (~12/s) still
+            //      outran the spawn rate in the lulls between swarms — HP pinned at max again.
+            //      iter-6c keeps 0:00–2:00 identical to 6b, then pushes the mid/late curve much
+            //      harder: ~11/s by 3:00, 22/s by 8:00, 44/s by 18:00, 70/s by 40:00; HP scales
+            //      to ×22 late; maxAlive 550→600. (Swarm size also up — see EnvironmentEventsBuilder.)
             //      Infinite still ramps gentler than Campaign so infinite runs last longer. ----
             infinite.spawnRatePerSecond = Curve(
-                (0, 0.5f), (25, 1f), (60, 1.8f), (110, 3f), (180, 4.6f),
-                (300, 7f), (480, 12f), (720, 19f), (1080, 29f), (1500, 40f), (2400, 55f));
+                (0, 0.5f), (25, 1f), (60, 1.8f), (120, 3.2f), (180, 5.5f),
+                (260, 9f), (360, 15f), (480, 22f), (720, 32f), (1080, 44f), (1500, 55f), (2400, 70f));
             infinite.healthMultiplier = Curve(
-                (0, 1f), (60, 1.12f), (180, 1.6f), (360, 2.5f), (600, 4f),
-                (900, 6f), (1200, 8.5f), (1500, 11.5f), (2400, 20f));
+                (0, 1f), (60, 1.12f), (180, 1.7f), (300, 2.6f), (480, 4f),
+                (700, 6f), (1000, 9f), (1500, 13f), (2400, 22f));
             infinite.speedMultiplier = Curve(
                 (0, 1f), (60, 1.03f), (180, 1.1f), (360, 1.22f),
                 (600, 1.36f), (900, 1.5f), (1500, 1.7f));
-            infinite.maxAliveEnemies = 550;
+            infinite.maxAliveEnemies = 600;
             infinite.bossSchedule = new List<BossEntry>
             {
                 Boss(180f, mini, 1, 4f),
@@ -80,14 +77,14 @@ namespace SpaceSurvivors.EditorTools
             };
 
             campaign.spawnRatePerSecond = Curve(
-                (0, 0.7f), (25, 1.4f), (60, 2.5f), (110, 4f), (180, 6f),
-                (240, 9f), (360, 15f), (540, 23f), (780, 32f), (900, 38f));
+                (0, 0.7f), (25, 1.4f), (60, 2.5f), (120, 4f), (180, 6.5f),
+                (260, 10f), (360, 17f), (500, 26f), (700, 35f), (900, 42f));
             campaign.healthMultiplier = Curve(
-                (0, 1f), (60, 1.18f), (150, 1.6f), (180, 1.9f), (360, 3.2f),
-                (540, 4.8f), (720, 6.5f), (900, 8.2f));
+                (0, 1f), (60, 1.18f), (150, 1.7f), (180, 2f), (300, 3f),
+                (450, 4.5f), (650, 6.5f), (900, 9f));
             campaign.speedMultiplier = Curve(
                 (0, 1f), (60, 1.04f), (180, 1.13f), (360, 1.28f), (600, 1.42f), (900, 1.58f));
-            campaign.maxAliveEnemies = 480;
+            campaign.maxAliveEnemies = 520;
             campaign.bossSchedule = new List<BossEntry>
             {
                 Boss(180f, mini, 1, 4f),   // stage 1 -> 2

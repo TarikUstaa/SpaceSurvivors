@@ -24,9 +24,9 @@ namespace SpaceSurvivors.Environment
         [Tooltip("Enemies in the very first swarm.")]
         [SerializeField, Min(1)] private int _baseEnemies = 30;
         [Tooltip("Extra enemies added per minute survived.")]
-        [SerializeField, Min(0f)] private float _enemiesPerMinute = 9f;
+        [SerializeField, Min(0f)] private float _enemiesPerMinute = 13f;
         [Tooltip("Hard ceiling regardless of run length.")]
-        [SerializeField, Min(1)] private int _maxEnemies = 150;
+        [SerializeField, Min(1)] private int _maxEnemies = 180;
 
         [Tooltip("How many screen edges the swarm comes from.")]
         [SerializeField, Range(1, 3)] private int _edges = 2;
@@ -46,7 +46,7 @@ namespace SpaceSurvivors.Environment
             _spawned = 0;
             _next = 0.6f;
 
-            var clock = FindFirstObjectByType<RunClock>();
+            var clock = FindAnyObjectByType<RunClock>();
             float minutes = clock != null ? Mathf.Max(0f, clock.Elapsed) / 60f : 0f;
             _quota = Mathf.Clamp(
                 _baseEnemies + Mathf.RoundToInt(_enemiesPerMinute * minutes),
