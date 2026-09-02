@@ -96,6 +96,49 @@ namespace SpaceSurvivors.EditorTools
             // reads as a real coloured ball. WeaponOrbGlow: a wide gentle falloff halo.
             BakeRadial("WeaponOrb.png", 128, 0.55f, 1f);
             BakeRadial("WeaponOrbGlow.png", 128, 0f, 2f);
+            BakeAuraField("AuraField.png", 256);
+        }
+
+        /// <summary>The Aura-weapon zone sprite: a faint inner wash (so the whole radius reads
+        /// as "you are standing in it") plus a bright soft rim that draws the boundary. The old
+        /// ring was a thin near-invisible outline. 1 sprite = 1 world unit.</summary>
+        private static void BakeAuraField(string file, int size)
+        {
+            var px = new Color[size * size];
+            float r = size * 0.5f;
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                float dx = x - r + 0.5f, dy = y - r + 0.5f;
+                float d = Mathf.Sqrt(dx * dx + dy * dy) / r;
+                float a;
+                if (d >= 1f)          a = 0f;
+                else if (d < 0.80f)   a = 0.20f + 0.14f * (d / 0.80f);                    // inner wash, denser toward the edge
+                else if (d < 0.93f)   a = Mathf.Lerp(0.34f, 1f, (d - 0.80f) / 0.13f);     // rim ramps up
+                else                  a = Mathf.Lerp(1f, 0f, (d - 0.93f) / 0.07f);        // soft outer feather
+                px[y * size + x] = new Color(1f, 1f, 1f, a);
+            }
+            WriteSprite(GenDir + file, size, px);
+        }
+
+        private static void WriteSprite(string path, int size, Color[] px)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            tex.SetPixels(px);
+            tex.Apply();
+            File.WriteAllBytes(path, tex.EncodeToPNG());
+            Object.DestroyImmediate(tex);
+            AssetDatabase.ImportAsset(path);
+            if (AssetImporter.GetAtPath(path) is TextureImporter imp)
+            {
+                imp.textureType = TextureImporterType.Sprite;
+                imp.spriteImportMode = SpriteImportMode.Single;
+                imp.spritePixelsPerUnit = size;   // 1 sprite = 1 world unit
+                imp.filterMode = FilterMode.Bilinear;
+                imp.mipmapEnabled = false;
+                imp.alphaIsTransparency = true;
+                imp.SaveAndReimport();
+            }
         }
 
         private static void BakeRadial(string file, int size, float solidFrac, float falloffPow)
@@ -211,10 +254,14 @@ namespace SpaceSurvivors.EditorTools
 
         private static void StyleBaseProjectiles(Material mat)
         {
+            // No trail on the Laser or Scatter pellets — with the Laser now a rapid stream of
+            // bolts, overlapping trails smeared into one solid line and you couldn't see the
+            // individual shots. Trails stay on the projectiles that read as single streaks
+            // (Rail Spike etc.), which keeps the "sniper" weapons visually distinct.
             Style("Laser", mat, new Look
             {
                 core = "trace_06", coreColor = new Color(0.5f, 0.95f, 1f),
-                rootScale = 0.5f, trail = true, trailColor = new Color(0.4f, 0.9f, 1f), trailTime = 0.09f,
+                rootScale = 0.5f, trail = false,
             });
             Style("Missile", mat, new Look
             {
@@ -230,7 +277,7 @@ namespace SpaceSurvivors.EditorTools
             Style("ScatterPellet", mat, new Look
             {
                 core = "Orb", coreColor = new Color(1f, 0.66f, 0.24f),
-                rootScale = 0.32f, trail = true, trailColor = new Color(1f, 0.68f, 0.3f), trailTime = 0.07f,
+                rootScale = 0.32f, trail = false,
             });
             Style("RailShard", mat, new Look
             {
@@ -332,8 +379,10 @@ namespace SpaceSurvivors.EditorTools
             }
             else if (trail != null)
             {
-                Object.DestroyImmediate(trail, true);
+                // TrailReset has [RequireComponent(TrailRenderer)] — drop it first or Unity
+                // refuses to remove the renderer.
                 if (root.GetComponent<TrailReset>() is { } tr2) Object.DestroyImmediate(tr2, true);
+                Object.DestroyImmediate(trail, true);
             }
         }
 
@@ -413,18 +462,21 @@ namespace SpaceSurvivors.EditorTools
 
         private static void StyleAuras()
         {
-            // Aura ring stays alpha-blended (not additive) — a faint outline, not a glow blob.
-            SetAuraTint("StaticField", new Color(0.4f, 0.85f, 1f, 0.18f));
-            SetAuraTint("IonStorm", new Color(0.78f, 0.55f, 1f, 0.24f));
+            // The aura was too faint and too small to notice. Bigger radius + a much stronger
+            // tint on the new AuraField sprite (faint fill + bright rim).
+            SetAura("StaticField", new Color(0.45f, 0.9f, 1f, 0.5f), radius: 3.4f);
+            SetAura("IonStorm",    new Color(0.82f, 0.55f, 1f, 0.6f), radius: 4.4f);
         }
 
-        private static void SetAuraTint(string weaponAsset, Color tint)
+        private static void SetAura(string weaponAsset, Color tint, float radius)
         {
             var wd = AssetDatabase.LoadAssetAtPath<WeaponData>(WeaponDir + weaponAsset + ".asset");
             if (wd == null) return;
             var so = new SerializedObject(wd);
             so.FindProperty("auraTint").colorValue = tint;
+            so.FindProperty("orbitRadius").floatValue = radius;
             so.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(wd);
         }
 
         // ---------------------------------------------------------------- evolutions
@@ -435,8 +487,7 @@ namespace SpaceSurvivors.EditorTools
             Evolve("Laser", "Evo_PrismBolt", "PrismLaser", mat, new Look
             {
                 core = "trace_06", coreColor = new Color(0.9f, 1f, 1f),
-                rootScale = 0.72f, trail = true, trailColor = new Color(0.7f, 1f, 1f), trailTime = 0.15f,
-                pulse = 0.1f,
+                rootScale = 0.72f, trail = false, pulse = 0.1f,
             });
             Evolve("Missile", "Evo_ClusterMissile", "ClusterMissile", mat, new Look
             {
@@ -453,7 +504,7 @@ namespace SpaceSurvivors.EditorTools
             Evolve("ScatterPellet", "Evo_BuckshotPellet", "BuckshotStorm", mat, new Look
             {
                 core = "Orb", coreColor = new Color(1f, 0.62f, 0.22f),
-                rootScale = 0.4f, trail = true, trailColor = new Color(1f, 0.58f, 0.24f), trailTime = 0.1f,
+                rootScale = 0.4f, trail = false,
             });
             Evolve("RailShard", "Evo_VoidSliver", "VoidLance", mat, new Look
             {
@@ -537,14 +588,17 @@ namespace SpaceSurvivors.EditorTools
             existing.sharedProfile = profile;
             EditorUtility.SetDirty(existing);
 
-            // 3. Muzzle flash on the player's WeaponController. (The aura ring keeps its
-            //    existing alpha-blended sprite/material — additive there just makes a blob.)
+            // 3. Muzzle flash + the aura zone sprite on the player's WeaponController.
+            //    (Aura stays alpha-blended, not additive — additive just makes a white blob.)
             var wc = Object.FindFirstObjectByType<WeaponController>();
             var muzzle = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabDir + "MuzzleFlash.prefab");
-            if (wc != null && muzzle != null)
+            var auraField = AssetDatabase.LoadAssetAtPath<Sprite>(GenDir + "AuraField.png");
+            if (wc != null)
             {
                 var so = new SerializedObject(wc);
-                so.FindProperty("_muzzleFlashPrefab").objectReferenceValue = muzzle;
+                if (muzzle != null) so.FindProperty("_muzzleFlashPrefab").objectReferenceValue = muzzle;
+                if (auraField != null) so.FindProperty("_auraRingSprite").objectReferenceValue = auraField;
+                so.FindProperty("_auraRingMaterial").objectReferenceValue = null; // default sprite shader
                 so.ApplyModifiedPropertiesWithoutUndo();
             }
 
