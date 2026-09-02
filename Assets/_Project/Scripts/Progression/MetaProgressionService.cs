@@ -71,8 +71,8 @@ namespace SpaceSurvivors.Progression
         }
 
         /// <summary>
-        /// Buy one level of <paramref name="u"/>. Deducts scrap, bumps the profile level,
-        /// saves. Returns false (no change) if maxed or short on scrap.
+        /// Buy one level of <paramref name="u"/> — spend + level-up as one transaction through
+        /// <see cref="ProfileService.TryPurchase"/>. Returns false (no change) if maxed or short.
         /// </summary>
         public static bool TryPurchase(MetaUpgradeData u)
         {
@@ -80,11 +80,10 @@ namespace SpaceSurvivors.Progression
             int lvl = LevelOf(u.id);
             if (lvl >= u.maxLevel) return false;
 
-            long cost = u.CostForNext(lvl);
-            if (!ProfileService.TrySpend(cost)) return false;
+            bool bought = ProfileService.TryPurchase(u.CostForNext(lvl),
+                () => ProfileService.Current.metaUpgradeLevels[u.id] = lvl + 1);
+            if (!bought) return false;
 
-            ProfileService.Current.metaUpgradeLevels[u.id] = lvl + 1;
-            ProfileService.Save();
             Changed?.Invoke();
             return true;
         }

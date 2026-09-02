@@ -91,16 +91,20 @@ namespace SpaceSurvivors.Progression
         public static bool CanAfford(ShipData ship)
             => ship != null && !IsOwned(ship.id) && ProfileService.Wallet >= ship.cost;
 
-        /// <summary>Unlock a ship. Deducts scrap, records ownership, saves, and auto-selects it.</summary>
+        /// <summary>Unlock a ship. Deducts scrap, records ownership, saves, and auto-selects it —
+        /// spend + grant as one transaction through <see cref="ProfileService.TryPurchase"/>.</summary>
         public static bool TryBuy(ShipData ship)
         {
             if (ship == null || IsOwned(ship.id)) return false;
-            if (!ProfileService.TrySpend(ship.cost)) return false;
 
-            var owned = ProfileService.Current.ownedShipIds;
-            if (!owned.Contains(ship.id)) owned.Add(ship.id);
-            ProfileService.Current.selectedShipId = ship.id;
-            ProfileService.Save();
+            bool bought = ProfileService.TryPurchase(ship.cost, () =>
+            {
+                var owned = ProfileService.Current.ownedShipIds;
+                if (!owned.Contains(ship.id)) owned.Add(ship.id);
+                ProfileService.Current.selectedShipId = ship.id;
+            });
+            if (!bought) return false;
+
             Changed?.Invoke();
             return true;
         }

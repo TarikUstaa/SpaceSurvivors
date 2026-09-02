@@ -15,9 +15,18 @@ namespace SpaceSurvivors.Core
     [Serializable]
     public class PlayerProfile
     {
-        public const int CurrentSchemaVersion = 4;
+        public const int CurrentSchemaVersion = 5;
 
         public int schemaVersion = CurrentSchemaVersion;
+
+        // ---- Identity ----
+        /// <summary>
+        /// The account this profile belongs to. Empty = local / anonymous play (the only mode
+        /// today). Set once the player signs in; the remote store keys on it and the local
+        /// cache namespaces its file by it, so switching accounts on one device stays clean.
+        /// Auth itself is out of band — the store carries a token; this is just the id.
+        /// </summary>
+        public string userId = "";
 
         // ---- Currency ----
         /// <summary>Spendable balance (scrap carried out of runs).</summary>

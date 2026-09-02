@@ -6,12 +6,13 @@ namespace SpaceSurvivors.Core
     /// <summary>
     /// The single place the game touches the persistent <see cref="PlayerProfile"/>. Static,
     /// like <see cref="SettingsService"/> / <see cref="HighScoreService"/> — every currency
-    /// mutation funnels through <see cref="AddScrap"/> / <see cref="TrySpend"/> so a future
-    /// server-authoritative backend has one seam to intercept (Project_Goals §8).
+    /// mutation funnels through <see cref="AddScrap"/> / <see cref="TrySpend"/> /
+    /// <see cref="TryPurchase"/> so a future server-authoritative backend has one seam to
+    /// intercept (Project_Goals §8).
     ///
     /// The backing <see cref="IProfileStore"/> is swappable: local JSON by default, an HTTP
-    /// store later, a fake in tests. The live profile is held in memory for the session and
-    /// written on <see cref="Save"/> (the run-end screen calls it).
+    /// store later (cache-first — see <see cref="IRemoteProfileStore"/>), a fake in tests. The
+    /// live profile is held in memory for the session and written on <see cref="Save"/>.
     /// </summary>
     public static class ProfileService
     {
@@ -21,6 +22,13 @@ namespace SpaceSurvivors.Core
         /// <summary>Raised after any change to the live profile (wallet, run history, …).</summary>
         public static event Action Changed;
 
+        /// <summary>
+        /// Raised when the backing store reports a change in sync health (only a remote store
+        /// does — a local store is always <see cref="ProfileSyncStatus.Synced"/>). UI can watch
+        /// this to show an offline / syncing indicator.
+        /// </summary>
+        public static event Action<ProfileSyncStatus> SyncStatusChanged;
+
         /// <summary>The live profile for this session. Loaded on first access.</summary>
         public static PlayerProfile Current
         {
@@ -29,6 +37,13 @@ namespace SpaceSurvivors.Core
 
         public static long Wallet => Current.wallet;
         public static long LifetimeScrap => Current.lifetimeScrap;
+
+        /// <summary>The signed-in account id, or "" for local / anonymous play.</summary>
+        public static string UserId => Current.userId ?? "";
+
+        /// <summary>Current sync health of the backing store (always Synced for a local store).</summary>
+        public static ProfileSyncStatus SyncStatus =>
+            _store is IRemoteProfileStore r ? r.SyncStatus : ProfileSyncStatus.Synced;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Boot() => EnsureLoaded();
@@ -42,10 +57,20 @@ namespace SpaceSurvivors.Core
         /// <summary>Swap the persistence layer (tests, or a future backend). Reloads at once.</summary>
         public static void SetStore(IProfileStore store)
         {
+            if (_store is IRemoteProfileStore oldRemote)
+                oldRemote.SyncStatusChanged -= RaiseSyncStatus;
+
             _store = store;
             _current = store?.Load();
+
+            if (_store is IRemoteProfileStore newRemote)
+                newRemote.SyncStatusChanged += RaiseSyncStatus;
+
             Changed?.Invoke();
+            RaiseSyncStatus(SyncStatus);
         }
+
+        private static void RaiseSyncStatus(ProfileSyncStatus status) => SyncStatusChanged?.Invoke(status);
 
         /// <summary>Credit scrap carried out of a run. Non-positive amounts are ignored.</summary>
         public static void AddScrap(long amount)
@@ -68,6 +93,26 @@ namespace SpaceSurvivors.Core
             return true;
         }
 
+        /// <summary>
+        /// One atomic "buy": debit <paramref name="cost"/> and, only if that succeeds, run
+        /// <paramref name="grant"/> to apply what was bought, then persist once. Returns false
+        /// (touching nothing) if the wallet is short. This is the single seam a server-
+        /// authoritative backend intercepts — spend + grant must not be two independent
+        /// client writes (Project_Goals §8).
+        /// </summary>
+        public static bool TryPurchase(long cost, Action grant)
+        {
+            EnsureLoaded();
+            if (cost > 0 && _current.wallet < cost) return false;
+
+            if (cost > 0) _current.wallet -= cost;
+            grant?.Invoke();
+
+            Changed?.Invoke();
+            Save();
+            return true;
+        }
+
         /// <summary>Record that a run finished, folding its figures into the lifetime stats
         /// that drive achievements (M14c). Called once per run by the end screen.</summary>
         public static void RecordRun(int kills, int level, float survivedSeconds, int bossesDefeated)
@@ -83,11 +128,22 @@ namespace SpaceSurvivors.Core
             Changed?.Invoke();
         }
 
-        /// <summary>Persist the live profile through the store.</summary>
+        /// <summary>
+        /// Persist the live profile through the store. Fire-and-forget: a remote store writes
+        /// its local cache synchronously and syncs in the background, reporting failures via
+        /// <see cref="SyncStatusChanged"/> — a save never throws into gameplay.
+        /// </summary>
         public static void Save()
         {
             EnsureLoaded();
-            _store.Save(_current);
+            try
+            {
+                _store.Save(_current);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[Profile] Save failed: {e}");
+            }
         }
     }
 }
