@@ -1124,6 +1124,31 @@ auth/cloud-save entry, **Azure** hosting. Client-side rule: use **Newtonsoft JSO
 (`com.unity.nuget.newtonsoft-json`), NOT `JsonUtility`, for the profile DTO so it round-trips
 with a Jackson backend. Server is a separate track. Detail in `Project_Goals.md §8`.
 
+**Backend prep pass — committed `0989f99` 2026-09-02 (user starts DB/backend).** Audited the
+persistence layer, opened the last seams so the HTTP layer is a drop-in. No behaviour change.
+- **`PlayerProfile.userId`** (string, "" = local/anonymous — today's only mode). **Schema v4→v5**
+  (additive; `Migrate()` note updated). Auth stays out of band (store carries a token); this is
+  the id the profile / local cache file / DB row key on. `ProfileService.UserId` accessor.
+- **`ProfileService.TryPurchase(long cost, Action grant)`** — one atomic buy (debit → grant only
+  if debit ok → `Save` once). `ShipService.TryBuy` + `MetaProgressionService.TryPurchase` now
+  route through it instead of `TrySpend` + a separate direct `Current.*` write. A server-
+  authoritative backend needs spend+grant as one transaction.
+- **`IRemoteProfileStore : IProfileStore`** (optional) + **`ProfileSyncStatus`** enum
+  (Synced/Syncing/Offline/Error). `ProfileService.SyncStatus` + `SyncStatusChanged` (always
+  Synced for the local store) → UI can show an offline indicator. `IProfileStore` documented as
+  **synchronous / cache-first** so the HTTP impl doesn't force an async refactor. `Save()` now
+  swallows+logs store exceptions instead of throwing into run-end.
+- **`ILeaderboardStore`** + `LocalPrefsLeaderboardStore` (= old PlayerPrefs behaviour).
+  `HighScoreService` routed through it with `SetStore()` — the online Infinite leaderboard drops
+  in like `IProfileStore` does. Public API (`BestSeconds`/`Submit`) unchanged; added `RecordSet`
+  event. NOTE per-mode bests still live in PlayerPrefs (via this store), separate from
+  `PlayerProfile.bestSurvivalSeconds` (global, feeds achievements) — deliberate; unify later if
+  the leaderboard wants it in the profile.
+- Open client decisions still to make when wiring the real backend: offline/retry policy inside
+  the HTTP store (write-through local cache + background sync — `LocalJsonProfileStore` becomes
+  that cache), and whether run results get a dedicated `SubmitRunResult` anti-cheat seam
+  separate from whole-profile save (needed only if leaderboards must be competitive).
+
 ## Architecture pass — Assembly Definitions (2026-08-27, before M8)
 Split the ~45 scripts into 9 compiler-enforced assemblies. Dependency direction is now
 enforced by the compiler → cannot become spaghetti. Layout + deps in `AI_Guidelines.md §6`:
