@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6341147080617014098}
   - component: {fileID: 9083043077639411619}
   - component: {fileID: 862767722165844181}
-  - component: {fileID: 1219929497735367632}
+  - component: {fileID: 6929643888772096736}
   m_Layer: 7
   m_Name: PlasmaOrb
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.42, y: 0.42, z: 0.42}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -161,7 +161,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 0.5}
+  m_Size: {x: 0.5952381, y: 0.5952381}
   m_Direction: 0
 --- !u!114 &6117100008654914610
 MonoBehaviour:
@@ -236,7 +236,7 @@ TrailRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 4
   m_MaskInteraction: 0
-  m_Time: 0.12
+  m_Time: 0.1
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -246,7 +246,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.25
+        value: 0.168
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -267,7 +267,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.6, g: 0.35, b: 1, a: 0.55}
+      key0: {r: 0.6, g: 0.35, b: 1, a: 0.45}
       key1: {r: 0.6, g: 0.35, b: 1, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -318,7 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f946eefef7a84897ae12b1d5ea59c4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SpaceSurvivors.Combat::SpaceSurvivors.Combat.TrailReset
---- !u!114 &1219929497735367632
+--- !u!114 &6929643888772096736
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

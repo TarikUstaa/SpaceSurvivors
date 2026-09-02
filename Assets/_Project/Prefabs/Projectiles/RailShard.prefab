@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
+  m_LocalScale: {x: 0.72, y: 0.72, z: 0.72}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -160,7 +160,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.12, y: 0.7}
+  m_Size: {x: 0.14166667, y: 0.8263889}
   m_Direction: 0
 --- !u!114 &1482538548250415432
 MonoBehaviour:
@@ -235,7 +235,7 @@ TrailRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 4
   m_MaskInteraction: 0
-  m_Time: 0.13
+  m_Time: 0.11
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -245,7 +245,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.425
+        value: 0.28800002
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -266,7 +266,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.7, g: 0.88, b: 1, a: 0.55}
+      key0: {r: 0.7, g: 0.88, b: 1, a: 0.45}
       key1: {r: 0.7, g: 0.88, b: 1, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}

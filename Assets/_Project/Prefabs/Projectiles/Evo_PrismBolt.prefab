@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7715517132302668451}
   - component: {fileID: 8139373813667983030}
   - component: {fileID: 8250840208309165218}
-  - component: {fileID: 6576933383024404668}
+  - component: {fileID: 5890605389709378273}
   m_Layer: 7
   m_Name: Evo_PrismBolt
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.72, y: 0.72, z: 0.72}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -161,7 +161,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.15, y: 0.5}
+  m_Size: {x: 0.18, y: 0.6}
   m_Direction: 0
 --- !u!114 &2580170024538110414
 MonoBehaviour:
@@ -236,7 +236,7 @@ TrailRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 4
   m_MaskInteraction: 0
-  m_Time: 0.15
+  m_Time: 0.13
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -246,7 +246,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.36
+        value: 0.24000001
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -267,7 +267,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.7, g: 1, b: 1, a: 0.55}
+      key0: {r: 0.7, g: 1, b: 1, a: 0.45}
       key1: {r: 0.7, g: 1, b: 1, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -318,7 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f946eefef7a84897ae12b1d5ea59c4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SpaceSurvivors.Combat::SpaceSurvivors.Combat.TrailReset
---- !u!114 &6576933383024404668
+--- !u!114 &5890605389709378273
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

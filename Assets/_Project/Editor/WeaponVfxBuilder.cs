@@ -211,31 +211,33 @@ namespace SpaceSurvivors.EditorTools
 
         private static void StyleBaseProjectiles(Material mat)
         {
+            // Ranged (fired) projectiles trimmed a little — root scale down ~15%, trails
+            // thinner + shorter (see ConfigureTrail). Hitboxes are unchanged (compensated).
             Style("Laser", mat, new Look
             {
                 core = "trace_06", coreColor = new Color(0.5f, 0.95f, 1f),
-                rootScale = 0.5f, trail = true, trailColor = new Color(0.4f, 0.9f, 1f), trailTime = 0.09f,
+                rootScale = 0.42f, trail = true, trailColor = new Color(0.4f, 0.9f, 1f), trailTime = 0.08f,
             });
             Style("Missile", mat, new Look
             {
                 core = "Orb", coreColor = new Color(1f, 0.55f, 0.2f),
-                rootScale = 0.42f, trail = true, trailColor = new Color(1f, 0.5f, 0.18f), trailTime = 0.16f,
+                rootScale = 0.36f, trail = true, trailColor = new Color(1f, 0.5f, 0.18f), trailTime = 0.14f,
             });
             Style("PlasmaOrb", mat, new Look
             {
                 core = "Orb", coreColor = new Color(0.66f, 0.32f, 1f),
-                rootScale = 0.5f, trail = true, trailColor = new Color(0.6f, 0.35f, 1f), trailTime = 0.12f,
+                rootScale = 0.42f, trail = true, trailColor = new Color(0.6f, 0.35f, 1f), trailTime = 0.1f,
                 pulse = 0.14f,
             });
             Style("ScatterPellet", mat, new Look
             {
                 core = "Orb", coreColor = new Color(1f, 0.66f, 0.24f),
-                rootScale = 0.32f, trail = true, trailColor = new Color(1f, 0.68f, 0.3f), trailTime = 0.07f,
+                rootScale = 0.27f, trail = true, trailColor = new Color(1f, 0.68f, 0.3f), trailTime = 0.06f,
             });
             Style("RailShard", mat, new Look
             {
                 core = "trace_04", coreColor = new Color(0.78f, 0.92f, 1f),
-                rootScale = 0.85f, trail = true, trailColor = new Color(0.7f, 0.88f, 1f), trailTime = 0.13f,
+                rootScale = 0.72f, trail = true, trailColor = new Color(0.7f, 0.88f, 1f), trailTime = 0.11f,
             });
             Style("OrbitOrb", mat, new Look
             {
@@ -277,6 +279,7 @@ namespace SpaceSurvivors.EditorTools
                 root.transform.localScale = Vector3.one * newScale;
                 foreach (var c in root.GetComponentsInChildren<CircleCollider2D>(true)) c.radius *= k;
                 foreach (var c in root.GetComponentsInChildren<BoxCollider2D>(true)) c.size *= k;
+                foreach (var c in root.GetComponentsInChildren<CapsuleCollider2D>(true)) c.size *= k;
             }
 
             // Core = the root SpriteRenderer. A small, saturated shape; the Bloom volume is
@@ -327,7 +330,7 @@ namespace SpaceSurvivors.EditorTools
             {
                 if (trail == null) trail = root.AddComponent<TrailRenderer>();
                 // Trail width tracks the projectile size (root scale) so it never dwarfs it.
-                ConfigureTrail(trail, mat, look.trailColor, look.trailTime, newScale * 0.5f);
+                ConfigureTrail(trail, mat, look.trailColor, look.trailTime, newScale * 0.4f);
                 if (root.GetComponent<TrailReset>() == null) root.AddComponent<TrailReset>();
             }
             else if (trail != null)
@@ -356,7 +359,7 @@ namespace SpaceSurvivors.EditorTools
             var grad = new Gradient();
             grad.SetKeys(
                 new[] { new GradientColorKey(tint, 0f), new GradientColorKey(tint, 1f) },
-                new[] { new GradientAlphaKey(0.55f, 0f), new GradientAlphaKey(0f, 1f) });
+                new[] { new GradientAlphaKey(0.45f, 0f), new GradientAlphaKey(0f, 1f) });
             tr.colorGradient = grad;
         }
 
@@ -435,30 +438,30 @@ namespace SpaceSurvivors.EditorTools
             Evolve("Laser", "Evo_PrismBolt", "PrismLaser", mat, new Look
             {
                 core = "trace_06", coreColor = new Color(0.9f, 1f, 1f),
-                rootScale = 0.72f, trail = true, trailColor = new Color(0.7f, 1f, 1f), trailTime = 0.15f,
+                rootScale = 0.6f, trail = true, trailColor = new Color(0.7f, 1f, 1f), trailTime = 0.13f,
                 pulse = 0.1f,
             });
             Evolve("Missile", "Evo_ClusterMissile", "ClusterMissile", mat, new Look
             {
                 core = "Orb", coreColor = new Color(1f, 0.38f, 0.12f),
-                glow = "flame_03", glowColor = new Color(1f, 0.3f, 0.06f, 0.4f), glowScale = 2.0f,
-                rootScale = 0.46f, trail = true, trailColor = new Color(1f, 0.35f, 0.1f), trailTime = 0.22f,
+                glow = "flame_03", glowColor = new Color(1f, 0.3f, 0.06f, 0.4f), glowScale = 1.8f,
+                rootScale = 0.4f, trail = true, trailColor = new Color(1f, 0.35f, 0.1f), trailTime = 0.19f,
             });
             Evolve("PlasmaOrb", "Evo_NovaOrb", "NovaCore", mat, new Look
             {
                 core = "magic_04", coreColor = new Color(1f, 0.9f, 0.72f),
-                rootScale = 0.5f, trail = true, trailColor = new Color(0.85f, 0.75f, 1f), trailTime = 0.15f,
+                rootScale = 0.42f, trail = true, trailColor = new Color(0.85f, 0.75f, 1f), trailTime = 0.13f,
                 pulse = 0.2f, spin = 150f,
             });
             Evolve("ScatterPellet", "Evo_BuckshotPellet", "BuckshotStorm", mat, new Look
             {
                 core = "Orb", coreColor = new Color(1f, 0.62f, 0.22f),
-                rootScale = 0.4f, trail = true, trailColor = new Color(1f, 0.58f, 0.24f), trailTime = 0.1f,
+                rootScale = 0.34f, trail = true, trailColor = new Color(1f, 0.58f, 0.24f), trailTime = 0.09f,
             });
             Evolve("RailShard", "Evo_VoidSliver", "VoidLance", mat, new Look
             {
                 core = "trace_04", coreColor = new Color(0.62f, 0.42f, 1f),
-                rootScale = 0.95f, trail = true, trailColor = new Color(0.5f, 0.28f, 1f), trailTime = 0.3f,
+                rootScale = 0.8f, trail = true, trailColor = new Color(0.5f, 0.28f, 1f), trailTime = 0.25f,
             });
             Evolve("OrbitOrb", "Evo_EventHorizonOrb", "EventHorizon", mat, new Look
             {
