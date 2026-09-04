@@ -27,10 +27,10 @@ namespace SpaceSurvivors.Core
         public static float BestSeconds(string modeId) => Store.BestSeconds(modeId);
 
         /// <summary>Record a run result. Returns true if it beat the stored best (new record).</summary>
-        public static bool Submit(string modeId, float survivedSeconds)
+        public static bool Submit(string modeId, RunResult run)
         {
-            bool record = Store.Submit(modeId, survivedSeconds);
-            if (record) RecordSet?.Invoke(modeId, survivedSeconds);
+            bool record = Store.Submit(modeId, run);
+            if (record) RecordSet?.Invoke(modeId, run.SurvivedSeconds);
             return record;
         }
     }

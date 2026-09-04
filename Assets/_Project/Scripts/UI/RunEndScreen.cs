@@ -80,7 +80,12 @@ namespace SpaceSurvivors.UI
                     $"SCRAP  +{_stats.Scrap:n0}\nWALLET  {ProfileService.Wallet:n0}";
 
             string modeId = GameSession.SelectedMode != null ? GameSession.SelectedMode.name : "default";
-            bool record = HighScoreService.Submit(modeId, survivedSeconds);
+            var runResult = new RunResult(
+                survivedSeconds,
+                _stats != null ? _stats.Kills : 0,
+                _stats != null ? _stats.Level : 1,
+                _stats != null ? _stats.BossesDefeated : 0);
+            bool record = HighScoreService.Submit(modeId, runResult);
             if (_bestValue != null)
             {
                 float best = HighScoreService.BestSeconds(modeId);

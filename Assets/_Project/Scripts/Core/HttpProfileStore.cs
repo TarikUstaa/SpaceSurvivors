@@ -1,8 +1,5 @@
 using System;
-using System.Text;
-using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace SpaceSurvivors.Core
 {
@@ -29,8 +26,6 @@ namespace SpaceSurvivors.Core
     /// </summary>
     public sealed class HttpProfileStore : IRemoteProfileStore
     {
-        private const int TimeoutSeconds = 10;
-
         /// <summary>A 409 should resolve on the retry; more than this means something is wrong.</summary>
         private const int MaxConflictRetries = 2;
 
@@ -225,97 +220,12 @@ namespace SpaceSurvivors.Core
             SyncStatusChanged?.Invoke(status);
         }
 
-        /// <summary>
-        /// Fire a request and hand the result to <paramref name="onDone"/> on the main thread.
-        /// Uses the async operation's completion event rather than a coroutine so the store
-        /// needs no MonoBehaviour of its own. A code of 0 means "never reached the server".
-        /// </summary>
         private void Send(string method, string body, Action<long, string> onDone)
-        {
-            try
-            {
-                var request = new UnityWebRequest(_url, method)
-                {
-                    downloadHandler = new DownloadHandlerBuffer(),
-                    timeout = TimeoutSeconds,
-                };
+            => BackendRequest.Send(_url, method, body, _userId, onDone);
 
-                if (body != null)
-                {
-                    request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
-                    request.SetRequestHeader("Content-Type", "application/json");
-                }
+        private static string Serialize(object value) => BackendRequest.Serialize(value);
 
-                // Stand-in for real auth — see BackendConfig.UserId.
-                request.SetRequestHeader("X-Dev-User", _userId);
-
-                request.SendWebRequest().completed += _ => Complete(request, onDone);
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"[Backend] could not send {method}: {e.Message}");
-                onDone(0, "");
-            }
-        }
-
-        private static void Complete(UnityWebRequest request, Action<long, string> onDone)
-        {
-            long code;
-            string body;
-            try
-            {
-                // A 404 or 409 is a ProtocolError but still a real answer, so only a genuine
-                // connection failure counts as "no server".
-                code = request.result == UnityWebRequest.Result.ConnectionError ? 0 : request.responseCode;
-                body = request.downloadHandler != null ? request.downloadHandler.text : "";
-            }
-            catch
-            {
-                code = 0;
-                body = "";
-            }
-            finally
-            {
-                request.Dispose();
-            }
-
-            try
-            {
-                onDone(code, body);
-            }
-            catch (Exception e)
-            {
-                // A bug in our own handling must not surface as a broken game.
-                Debug.LogError($"[Backend] response handling failed: {e}");
-            }
-        }
-
-        private static string Serialize(object value)
-        {
-            try
-            {
-                return JsonConvert.SerializeObject(value);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"[Backend] could not serialise request: {e.Message}");
-                return null;
-            }
-        }
-
-        private static T Parse<T>(string json) where T : class
-        {
-            if (string.IsNullOrWhiteSpace(json)) return null;
-            try
-            {
-                return JsonConvert.DeserializeObject<T>(json);
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"[Backend] could not read response: {e.Message}");
-                return null;
-            }
-        }
+        private static T Parse<T>(string json) where T : class => BackendRequest.Parse<T>(json);
 
         // ── wire shapes (mirror the backend's api contract) ────────────────────────────
 
