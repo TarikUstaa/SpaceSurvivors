@@ -1111,6 +1111,37 @@ G1 + G4 BUILT & committed as one bundle 2026-09-01 (awaiting sign-off). G3 next 
   `Trail` `WeaponKind` — currently only the Deep Mine evolution uses it. Add new weapon(s) in
   its slot. Pure content on the existing weapon system + `UpgradeService` catalogue.
 
+## Faz 5a — Cloud profile sync (2026-09-04, committed `18d0745`, tested OK)
+The backend track (separate repo `~/SpaceSurvivors-backend`, Spring Boot 4 + Postgres) reached
+the point where the game can talk to it. **No gameplay code changed** — everything went in behind
+the `IProfileStore` seam opened in `0989f99`.
+
+- **`Core/HttpProfileStore` : `IRemoteProfileStore`** — local-first. Reads answer from a wrapped
+  `LocalJsonProfileStore`; writes hit disk *synchronously* before any network call, so offline
+  play is byte-identical to before. HTTP rides `UnityWebRequest.SendWebRequest().completed`, so
+  the store needs **no MonoBehaviour** and never blocks a frame. Startup = GET → merge → PUT
+  (both sides converge). Later saves PUT with the last seen `version`; a **409** merges the
+  server's copy in and retries (capped at 2).
+- **In-place mutation.** `ProfileService._current` holds the instance `Load()` returned for the
+  whole session, so a background sync that built a *new* `PlayerProfile` would strand the game on
+  a stale copy. The store mutates that same object and raises a new
+  `IRemoteProfileStore.ProfileRefreshed`, which `ProfileService` forwards as its `Changed`.
+- **`Core/ProfileMerge`** — divergence rules, chosen to *never lose progress, never invent
+  currency, never undo a purchase*: earned monotonic values (`lifetimeScrap`, bests, achievements)
+  take max/union; **`wallet` + `metaUpgradeLevels` + `ownedShipIds` move as ONE block** from
+  whichever side is further along (`lifetimeScrap`, tie-broken by purchase count). Taking the
+  higher wallet *and* the union of purchases would make every offline purchase free.
+- **`Core/BackendConfig`** (PlayerPrefs: enabled / baseUrl / userId / sandbox) +
+  **`Core/BackendBootstrap`** (`BeforeSceneLoad`, so the store is in place before any scene object
+  reads the profile). **Sync ships OFF.** `userId` is a generated `dev-xxxxxxxx` sent as the
+  `X-Dev-User` header — a stand-in the backend trusts blindly, *not* authentication.
+- **`Editor/BackendWindow`** — `SpaceSurvivors/Backend/Settings`: enable, server URL, user id,
+  health check, and a **sandbox cache file** so testing can't touch the real save (M17 lesson).
+
+Verified live: wire shapes match the Java DTOs on all four paths (PUT / GET / 409 / 404); sandbox
+run created the row; real run pushed wallet 481 / 17783 lifetime scrap / ronin / 6 achievements —
+and the empty server profile correctly *lost* the merge. Next: `HttpLeaderboardStore`.
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,
