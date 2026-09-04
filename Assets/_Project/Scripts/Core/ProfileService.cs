@@ -58,19 +58,28 @@ namespace SpaceSurvivors.Core
         public static void SetStore(IProfileStore store)
         {
             if (_store is IRemoteProfileStore oldRemote)
+            {
                 oldRemote.SyncStatusChanged -= RaiseSyncStatus;
+                oldRemote.ProfileRefreshed -= RaiseChanged;
+            }
 
             _store = store;
             _current = store?.Load();
 
             if (_store is IRemoteProfileStore newRemote)
+            {
                 newRemote.SyncStatusChanged += RaiseSyncStatus;
+                newRemote.ProfileRefreshed += RaiseChanged;
+            }
 
             Changed?.Invoke();
             RaiseSyncStatus(SyncStatus);
         }
 
         private static void RaiseSyncStatus(ProfileSyncStatus status) => SyncStatusChanged?.Invoke(status);
+
+        /// <summary>A remote store folded server data into <see cref="Current"/> — redraw.</summary>
+        private static void RaiseChanged() => Changed?.Invoke();
 
         /// <summary>Credit scrap carried out of a run. Non-positive amounts are ignored.</summary>
         public static void AddScrap(long amount)

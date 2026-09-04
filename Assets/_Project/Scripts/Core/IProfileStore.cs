@@ -49,6 +49,15 @@ namespace SpaceSurvivors.Core
         /// <summary>Raised whenever <see cref="SyncStatus"/> changes.</summary>
         event Action<ProfileSyncStatus> SyncStatusChanged;
 
+        /// <summary>
+        /// Raised when a background sync folded remote data into the live profile. The store
+        /// mutates the instance it handed out from <see cref="IProfileStore.Load"/> <i>in
+        /// place</i> — callers hold that reference, so replacing it would leave them on a stale
+        /// copy — and then fires this so the UI redraws. <see cref="ProfileService"/> forwards
+        /// it as its own <c>Changed</c> event.
+        /// </summary>
+        event Action ProfileRefreshed;
+
         /// <summary>Ask the store to reconcile local and remote now (e.g. a "retry" button).</summary>
         void ForceSync();
     }
