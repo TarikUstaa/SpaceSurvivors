@@ -1140,7 +1140,35 @@ the `IProfileStore` seam opened in `0989f99`.
 
 Verified live: wire shapes match the Java DTOs on all four paths (PUT / GET / 409 / 404); sandbox
 run created the row; real run pushed wallet 481 / 17783 lifetime scrap / ronin / 6 achievements —
-and the empty server profile correctly *lost* the merge. Next: `HttpLeaderboardStore`.
+and the empty server profile correctly *lost* the merge.
+
+## Faz 5b — Online leaderboard (2026-09-04, committed `fa83b63`, tested OK)
+- **`ILeaderboardStore.Submit` widened** `(modeId, float)` → `(modeId, RunResult)`. The local store
+  still ranks on seconds alone, but the server displays kills/level and uses them to sanity-check
+  the run. `Core/RunResult` is a plain `readonly struct` in Core (`RunStats` is a MonoBehaviour in
+  Progression; the seams stay framework-free) and **clamps on construction** so a UI glitch can't
+  build a run the server would reject.
+- **`Core/HttpLeaderboardStore`** — local record check first and *synchronously*, because
+  `RunEndScreen` prints "NEW BEST" off the return value; the POST follows in the background. Posts
+  on **every** run, not just local records: this device's best can lag the server's, so the server
+  gets to compare for itself. It re-checks rather than trusting us, which is what stops a tampered
+  client writing a fake record.
+- **Mode ids are translated** (`Mode_Infinite` → `infinite`) instead of renaming the assets, which
+  would orphan the existing `score.best.*` PlayerPrefs keys and their saved bests. A mode the
+  server doesn't rank is kept locally **and logs why**.
+- **`Core/BackendRequest`** — the `UnityWebRequest` plumbing got a second real caller, so it moved
+  out of `HttpProfileStore` into a shared helper.
+
+⚠ **Gotcha worth remembering:** starting a run from `Game.unity` directly leaves
+`GameSession.SelectedMode` null → `modeId` falls back to `"default"` → nothing is submitted to the
+server (and `score.best.default` gets its own PlayerPrefs key). Play through **MainMenu → mode →
+map → PLAY** when testing anything score-related. The warning added above is what diagnosed this.
+
+Verified live: a menu run wrote `infinite / 28.4s / 18 kills`; beating it **replaced that single
+row in place** (29.6s / 20 kills) rather than appending — `ON CONFLICT (user_id, mode) DO UPDATE`
+holding on both sides. Profile sync kept flowing in parallel (wallet 481 → 564 over the runs).
+Next: display name (players can't pick one yet — everyone is `Pilot-dev-ce`), and a leaderboard
+screen (`GET /v1/scores` has no client yet, on purpose — nothing displays a board).
 
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
