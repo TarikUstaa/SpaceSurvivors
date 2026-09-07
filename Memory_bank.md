@@ -3,7 +3,7 @@
 > Working memory log. Update after every major milestone. Newest entry on top.
 
 ## Current State
-**M1–M14c approved. M15 committed `18de62c` (environment & maps, revised per user). M16 BUILT 2026-08-31, awaiting human playtest sign-off = balance pass — `Editor/BalanceConfig` (one-shot tuning applier for all curves/roster/bosses/XP/ceilings) + `Editor/BalancePlaytest` telemetry harness (orbit-the-horde bot via `Player/ExternalMoveInput`, CSV output). Iter-3: first 3:00 gentle (no elites, mini-boss @180), then a hard mid/late ramp; Campaign now a 4-boss/5-stage/~15-min arc; Damage/FireRate stack ceilings 5→4 / 8→6. Bot is noisy on survivability — needs the human feel-check. Next: M17 (nothing formally scoped yet) or address the M16 caveats.**
+**M1–M14c approved. M15 committed `fb4c354` (environment & maps, revised per user). M16 BUILT 2026-08-31, awaiting human playtest sign-off = balance pass — `Editor/BalanceConfig` (one-shot tuning applier for all curves/roster/bosses/XP/ceilings) + `Editor/BalancePlaytest` telemetry harness (orbit-the-horde bot via `Player/ExternalMoveInput`, CSV output). Iter-3: first 3:00 gentle (no elites, mini-boss @180), then a hard mid/late ramp; Campaign now a 4-boss/5-stage/~15-min arc; Damage/FireRate stack ceilings 5→4 / 8→6. Bot is noisy on survivability — needs the human feel-check. Next: M17 (nothing formally scoped yet) or address the M16 caveats.**
 
 Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c follow-on); enemy obstacle-avoidance `IVelocityModifier`; map preview art; the M16 caveats (bot noise, on-screen density, MaxHealth stacking, hazard-zone count). Full detail for each milestone is in its section below.
 
@@ -195,13 +195,13 @@ Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c foll
 | 2026-08-28 | M14b — ship shop / hangar | ✅ APPROVED 2026-08-28. Scout (free) / Vanguard / Wraith / Ronin — each = a hull sprite + run-start `StatModifier[]` via `ShipService` + `ShipApplier`. `Hangar.unity` carousel + MainMenu HANGAR button. MainMenu wallet restyled to the HUD metal look. |
 | 2026-08-31 | M14c — achievements | ⏳ BUILT, awaiting sign-off. 8 stat-threshold achievements (`AchievementData` = metric enum + threshold; `AchievementCatalogue` in `Resources/`). `AchievementService` static auto-tracks via `ProfileService.Changed` → `Evaluate()` → writes `unlockedAchievementIds` + `Save`. `Achievements.unity` 2×4 grid (`Rating/` CraftPix art) + MainMenu ACHIEVEMENTS button. Profile schema v2→v3 (`lifetimeKills` / `bestSurvivalSeconds` / `bestLevel` / `bossKills`); `ProfileService.RecordRun` extended; `RunEndScreen` calls `Evaluate()`. |
 | 2026-08-31 | M16 — balance pass | ⏳ BUILT, awaiting human playtest sign-off. `Editor/BalanceConfig` = one-shot applier for all difficulty curves / roster timing / boss schedules / XP curve / upgrade stack ceilings. `Editor/BalancePlaytest` = telemetry harness (orbit-the-horde autopilot via `Player/ExternalMoveInput` shim, CSV to persistentDataPath). Iter-3: first 3:00 gentle (Grunt/Swarmer/Shooter only, mini-boss @180) then a hard mid/late ramp (spawn 2.4→13/s, HP-mult 1.6→11); Campaign = 4-boss / 5-stage / ~15-min arc; Damage/FireRate maxStacks 5→4 / 8→6. Bot noisy on survivability → the feel needs human hands. |
-| 2026-08-31 | M15 — environment & maps | ✅ committed `18de62c`. `Obstacle` layer (11) + Physics2D matrix. New `SpaceSurvivors.Environment` asmdef: `Obstacle` (kinematic solid + `HealthComponent`; destructible raises `Destroyed` → director spawns debris VFX + `ScrapReward` scrap), `HazardZone` (`OverlapCircleNonAlloc` ticker damaging Player + Enemy), `EnvironmentDirector` (chunk streamer — deterministic per-cell RNG, pooled, far-cull; **owns the field config** — same asteroid/cache/hazard field on every map). `Data/MapData` (= backdrop theme: sky/star tint + baked nebula sprite) + `MapCatalogue` (Resources). `Progression/MapService` (static; profile schema **v3→v4** `selectedMapId`). 3 maps = **backdrops**: Milky Way / Crimson Nebula / Supernova (`Editor/BackdropTextureBaker` bakes 3 seamless 512² PNGs; `StarfieldParallax.SetBackdrop()` draws one as the farthest parallax layer). Flow: Campaign/Infinite → `MapSelect.unity` (build 5) carousel → PLAY → Game (no MAPS menu button). `PlayerMovement` gains `Rigidbody2D.Cast` obstacle deflection (`_obstacleMask`). `EnemyProjectile._blockLayers`. `StarfieldParallax.SetTint()` / `SetBackdrop()`. |
-| 2026-09-02 | Weapon changes REVERTED (`af41f7c`) | User: leave the weapons as they were. Everything from `009e555`/`2f4d94e`/`285ca0b` + the Laser-stream half of `a6d23f4` rolled back to `b543122` — Laser multishot is the centre-out fan again, all trails restored, Laser bolt scale 0.5, Static Field/Ion Storm aura back to the faint ring (r 2.6/3.6, α 0.18/0.24), AuraField.png deleted. **Kept: the boss-HP fix** (MiniBoss 3500 / FinalBoss 14000 + SpawnDirector 0.7 Lerp). Below is what was tried and undone: |
-| 2026-09-02 | ~~Weapon VFX polish (playtest feedback)~~ REVERTED | ~~committed `009e555` + `2f4d94e`.~~ Laser stream `streamGap` 0.35→1.0 (bolts overlapped). **Trails off** on Laser / ScatterPellet / Evo_PrismBolt / Evo_BuckshotPellet (`WeaponVfxBuilder` `trail=false`) — the stream smeared into one line; Rail Spike / Void Lance keep their streak so the "sniper" reads distinct. Fixed `Style()` trail-removal order bug (`TrailReset [RequireComponent]` blocked removing `TrailRenderer` first). **Aura visible:** new baked `AuraField.png` (faint inner wash + bright rim, replaces the invisible thin outline); StaticField `orbitRadius` 2.6→3.4 / tint α 0.18→0.5, IonStorm 3.6→4.4 / 0.24→0.6; `AuraWeapon` view ×1.13 so rim = damage edge, pulse floor 50%→70% α. Wired via `WeaponVfxBuilder.WireGameScene`. |
-| 2026-09-02 | Boss HP + Laser stream multishot | ⏳ committed `a6d23f4`, awaiting playtest. Playtest feedback: bosses died in ~2s; Laser fanning on MultiShot felt wrong. **Bosses:** `BalanceConfig.SetEnemyHealth` MiniBoss 650→3500 / FinalBoss 1800→14000; `SpawnDirector` boss-HP Lerp weight 0.5→0.7. Result (iter-6c curves): campaign mini ~6k@3min / ~12k@7min / ~17k@11min, final ~92k@15min. **Laser:** new `WeaponData.multishotShape` (Fan\|Stream) + `streamGap` (0.35 wu). Stream = every extra projectile fires dead straight, spawned a gap further along the aim line → tight back-to-back burst that fills into a stream as count climbs. `LaserBlaster`→Stream; all other weapons + Prism stay Fan. `WeaponController.FireWeapon` branches before the fan math. |
-| 2026-09-02 | iter-6c — steeper mid/late curves + swarm scaling | ⏳ committed `b543122`, awaiting playtest. iter-6b fixed 0-3min but past 3min a snowballed build still pinned HP at max. iter-6c: Infinite spawn 15/s @6min / 44/s @18min / 70/s @40min (was 12/29/55), HP ×22 @40min, maxAlive 600/520, SwarmEvent `_enemiesPerMinute` 9→13 / cap 180. First 2 min unchanged. `EnemyBrain.FixedUpdate` modifier-loop null-guard added (pre-empts the run-end NRE burst). **20-min sim: console 100% clean the whole run** (guard worked); screen density up (~35 alive mid-game vs 6b's ~15) but the bot (+220% pickup, level 33 by 6min) still pins HP at max — mid/late is a human-playthrough call. Early game verified rough (bot → 45 HP at 0:40). |
-| 2026-09-01 | Playtest fixes — threat/density scale with time | ⏳ committed `dba5f81`, awaiting sign-off. Sim playtest of G1/G3/G4 found **no threat after ~90s** (kiting bot never below ~90% HP in 8 min; screen stuck at 10-25 enemies). Fixes: `SpawnDirector` **lead-biased spawn placement** (60% into a 75° arc toward player heading — `_leadBias`/`_leadArcDegrees`); `SwarmEvent` **v2 scales with run time** (`30 + 9×min`, cap 150; interval 60→45s, duration 16→20s); `BalanceConfig` iter-6b — enemy base speeds up (Swarmer 3.1→4.0 etc.), speed/HP multipliers ramp harder & further, spawn curve gentler first 90s then steeper, maxAlive 550/480; enemy prefab `_farCullRadius` 45→55. Verified early game now dangerous; **mid/late still eases once a build snowballs** — iter-6c drafted. Also: `StarTile.png` spriteMeshType Tight→FullRect (kills the parallax tiling warning). |
-| 2026-09-01 | G3 — skill / upgrade balance | ⏳ committed `72043d8`, awaiting sign-off. `Editor/BalanceConfig.TuneUpgrades()` owns weight/value/stack-ceiling for all 16 level-up choices in one place. FireRate 6→5 / +18%, MoveSpeed 6→4 / +10%, Haste w0.9→0.5 & 5→3, MaxHealth +25→30 & 6→5, MultiShot w0.35→0.5, Damage max 4→5. `WeaponController._maxWeapons = 6` slot cap (+ `IsFull`); `UpgradeService.Roll` stops offering new weapons at cap. Verified in sim: slot cap holds at 6, all evolutions fire. |
+| 2026-08-31 | M15 — environment & maps | ✅ committed `fb4c354`. `Obstacle` layer (11) + Physics2D matrix. New `SpaceSurvivors.Environment` asmdef: `Obstacle` (kinematic solid + `HealthComponent`; destructible raises `Destroyed` → director spawns debris VFX + `ScrapReward` scrap), `HazardZone` (`OverlapCircleNonAlloc` ticker damaging Player + Enemy), `EnvironmentDirector` (chunk streamer — deterministic per-cell RNG, pooled, far-cull; **owns the field config** — same asteroid/cache/hazard field on every map). `Data/MapData` (= backdrop theme: sky/star tint + baked nebula sprite) + `MapCatalogue` (Resources). `Progression/MapService` (static; profile schema **v3→v4** `selectedMapId`). 3 maps = **backdrops**: Milky Way / Crimson Nebula / Supernova (`Editor/BackdropTextureBaker` bakes 3 seamless 512² PNGs; `StarfieldParallax.SetBackdrop()` draws one as the farthest parallax layer). Flow: Campaign/Infinite → `MapSelect.unity` (build 5) carousel → PLAY → Game (no MAPS menu button). `PlayerMovement` gains `Rigidbody2D.Cast` obstacle deflection (`_obstacleMask`). `EnemyProjectile._blockLayers`. `StarfieldParallax.SetTint()` / `SetBackdrop()`. |
+| 2026-09-02 | Weapon changes REVERTED (`4fe5248`) | User: leave the weapons as they were. Everything from `51e7dd9`/`c2c7525`/`0cdc3c5` + the Laser-stream half of `8b16aec` rolled back to `38aaf8c` — Laser multishot is the centre-out fan again, all trails restored, Laser bolt scale 0.5, Static Field/Ion Storm aura back to the faint ring (r 2.6/3.6, α 0.18/0.24), AuraField.png deleted. **Kept: the boss-HP fix** (MiniBoss 3500 / FinalBoss 14000 + SpawnDirector 0.7 Lerp). Below is what was tried and undone: |
+| 2026-09-02 | ~~Weapon VFX polish (playtest feedback)~~ REVERTED | ~~committed `51e7dd9` + `c2c7525`.~~ Laser stream `streamGap` 0.35→1.0 (bolts overlapped). **Trails off** on Laser / ScatterPellet / Evo_PrismBolt / Evo_BuckshotPellet (`WeaponVfxBuilder` `trail=false`) — the stream smeared into one line; Rail Spike / Void Lance keep their streak so the "sniper" reads distinct. Fixed `Style()` trail-removal order bug (`TrailReset [RequireComponent]` blocked removing `TrailRenderer` first). **Aura visible:** new baked `AuraField.png` (faint inner wash + bright rim, replaces the invisible thin outline); StaticField `orbitRadius` 2.6→3.4 / tint α 0.18→0.5, IonStorm 3.6→4.4 / 0.24→0.6; `AuraWeapon` view ×1.13 so rim = damage edge, pulse floor 50%→70% α. Wired via `WeaponVfxBuilder.WireGameScene`. |
+| 2026-09-02 | Boss HP + Laser stream multishot | ⏳ committed `8b16aec`, awaiting playtest. Playtest feedback: bosses died in ~2s; Laser fanning on MultiShot felt wrong. **Bosses:** `BalanceConfig.SetEnemyHealth` MiniBoss 650→3500 / FinalBoss 1800→14000; `SpawnDirector` boss-HP Lerp weight 0.5→0.7. Result (iter-6c curves): campaign mini ~6k@3min / ~12k@7min / ~17k@11min, final ~92k@15min. **Laser:** new `WeaponData.multishotShape` (Fan\|Stream) + `streamGap` (0.35 wu). Stream = every extra projectile fires dead straight, spawned a gap further along the aim line → tight back-to-back burst that fills into a stream as count climbs. `LaserBlaster`→Stream; all other weapons + Prism stay Fan. `WeaponController.FireWeapon` branches before the fan math. |
+| 2026-09-02 | iter-6c — steeper mid/late curves + swarm scaling | ⏳ committed `38aaf8c`, awaiting playtest. iter-6b fixed 0-3min but past 3min a snowballed build still pinned HP at max. iter-6c: Infinite spawn 15/s @6min / 44/s @18min / 70/s @40min (was 12/29/55), HP ×22 @40min, maxAlive 600/520, SwarmEvent `_enemiesPerMinute` 9→13 / cap 180. First 2 min unchanged. `EnemyBrain.FixedUpdate` modifier-loop null-guard added (pre-empts the run-end NRE burst). **20-min sim: console 100% clean the whole run** (guard worked); screen density up (~35 alive mid-game vs 6b's ~15) but the bot (+220% pickup, level 33 by 6min) still pins HP at max — mid/late is a human-playthrough call. Early game verified rough (bot → 45 HP at 0:40). |
+| 2026-09-01 | Playtest fixes — threat/density scale with time | ⏳ committed `4ac9fef`, awaiting sign-off. Sim playtest of G1/G3/G4 found **no threat after ~90s** (kiting bot never below ~90% HP in 8 min; screen stuck at 10-25 enemies). Fixes: `SpawnDirector` **lead-biased spawn placement** (60% into a 75° arc toward player heading — `_leadBias`/`_leadArcDegrees`); `SwarmEvent` **v2 scales with run time** (`30 + 9×min`, cap 150; interval 60→45s, duration 16→20s); `BalanceConfig` iter-6b — enemy base speeds up (Swarmer 3.1→4.0 etc.), speed/HP multipliers ramp harder & further, spawn curve gentler first 90s then steeper, maxAlive 550/480; enemy prefab `_farCullRadius` 45→55. Verified early game now dangerous; **mid/late still eases once a build snowballs** — iter-6c drafted. Also: `StarTile.png` spriteMeshType Tight→FullRect (kills the parallax tiling warning). |
+| 2026-09-01 | G3 — skill / upgrade balance | ⏳ committed `e92b793`, awaiting sign-off. `Editor/BalanceConfig.TuneUpgrades()` owns weight/value/stack-ceiling for all 16 level-up choices in one place. FireRate 6→5 / +18%, MoveSpeed 6→4 / +10%, Haste w0.9→0.5 & 5→3, MaxHealth +25→30 & 6→5, MultiShot w0.35→0.5, Damage max 4→5. `WeaponController._maxWeapons = 6` slot cap (+ `IsFull`); `UpgradeService.Roll` stops offering new weapons at cap. Verified in sim: slot cap holds at 6, all evolutions fire. |
 | 2026-09-01 | G1 + G4 — swarm mechanic + denser spawns | ⏳ committed, awaiting sign-off. **G1:** `Environment/SwarmEvent` (`SpaceEventBehaviour`) pours ~34 real enemies from 1–2 screen edges over ~16s, on `EventDirector`'s own fixed 60s track (`_swarmEvent` / `_firstSwarmAt` / `_swarmInterval`; `Fire`→`FireEvent(data, bool trackActive)` so it overlaps the random rotation). Removed from random `SpaceEventCatalogue`. `Editor/EnvironmentEventsBuilder` builds `Event_Swarm.prefab` + `Event_swarm.asset` + wires the scene. **G4:** `Editor/BalanceConfig` iter-5 — Infinite spawn peaks 25/s, Campaign 26/s (were ~8), `maxAliveEnemies` 400/420, roster fully in by ~2:40. Verified ~360 on screen @ 465 fps. Multishot train-stagger tried + reverted (kept M19 fan). |
 
 ## Tweaks (2026-08-28)
@@ -686,7 +686,7 @@ The linchpin for M14. Everything is in `Core` (no gameplay deps → backend-port
 - **Deferred:** in-run achievement toast / unlock animation (`Evaluate()` already returns the freshly
   unlocked list for a future notifier to consume).
 
-## M16 — Balance pass (committed `10b2e08` 2026-08-31; difficulty feel pending human playtest)
+## M16 — Balance pass (committed `9f1f93c` 2026-08-31; difficulty feel pending human playtest)
 
 **User's calls:** Campaign win ≈ 15 min (4 bosses / 5 stages); GDD-faithful — no elites in the first 3:00.
 
@@ -734,7 +734,7 @@ The linchpin for M14. Everything is in `Core` (no gameplay deps → backend-port
   - **Hazard-zone count (M15 follow-on)** — the environment field renders a lot of orange hazard rings;
     consider the `EnvironmentDirector` hazard weight 0.7 → ~0.3.
 
-## M15 — Environment & Maps (revised per user, committed `18de62c` 2026-08-31)
+## M15 — Environment & Maps (revised per user, committed `fb4c354` 2026-08-31)
 
 **User's steer (mid-M15):** asteroids/caches/hazards should be the STANDARD ARENA (they expected them
 in the base game regardless of map). Maps = pure **backdrop themes** ("samanyolu galaksisi / kırmızı
@@ -938,7 +938,7 @@ with `bsdtar` (macOS can't open RAR natively).
   (pre-existing, cosmetic). IonStorm has no enemy-slow (enemies have no StatSheet) — it's pure
   damage. Event balance numbers are first-pass.
 
-## M18 follow-up — maps made visually distinct (committed `83a310a` 2026-08-31)
+## M18 follow-up — maps made visually distinct (committed `6baa326` 2026-08-31)
 User: "maplerde sanki çok değişiklik olmamış gibi." Nebula alpha 0.2 was too faint — all 6 maps
 read the same. Fixes in `EnvironmentEventsBuilder.BuildMaps`: `backdropTint` alpha 0.2 → ~0.55
 (0.32 for Deep Void), strongly-hued dark `cameraBackground` per map, `starfieldTint` dimmed +
@@ -1049,7 +1049,7 @@ G1 + G4 BUILT & committed as one bundle 2026-09-01 (awaiting sign-off). G3 next 
   (`MakeEvent<SwarmEvent>` → `Prefabs/Events/Event_Swarm.prefab`; `Event_swarm.asset` weight 0 /
   earliest 60 / duration 16, created outside `cat.events`; WireScene wires the EventDirector).
   Roster weighted Grunt×3 / Swarmer×2 / Charger / Shooter.
-  **v2 (`dba5f81`):** size scales with run time — `SwarmEvent._baseEnemies 30 + _enemiesPerMinute
+  **v2 (`4ac9fef`):** size scales with run time — `SwarmEvent._baseEnemies 30 + _enemiesPerMinute
   9 × minutes`, `_maxEnemies` 150 (was a flat `_totalEnemies 34` that a mid-game build shredded
   in ~2s). Reads `RunClock.Elapsed` in `OnBegin`. Bigger swarms get a heavier burst. Cadence
   `_swarmInterval` 60→45s, `Event_swarm` duration 16→20s. In the sim it's the main threat in the
@@ -1059,7 +1059,7 @@ G1 + G4 BUILT & committed as one bundle 2026-09-01 (awaiting sign-off). G3 next 
   behind the player + player sort order 0→20 + a dark/threat rim child on every enemy + optional
   archetype tint. The **player-glow + sort-order** half was a clear win; the enemy recolour
   (threat tints, then dark rim, then red rim) all read *worse* than the natural Kenney sprites —
-  user rejected. **Fully reverted, nothing committed** (`git restore` back to `904dfff`). Revisit
+  user rejected. **Fully reverted, nothing committed** (`git restore` back to `967bb82`). Revisit
   only alongside an enemy **art pass** — distinct per-archetype silhouettes — not tints over the
   current art. The player-beacon idea is worth keeping for that future pass.
 - **G3 — Skill / upgrade balance pass. ✅ BUILT 2026-09-01 (awaiting sign-off).** All 16 level-up
@@ -1083,7 +1083,7 @@ G1 + G4 BUILT & committed as one bundle 2026-09-01 (awaiting sign-off). G3 next 
   edited directly in YAML (builder code matches, so a future `M16 Apply balance` run is
   idempotent). Deferred candidate if Shield still feels weak at G4 density: buff
   `ShieldComponent` (`_rechargeTime` 6→~4.5, `_barrierDamage` 6→~8) — it's a scene object.
-- **G4 — More enemies on screen + threat. 🟡 iter-6b BUILT 2026-09-01 `dba5f81` (early game fixed,
+- **G4 — More enemies on screen + threat. 🟡 iter-6b BUILT 2026-09-01 `4ac9fef` (early game fixed,
   mid/late open).** iter-5 (`(0,0.7)…(1500,25)` infinite) gave a denser screen on paper but a
   **sim playtest showed zero threat after ~90s** — a kiting bot never dropped below ~90% HP in 8
   min and the screen sat at 10–25 enemies (player DPS > spawn rate; enemies ~2 u/s vs player 6;
@@ -1111,10 +1111,10 @@ G1 + G4 BUILT & committed as one bundle 2026-09-01 (awaiting sign-off). G3 next 
   `Trail` `WeaponKind` — currently only the Deep Mine evolution uses it. Add new weapon(s) in
   its slot. Pure content on the existing weapon system + `UpgradeService` catalogue.
 
-## Faz 5a — Cloud profile sync (2026-09-04, committed `18d0745`, tested OK)
+## Faz 5a — Cloud profile sync (2026-09-04, committed `73e0ae1`, tested OK)
 The backend track (separate repo `~/SpaceSurvivors-backend`, Spring Boot 4 + Postgres) reached
 the point where the game can talk to it. **No gameplay code changed** — everything went in behind
-the `IProfileStore` seam opened in `0989f99`.
+the `IProfileStore` seam opened in `149b032`.
 
 - **`Core/HttpProfileStore` : `IRemoteProfileStore`** — local-first. Reads answer from a wrapped
   `LocalJsonProfileStore`; writes hit disk *synchronously* before any network call, so offline
@@ -1142,7 +1142,7 @@ Verified live: wire shapes match the Java DTOs on all four paths (PUT / GET / 40
 run created the row; real run pushed wallet 481 / 17783 lifetime scrap / ronin / 6 achievements —
 and the empty server profile correctly *lost* the merge.
 
-## Faz 5b — Online leaderboard (2026-09-04, committed `fa83b63`, tested OK)
+## Faz 5b — Online leaderboard (2026-09-04, committed `6fe1eac`, tested OK)
 - **`ILeaderboardStore.Submit` widened** `(modeId, float)` → `(modeId, RunResult)`. The local store
   still ranks on seconds alone, but the server displays kills/level and uses them to sanity-check
   the run. `Core/RunResult` is a plain `readonly struct` in Core (`RunStats` is a MonoBehaviour in
@@ -1212,7 +1212,7 @@ auth/cloud-save entry, **Azure** hosting. Client-side rule: use **Newtonsoft JSO
 (`com.unity.nuget.newtonsoft-json`), NOT `JsonUtility`, for the profile DTO so it round-trips
 with a Jackson backend. Server is a separate track. Detail in `Project_Goals.md §8`.
 
-**Backend prep pass — committed `0989f99` 2026-09-02 (user starts DB/backend).** Audited the
+**Backend prep pass — committed `149b032` 2026-09-02 (user starts DB/backend).** Audited the
 persistence layer, opened the last seams so the HTTP layer is a drop-in. No behaviour change.
 - **`PlayerProfile.userId`** (string, "" = local/anonymous — today's only mode). **Schema v4→v5**
   (additive; `Migrate()` note updated). Auth stays out of band (store carries a token); this is
