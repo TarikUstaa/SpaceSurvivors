@@ -1170,6 +1170,28 @@ holding on both sides. Profile sync kept flowing in parallel (wallet 481 → 564
 Next: display name (players can't pick one yet — everyone is `Pilot-dev-ce`), and a leaderboard
 screen (`GET /v1/scores` has no client yet, on purpose — nothing displays a board).
 
+## Faz 6 — Backend schema rework, client realigned (2026-09-07, committed, tested OK)
+Server-side redesign (see `~/SpaceSurvivors-backend/Memory_bank.md` D9-D12 for the reasoning).
+The game changed only where the wire contract did:
+
+- **`X-Dev-User` -> `X-Device-Id`**, and `/v1/profile` -> **`/v1/progress`**. `BackendConfig`
+  gained `ProgressUrl` / `PlayerUrl`; the PlayerPrefs *key* stayed `backend.userId` on purpose,
+  so existing installs keep the id they already have.
+- **Wire field `profile` -> `progress`** in `HttpProfileStore`'s three DTOs. Internal Unity
+  naming (`HttpProfileStore`, `IProfileStore`) is unchanged — the game's own vocabulary is
+  "profile", the server's is "progress", and each is coherent in its own domain.
+- **Device id is now a full GUID.** It was `Guid[..8]` = 32 bits, which by the birthday bound
+  starts colliding around ~65k players. With `device_id` UNIQUE *and* used to look a player up,
+  a collision would silently log someone into another player's account. Not a cosmetic fix.
+- The server now stamps `PlayerProfile.userId` with its `player_id` uuid (was the device id).
+
+**Not changed:** `ProfileMerge`, the sync/conflict state machine, `HttpLeaderboardStore`,
+`ILeaderboardStore`, `RunResult`, and every gameplay script. The seams held — a full schema
+rework cost the client four field renames and two strings.
+
+Verified: Unity compiles clean (0 errors), wire shapes checked against the running backend on
+all four paths, URLs resolve, existing device id preserved.
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,

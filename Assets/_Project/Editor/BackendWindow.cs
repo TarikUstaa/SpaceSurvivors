@@ -40,7 +40,7 @@ namespace SpaceSurvivors.EditorTools
                 if (url != BackendConfig.BaseUrl) BackendConfig.BaseUrl = url;
 
                 string userId = EditorGUILayout.TextField(
-                    new GUIContent("User id", "Sent as X-Dev-User. Change it to play as a second account."),
+                    new GUIContent("Device id", "Sent as X-Device-Id. Change it to play as a second account."),
                     BackendConfig.UserId);
                 if (userId != BackendConfig.UserId) BackendConfig.UserId = userId;
 

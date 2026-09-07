@@ -18,7 +18,7 @@ namespace SpaceSurvivors.Core
     {
         private const string EnabledKey = "backend.enabled";
         private const string BaseUrlKey = "backend.baseUrl";
-        private const string UserIdKey = "backend.userId";
+        private const string DeviceIdKey = "backend.userId";   // key kept: existing installs keep their id
 
         /// <summary>Local Spring Boot server. Replaced by the deployed URL later.</summary>
         public const string DefaultBaseUrl = "http://localhost:8080";
@@ -46,7 +46,7 @@ namespace SpaceSurvivors.Core
         }
 
         /// <summary>
-        /// Who this install claims to be. Sent as the <c>X-Dev-User</c> header, which the
+        /// Who this install claims to be. Sent as the <c>X-Device-Id</c> header, which the
         /// backend's dev auth filter trusts blindly — this is a stand-in, not authentication.
         /// Generated once per device so repeated launches map to the same server-side player;
         /// set it by hand to test as a second player.
@@ -58,15 +58,15 @@ namespace SpaceSurvivors.Core
         {
             get
             {
-                var stored = PlayerPrefs.GetString(UserIdKey, "");
+                var stored = PlayerPrefs.GetString(DeviceIdKey, "");
                 if (!string.IsNullOrWhiteSpace(stored)) return stored;
 
                 // First run on this device: mint a stable id and keep it.
-                var generated = "dev-" + Guid.NewGuid().ToString("N")[..8];
+                var generated = "dev-" + Guid.NewGuid().ToString("N");
                 UserId = generated;
                 return generated;
             }
-            set { PlayerPrefs.SetString(UserIdKey, (value ?? "").Trim()); PlayerPrefs.Save(); }
+            set { PlayerPrefs.SetString(DeviceIdKey, (value ?? "").Trim()); PlayerPrefs.Save(); }
         }
 
         /// <summary>
@@ -85,7 +85,8 @@ namespace SpaceSurvivors.Core
         /// <summary>File the <see cref="LocalJsonProfileStore"/> cache should use.</summary>
         public static string CacheFileName => Sandbox ? "profile.backend-sandbox.json" : "profile.json";
 
-        public static string ProfileUrl => BaseUrl + "/v1/profile";
+        public static string ProgressUrl => BaseUrl + "/v1/progress";
+        public static string PlayerUrl   => BaseUrl + "/v1/player";
         public static string ScoresUrl => BaseUrl + "/v1/scores";
     }
 }

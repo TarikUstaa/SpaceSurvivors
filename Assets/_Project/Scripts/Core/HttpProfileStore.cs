@@ -5,7 +5,7 @@ namespace SpaceSurvivors.Core
 {
     /// <summary>
     /// Cloud-save <see cref="IProfileStore"/>, talking to the Spring Boot backend's
-    /// <c>/v1/profile</c> endpoints.
+    /// <c>/v1/progress</c> endpoints.
     ///
     /// <para><b>Local first, always.</b> Every read is answered from a wrapped
     /// <see cref="LocalJsonProfileStore"/> and every write hits that cache synchronously before
@@ -108,14 +108,14 @@ namespace SpaceSurvivors.Core
 
                 case 200:
                     var response = Parse<LoadResponse>(body);
-                    if (response?.profile == null)
+                    if (response?.progress == null)
                     {
                         SetStatus(ProfileSyncStatus.Error);
                         return;
                     }
 
                     _serverVersion = response.version;
-                    if (ProfileMerge.MergeInto(_live, response.profile))
+                    if (ProfileMerge.MergeInto(_live, response.progress))
                     {
                         _cache.Save(_live);
                         ProfileRefreshed?.Invoke();
@@ -148,7 +148,7 @@ namespace SpaceSurvivors.Core
                 return;
             }
 
-            var body = Serialize(new SaveRequest { profile = _live, version = _serverVersion });
+            var body = Serialize(new SaveRequest { progress = _live, version = _serverVersion });
             if (body == null)
             {
                 SetStatus(ProfileSyncStatus.Error);
@@ -179,14 +179,14 @@ namespace SpaceSurvivors.Core
                     // Someone else wrote first. The server handed back its copy; fold it in and
                     // try again with the version it told us about.
                     var conflict = Parse<ConflictResponse>(body);
-                    if (conflict?.profile == null)
+                    if (conflict?.progress == null)
                     {
                         SetStatus(ProfileSyncStatus.Error);
                         return;
                     }
 
                     _serverVersion = conflict.serverVersion;
-                    if (ProfileMerge.MergeInto(_live, conflict.profile))
+                    if (ProfileMerge.MergeInto(_live, conflict.progress))
                     {
                         _cache.Save(_live);
                         ProfileRefreshed?.Invoke();
@@ -231,7 +231,7 @@ namespace SpaceSurvivors.Core
 
         private sealed class SaveRequest
         {
-            public PlayerProfile profile;
+            public PlayerProfile progress;
             public int version;
         }
 
@@ -242,14 +242,14 @@ namespace SpaceSurvivors.Core
 
         private sealed class LoadResponse
         {
-            public PlayerProfile profile;
+            public PlayerProfile progress;
             public int version;
         }
 
         private sealed class ConflictResponse
         {
             public int serverVersion;
-            public PlayerProfile profile;
+            public PlayerProfile progress;
         }
     }
 }

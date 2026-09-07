@@ -44,7 +44,7 @@ namespace SpaceSurvivors.Core
                 }
 
                 // Stand-in for real auth — see BackendConfig.UserId.
-                request.SetRequestHeader("X-Dev-User", userId);
+                request.SetRequestHeader("X-Device-Id", userId);
 
                 request.SendWebRequest().completed += _ => Complete(request, onDone);
             }
