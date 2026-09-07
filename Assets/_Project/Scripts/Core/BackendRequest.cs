@@ -43,8 +43,10 @@ namespace SpaceSurvivors.Core
                     request.SetRequestHeader("Content-Type", "application/json");
                 }
 
-                // Stand-in for real auth — see BackendConfig.UserId.
-                request.SetRequestHeader("X-Device-Id", userId);
+                // Stand-in for real auth — see BackendConfig.UserId. The standard header
+                // rather than a custom one, so swapping in a verified token later is a
+                // change of scheme ("Device" -> "Bearer") and nothing more.
+                request.SetRequestHeader("Authorization", "Device " + userId);
 
                 request.SendWebRequest().completed += _ => Complete(request, onDone);
             }

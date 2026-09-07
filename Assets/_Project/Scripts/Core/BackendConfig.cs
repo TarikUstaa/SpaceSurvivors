@@ -46,7 +46,7 @@ namespace SpaceSurvivors.Core
         }
 
         /// <summary>
-        /// Who this install claims to be. Sent as the <c>X-Device-Id</c> header, which the
+        /// Who this install claims to be. Sent as <c>Authorization: Device &lt;id&gt;</c>, which the
         /// backend's dev auth filter trusts blindly — this is a stand-in, not authentication.
         /// Generated once per device so repeated launches map to the same server-side player;
         /// set it by hand to test as a second player.
