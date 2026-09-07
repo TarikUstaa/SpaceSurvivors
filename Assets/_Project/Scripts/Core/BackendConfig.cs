@@ -18,7 +18,8 @@ namespace SpaceSurvivors.Core
     {
         private const string EnabledKey = "backend.enabled";
         private const string BaseUrlKey = "backend.baseUrl";
-        private const string DeviceIdKey = "backend.userId";   // key kept: existing installs keep their id
+        private const string DeviceIdKey = "backend.userId";       // key kept: existing installs keep their id
+        private const string DeviceSecretKey = "backend.deviceSecret";
 
         /// <summary>Local Spring Boot server. Replaced by the deployed URL later.</summary>
         public const string DefaultBaseUrl = "http://localhost:8080";
@@ -47,12 +48,11 @@ namespace SpaceSurvivors.Core
 
         /// <summary>
         /// Who this install claims to be. Sent as <c>Authorization: Device &lt;id&gt;</c>, which the
-        /// backend's dev auth filter trusts blindly — this is a stand-in, not authentication.
-        /// Generated once per device so repeated launches map to the same server-side player;
-        /// set it by hand to test as a second player.
+        /// The device's public half of its credential: which device this is.
         ///
-        /// <para>When real auth lands this disappears: the id will come from a verified token
-        /// and this property goes with it.</para>
+        /// <para>Generated once and kept, so repeated launches map to the same server-side
+        /// player. Safe to read and to log — on its own it proves nothing, because the server
+        /// also requires <see cref="DeviceSecret"/>.</para>
         /// </summary>
         public static string UserId
         {
@@ -67,6 +67,33 @@ namespace SpaceSurvivors.Core
                 return generated;
             }
             set { PlayerPrefs.SetString(DeviceIdKey, (value ?? "").Trim()); PlayerPrefs.Save(); }
+        }
+
+        /// <summary>
+        /// The device's private half: the proof that this really is that device.
+        ///
+        /// <para>Generated once, kept on the device, and sent only to <see cref="TokenUrl"/> —
+        /// never on an ordinary request. The server stores only a BCrypt hash of it, so a copy
+        /// of its database cannot be turned back into this value.</para>
+        ///
+        /// <para>Two GUIDs, because one is 122 bits of randomness and the server insists on at
+        /// least 32 characters. Guessing it is not a realistic attack; reading it off an
+        /// unlocked device is, which is the honest limit of device-based identity.</para>
+        ///
+        /// <para><b>Never log this.</b> It is the account.</para>
+        /// </summary>
+        public static string DeviceSecret
+        {
+            get
+            {
+                var stored = PlayerPrefs.GetString(DeviceSecretKey, "");
+                if (!string.IsNullOrWhiteSpace(stored)) return stored;
+
+                var generated = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
+                PlayerPrefs.SetString(DeviceSecretKey, generated);
+                PlayerPrefs.Save();
+                return generated;
+            }
         }
 
         /// <summary>
@@ -88,5 +115,6 @@ namespace SpaceSurvivors.Core
         public static string ProgressUrl => BaseUrl + "/v1/progress";
         public static string PlayerUrl   => BaseUrl + "/v1/player";
         public static string LeaderboardUrl => BaseUrl + "/v1/leaderboard";
+        public static string TokenUrl       => BaseUrl + "/v1/auth/token";
     }
 }

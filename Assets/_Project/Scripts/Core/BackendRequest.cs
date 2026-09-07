@@ -22,12 +22,46 @@ namespace SpaceSurvivors.Core
         public const long NoConnection = 0;
 
         /// <summary>
-        /// Send <paramref name="body"/> (or nothing, for a GET) and invoke
-        /// <paramref name="onDone"/> with the response. The callback never sees an exception —
-        /// a transport failure arrives as <see cref="NoConnection"/>.
+        /// Send an authenticated request, obtaining a token first if there is not a usable one.
+        ///
+        /// <para>A 401 means the token expired or was rejected, so it is discarded and the
+        /// request is retried once with a fresh one. Retrying more than once would loop against
+        /// a server that is refusing this device outright.</para>
         /// </summary>
-        public static void Send(string url, string method, string body, string userId,
-                                Action<long, string> onDone)
+        public static void Send(string url, string method, string body, Action<long, string> onDone)
+        {
+            BackendSession.WithToken(token =>
+            {
+                if (token == null)
+                {
+                    onDone(NoConnection, "");
+                    return;
+                }
+
+                SendRaw(url, method, body, token, (code, response) =>
+                {
+                    if (code != 401)
+                    {
+                        onDone(code, response);
+                        return;
+                    }
+
+                    BackendSession.Invalidate();
+                    BackendSession.WithToken(refreshed =>
+                    {
+                        if (refreshed == null) onDone(NoConnection, "");
+                        else SendRaw(url, method, body, refreshed, onDone);
+                    });
+                });
+            });
+        }
+
+        /// <summary>
+        /// Fire one request with the token given — or none at all, which is how the token
+        /// endpoint itself is called. Everything else should use <see cref="Send"/>.
+        /// </summary>
+        public static void SendRaw(string url, string method, string body, string token,
+                                   Action<long, string> onDone)
         {
             try
             {
@@ -43,10 +77,10 @@ namespace SpaceSurvivors.Core
                     request.SetRequestHeader("Content-Type", "application/json");
                 }
 
-                // Stand-in for real auth — see BackendConfig.UserId. The standard header
-                // rather than a custom one, so swapping in a verified token later is a
-                // change of scheme ("Device" -> "Bearer") and nothing more.
-                request.SetRequestHeader("Authorization", "Device " + userId);
+                if (token != null)
+                {
+                    request.SetRequestHeader("Authorization", "Bearer " + token);
+                }
 
                 request.SendWebRequest().completed += _ => Complete(request, onDone);
             }

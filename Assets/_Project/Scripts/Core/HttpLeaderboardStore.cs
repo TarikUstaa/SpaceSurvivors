@@ -23,12 +23,10 @@ namespace SpaceSurvivors.Core
     {
         private readonly ILeaderboardStore _local;
         private readonly string _url;
-        private readonly string _userId;
 
-        public HttpLeaderboardStore(string url, string userId, ILeaderboardStore local = null)
+        public HttpLeaderboardStore(string url, ILeaderboardStore local = null)
         {
             _url = url;
-            _userId = userId;
             _local = local ?? new LocalPrefsLeaderboardStore();
         }
 
@@ -73,7 +71,7 @@ namespace SpaceSurvivors.Core
             });
             if (body == null) return;
 
-            BackendRequest.Send(_url, "POST", body, _userId, OnPosted);
+            BackendRequest.Send(_url, "POST", body, OnPosted);
         }
 
         private static void OnPosted(long code, string body)

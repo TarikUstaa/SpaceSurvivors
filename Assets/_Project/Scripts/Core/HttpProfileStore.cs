@@ -31,7 +31,6 @@ namespace SpaceSurvivors.Core
 
         private readonly IProfileStore _cache;
         private readonly string _url;
-        private readonly string _userId;
 
         private PlayerProfile _live;
         private ProfileSyncStatus _status = ProfileSyncStatus.Syncing;
@@ -46,10 +45,9 @@ namespace SpaceSurvivors.Core
         private bool _pushQueued;
         private int _conflictRetries;
 
-        public HttpProfileStore(string url, string userId, IProfileStore cache = null)
+        public HttpProfileStore(string url, IProfileStore cache = null)
         {
             _url = url;
-            _userId = userId;
             _cache = cache ?? new LocalJsonProfileStore();
         }
 
@@ -62,8 +60,10 @@ namespace SpaceSurvivors.Core
         public PlayerProfile Load()
         {
             _live = _cache.Load();
-            if (string.IsNullOrEmpty(_live.userId)) _live.userId = _userId;
 
+            // userId is left alone: the server stamps its own player id into the blob on the
+            // first successful save, and that value is the authoritative one. Guessing at it
+            // here would only put a placeholder in the way.
             Pull();
             return _live;   // immediately — the pull lands later and merges into this instance
         }
@@ -221,7 +221,7 @@ namespace SpaceSurvivors.Core
         }
 
         private void Send(string method, string body, Action<long, string> onDone)
-            => BackendRequest.Send(_url, method, body, _userId, onDone);
+            => BackendRequest.Send(_url, method, body, onDone);
 
         private static string Serialize(object value) => BackendRequest.Serialize(value);
 
