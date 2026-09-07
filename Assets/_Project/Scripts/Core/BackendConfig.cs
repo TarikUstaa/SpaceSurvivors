@@ -87,6 +87,6 @@ namespace SpaceSurvivors.Core
 
         public static string ProgressUrl => BaseUrl + "/v1/progress";
         public static string PlayerUrl   => BaseUrl + "/v1/player";
-        public static string ScoresUrl => BaseUrl + "/v1/scores";
+        public static string LeaderboardUrl => BaseUrl + "/v1/leaderboard";
     }
 }

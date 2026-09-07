@@ -1184,6 +1184,9 @@ The game changed only where the wire contract did:
   starts colliding around ~65k players. With `device_id` UNIQUE *and* used to look a player up,
   a collision would silently log someone into another player's account. Not a cosmetic fix.
 - The server now stamps `PlayerProfile.userId` with its `player_id` uuid (was the device id).
+- **`/v1/scores` -> `/v1/leaderboard`** (`BackendConfig.ScoresUrl` -> `LeaderboardUrl`). The
+  server renamed table, package and classes to match the endpoint, so all four now say the
+  same word; `HttpLeaderboardStore` was already named right.
 
 **Not changed:** `ProfileMerge`, the sync/conflict state machine, `HttpLeaderboardStore`,
 `ILeaderboardStore`, `RunResult`, and every gameplay script. The seams held — a full schema

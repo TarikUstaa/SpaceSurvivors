@@ -4,7 +4,7 @@ namespace SpaceSurvivors.Core
 {
     /// <summary>
     /// Online leaderboard <see cref="ILeaderboardStore"/>, posting to the backend's
-    /// <c>/v1/scores</c> endpoint.
+    /// <c>/v1/leaderboard</c> endpoint.
     ///
     /// <para>Same shape as <see cref="HttpProfileStore"/>: a local store answers every question
     /// immediately and the network is a background extra. <see cref="Submit"/> in particular
@@ -17,7 +17,7 @@ namespace SpaceSurvivors.Core
     /// trusting us, which is what keeps a tampered client from writing a fake record.</para>
     ///
     /// <para>Reading other players' scores is not here yet — nothing displays a board. That
-    /// endpoint (<c>GET /v1/scores</c>) gets a client when a leaderboard screen needs it.</para>
+    /// endpoint (<c>GET /v1/leaderboard</c>) gets a client when a leaderboard screen needs it.</para>
     /// </summary>
     public sealed class HttpLeaderboardStore : ILeaderboardStore
     {

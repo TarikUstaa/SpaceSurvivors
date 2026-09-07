@@ -26,7 +26,7 @@ namespace SpaceSurvivors.Core
             var cache = new LocalJsonProfileStore(BackendConfig.CacheFileName);
 
             ProfileService.SetStore(new HttpProfileStore(BackendConfig.ProgressUrl, userId, cache));
-            HighScoreService.SetStore(new HttpLeaderboardStore(BackendConfig.ScoresUrl, userId));
+            HighScoreService.SetStore(new HttpLeaderboardStore(BackendConfig.LeaderboardUrl, userId));
 
             Debug.Log($"[Backend] cloud sync on — {BackendConfig.BaseUrl} as '{userId}'"
                       + (BackendConfig.Sandbox ? "  [SANDBOX cache]" : ""));
