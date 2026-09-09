@@ -66,6 +66,21 @@ namespace SpaceSurvivors.UI
 
         private bool _saving;
 
+        /// <summary>
+        /// The name the status line is talking about, or empty when it is complaining about
+        /// whatever is typed right now.
+        ///
+        /// <para>This is what lets the message be cleared at the right moment and only
+        /// then. Leaving "3-16 characters" up after the player fixes it contradicts the
+        /// Save button that just went live; leaving "that name is taken" up while they type
+        /// a different name says something untrue about the new one. Both go when the text
+        /// stops being the text the message was about — and a result stays put while they
+        /// are still looking at the name that earned it.</para>
+        /// </summary>
+        private string _statusAbout = "";
+
+        private bool _hasStatus;
+
         private void Awake()
         {
             EnsureEventSystem();
@@ -139,7 +154,7 @@ namespace SpaceSurvivors.UI
             string wanted = _nameInput.text.Trim();
             _saving = true;
             RefreshSaveState();
-            SetStatus("saving…", _statusNeutral);
+            SetStatus("saving…", _statusNeutral, wanted);
 
             PlayerIdentity.Rename(wanted, (outcome, message) =>
             {
@@ -151,16 +166,16 @@ namespace SpaceSurvivors.UI
                     case RenameOutcome.Ok:
                         _confirmedName = message;
                         if (_nameInput != null) _nameInput.text = message;
-                        SetStatus("saved", _statusGood);
+                        SetStatus("saved", _statusGood, message);
                         break;
 
                     case RenameOutcome.Taken:
                     case RenameOutcome.Invalid:
-                        SetStatus(message, _statusBad);
+                        SetStatus(message, _statusBad, wanted);
                         break;
 
                     default:
-                        SetStatus(message, _statusNeutral);
+                        SetStatus(message, _statusNeutral, wanted);
                         break;
                 }
                 RefreshSaveState();
@@ -181,13 +196,30 @@ namespace SpaceSurvivors.UI
 
             _saveButton.interactable = !_saving && legal && changed && PlayerIdentity.Available;
 
-            // Only nag about the rule once they have typed enough to mean it, and never
-            // over the top of a result they are still reading.
-            if (!_saving && typed.Length > 0 && !legal) SetStatus(reason, _statusBad);
+            if (_saving) return;
+
+            if (typed.Length > 0 && !legal)
+            {
+                // Only nag once they have typed enough to mean it.
+                SetStatus(reason, _statusBad);
+            }
+            else if (_hasStatus && !string.Equals(typed, _statusAbout, StringComparison.Ordinal))
+            {
+                // The message was about a different name than the one in the box now. With
+                // no server the notice stays, because otherwise Save would sit there dead
+                // with nothing on screen saying why.
+                SetStatus(PlayerIdentity.Available ? "" : "cloud sync is off", _statusNeutral);
+            }
         }
 
-        private void SetStatus(string text, Color colour)
+        /// <summary>
+        /// Show a message about <paramref name="about"/>, or about the live text when that
+        /// is null. See <see cref="_statusAbout"/> for why the distinction matters.
+        /// </summary>
+        private void SetStatus(string text, Color colour, string about = null)
         {
+            _hasStatus = !string.IsNullOrEmpty(text);
+            _statusAbout = about ?? (_nameInput != null ? _nameInput.text.Trim() : "");
             if (_nameStatus == null) return;
             _nameStatus.text = text;
             _nameStatus.color = colour;
