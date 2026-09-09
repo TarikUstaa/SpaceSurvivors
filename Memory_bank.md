@@ -1353,10 +1353,19 @@ Lives in `Assembly-CSharp-Editor` because the RunCommand dynamic assembly can't 
 run-stats screen, TMP conversion, converting the rest of the bootstrap-code UI to prefabs.
 
 ## Open Decisions / TODO
-- [ ] Confirm Input System package is installed (Package Manager) before M1 wiring.
-- [ ] Decide pool implementation: custom `PoolManager` vs Unity `ObjectPool<T>`.
-- [ ] Set up Layer collision matrix (Player / Enemy / PlayerProjectile / Pickup).
-- [ ] Add `.gitignore` (Unity template) and init Git repo.
+
+*The M1-era setup items (Input System, pooling, layer matrix, git) are all long done.*
+
+- [ ] **Playtest sign-off** — M14c, M16, M17, M18, M19, M20 and the iter-6b/6c difficulty
+      curves are all committed and unplayed by a human. The recurring open question is
+      mid/late-game feel: the sim bot kites and never drops below ~90% HP past ~6 min, so
+      it cannot judge whether the ramp is right.
+- [ ] **G5 — replace the Mine weapon.** Drop Mine Layer + Deep Mine; decide what fills the
+      slot. Assets still in the project (`MineLayer.asset`, `Mine.cs`, `Evo_DeepMine.prefab`…).
+- [ ] **Leaderboard + Profile screens** (2026-09-09) — built and verified against the live
+      backend, but not looked at by a human for feel/layout.
+- [ ] **G2 — readability** — deferred; enemy sprite tints looked worse. Revisit with a
+      different approach (outline / rim light rather than body tint) if it still bothers.
 
 ## Key Facts (so future sessions don't re-derive them)
 - Balance: first mini-boss at exactly 180s. Player power ~doubles every 2 levels.
