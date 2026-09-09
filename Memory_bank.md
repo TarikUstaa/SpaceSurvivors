@@ -1195,7 +1195,7 @@ rework cost the client four field renames and two strings.
 Verified: Unity compiles clean (0 errors), wire shapes checked against the running backend on
 all four paths, URLs resolve, existing device id preserved.
 
-## Menu leaderboard + Stats screen (2026-09-09, committed `8ec06a3`/`1e542ee`)
+## Menu leaderboard + Profile screen (2026-09-09, committed `8ec06a3` … `d6c369b`)
 The main-menu pilot card (best time / kills / scrap / achievements) is replaced by the
 ranked board; those four numbers move to a new Stats scene beside Shop and Hangar.
 
@@ -1213,11 +1213,44 @@ ranked board; those four numbers move to a new Stats scene beside Shop and Hanga
   `ShopBuilder`). `StatsButton` added to the meta row; `MetaScreenSkinner` skins the scene.
 - **`MenuStatsReadout` deleted** — nothing builds it now.
 
-Verified: compiles clean (0 errors), all builders ran, scene structure + serialized wiring
-checked, and in play mode (backend on, server down) the board correctly showed
-"offline — your best only" with the local best in the highlighted row. **Still to check by
-hand:** the look of it, STATS -> career -> BACK navigation, and the board against a running
-server with real entries.
+**The Stats screen became Profile** (`04e69dc`, `730e48d`, `d6c369b`) — the account on top,
+the career below, one scroll. The two halves are deliberately not the same kind of thing:
+the account belongs to the *server* and is only ever asked to change, the career is the
+local save the server merely stores. A player thinks of both as "me", so they share a
+screen; the code keeps them apart because they fail differently.
+
+- **`PlayerIdentity` (Core)** — the account's client side. `Fetch` reads `GET /v1/player`,
+  `Rename` writes `PATCH /v1/player` and reports **three** distinct failures — taken (409),
+  invalid (400), offline — because the player's next move differs for each. The server's
+  name rules are mirrored locally so a bad name costs no round trip; the server still
+  enforces them, since a client's checks are never a defence. Name cached in PlayerPrefs so
+  the field is never blank while the fetch is out.
+- **Backend widened** `GET /v1/player` to carry `playerId` + `firstLoginDate` (backend
+  `3192891`). The id is deliberately **not displayed** — a wall of hex means nothing on your
+  own profile — but the endpoint hands it over because the caller has already proved they
+  are that player. The device id stays hidden: it is half a credential.
+- **Layout:** ACCOUNT and STATS are centred 28pt peers; RUNS / LIFETIME / NOW are left 20pt
+  subdivisions. A `VerticalLayoutGroup` + `ContentSizeFitter` under the `ScrollRect` means
+  rows can be added without anyone recomputing a height.
+
+**Two defects found by testing it live, both fixed:**
+1. The status line argued with itself — fix "ab" to something legal and "3-16 characters"
+   stayed up beside a Save button that had just gone live; type a second name after a
+   rejection and "that name is taken" said something untrue about the new one. The status
+   now remembers *which name it is about*: a complaint goes when the text changes, a result
+   stays while the player is still looking at the name that earned it.
+2. The account fields read "–" against a server still running the older build. Not a bug —
+   the client degrading correctly — but it is the reminder that **the server must be
+   restarted after a backend change** before any client test means anything.
+
+Verified end to end against the running backend: board shows real rankings in both modes
+with this player's row highlighted at the right rank, tabs switch, rename walks 400 -> 409
+-> 200 with the right message and colour each time, the new name propagates to the
+leaderboard, and the column scrolls (942 > 692).
+
+**⚠ Six seeded players (Orion, Vega, Nova, Lyra, Draco, Corvus) are left in the local DB on
+purpose** so the board looks populated while the UI is being worked on. Purge them before
+any real playtest — they are not real scores.
 
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
