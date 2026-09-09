@@ -37,11 +37,11 @@ namespace SpaceSurvivors.EditorTools
 
         /// <summary>
         /// The bottom meta row, left to right. Each button object is created by its own
-        /// builder's menu item (Shop/Hangar/Achievements/Stats) or lives in the base scene
+        /// builder's menu item (Shop/Hangar/Profile/Achievements) or lives in the base scene
         /// (Settings); this list is only which ones to rescue and restyle here.
         /// </summary>
         private static readonly string[] MetaButtonNames =
-            { "ShopButton", "HangarButton", "StatsButton", "AchievementsButton", "SettingsButton" };
+            { "ShopButton", "HangarButton", "ProfileButton", "AchievementsButton", "SettingsButton" };
 
         // ------------------------------------------------------------------ entry
 
@@ -286,7 +286,7 @@ namespace SpaceSurvivors.EditorTools
             hlg.childControlWidth = hlg.childControlHeight = true;
             hlg.childForceExpandWidth = hlg.childForceExpandHeight = false;
 
-            // StatsButton is created by StatsBuilder's own menu item; StyleMetaButton skips it
+            // ProfileButton is created by ProfileBuilder's own menu item; StyleMetaButton skips it
             // if it is not there yet, so the order the two builders run in does not matter.
             foreach (var name in MetaButtonNames)
                 StyleMetaButton(canvas, name, row, semi, panelSpr);
