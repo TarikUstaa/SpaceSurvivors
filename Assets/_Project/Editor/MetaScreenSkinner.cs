@@ -35,6 +35,7 @@ namespace SpaceSurvivors.EditorTools
             SkinScene("Assets/_Project/Scenes/Achievements.unity", "ACHIEVEMENTS", tightenGrid: true, panelHeight: 1000f);
             SkinScene("Assets/_Project/Scenes/Shop.unity", "UPGRADES");
             SkinScene("Assets/_Project/Scenes/MapSelect.unity", "SELECT MAP");
+            SkinScene("Assets/_Project/Scenes/Stats.unity", "CAREER");
             SkinSettingsPanel();
             Debug.Log("[MetaScreenSkinner] meta screens skinned.");
         }

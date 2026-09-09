@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SpaceSurvivors.Core
 {
@@ -28,6 +29,63 @@ namespace SpaceSurvivors.Core
         /// server uses them to sanity-check the run.</para>
         /// </summary>
         bool Submit(string modeId, RunResult run);
+
+        /// <summary>
+        /// Fetch the ranked board for a mode. Unlike the rest of this interface there is no
+        /// synchronous answer to give — a board is other players' data, which only the server
+        /// has — so the result arrives through <paramref name="onDone"/> instead.
+        ///
+        /// <para><paramref name="onDone"/> is always called exactly once, on the main thread,
+        /// and never with null: a store with nothing to show returns an empty
+        /// <see cref="LeaderboardBoard"/> with <see cref="LeaderboardBoard.FromServer"/> false,
+        /// so the screen can say "offline" rather than hang on a spinner.</para>
+        /// </summary>
+        void FetchBoard(string modeId, int limit, Action<LeaderboardBoard> onDone);
+    }
+
+    /// <summary>The ranked board for one mode, plus where this player sits in it.</summary>
+    public sealed class LeaderboardBoard
+    {
+        /// <summary>The game's mode id this board is for (e.g. <c>Mode_Infinite</c>).</summary>
+        public string ModeId;
+
+        /// <summary>
+        /// True when the rows came from the server. False means the network was unreachable
+        /// or the backend is switched off, and <see cref="Entries"/> is at most this device's
+        /// own best — the screen shows that plainly rather than pretending it is a ranking.
+        /// </summary>
+        public bool FromServer;
+
+        /// <summary>Top rows, best first. Never null; may be empty.</summary>
+        public IReadOnlyList<LeaderboardRow> Entries = Array.Empty<LeaderboardRow>();
+
+        /// <summary>
+        /// This player's own standing, even when they fall outside <see cref="Entries"/>.
+        /// Null when they have no ranked run in this mode yet.
+        /// </summary>
+        public LeaderboardRow Me;
+
+        public static LeaderboardBoard Offline(string modeId, LeaderboardRow me = null) => new()
+        {
+            ModeId = modeId,
+            FromServer = false,
+            Entries = me != null ? new[] { me } : Array.Empty<LeaderboardRow>(),
+            Me = me,
+        };
+    }
+
+    /// <summary>One line of a <see cref="LeaderboardBoard"/>.</summary>
+    public sealed class LeaderboardRow
+    {
+        /// <summary>1-based position. 0 when unknown (a local-only "your best" row).</summary>
+        public int Rank;
+        public string Name = "";
+        public float Seconds;
+        public int Kills;
+        public int Level;
+
+        /// <summary>Set by the store so the screen can highlight this player's row.</summary>
+        public bool IsMe;
     }
 
     /// <summary>Default <see cref="ILeaderboardStore"/>: per-mode bests in <see cref="UnityEngine.PlayerPrefs"/>.</summary>
@@ -45,6 +103,20 @@ namespace SpaceSurvivors.Core
             UnityEngine.PlayerPrefs.SetFloat(key, run.SurvivedSeconds);
             UnityEngine.PlayerPrefs.Save();
             return true;
+        }
+
+        /// <summary>
+        /// There is no board to fetch without a server — this store only ever knew this
+        /// device. It answers with the one row it has (this player's best) so the screen has
+        /// something honest to show, marked <see cref="LeaderboardBoard.FromServer"/> false.
+        /// </summary>
+        public void FetchBoard(string modeId, int limit, Action<LeaderboardBoard> onDone)
+        {
+            float best = BestSeconds(modeId);
+            LeaderboardRow me = best > 0f
+                ? new LeaderboardRow { Rank = 0, Name = "YOU", Seconds = best, IsMe = true }
+                : null;
+            onDone(LeaderboardBoard.Offline(modeId, me));
         }
     }
 }

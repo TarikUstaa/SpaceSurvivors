@@ -35,6 +35,14 @@ namespace SpaceSurvivors.EditorTools
         private static readonly Color InkMute = new(0.5f, 0.62f, 0.74f);
         private static readonly Color Panel = new(0.66f, 0.86f, 1f, 1f);
 
+        /// <summary>
+        /// The bottom meta row, left to right. Each button object is created by its own
+        /// builder's menu item (Shop/Hangar/Achievements/Stats) or lives in the base scene
+        /// (Settings); this list is only which ones to rescue and restyle here.
+        /// </summary>
+        private static readonly string[] MetaButtonNames =
+            { "ShopButton", "HangarButton", "StatsButton", "AchievementsButton", "SettingsButton" };
+
         // ------------------------------------------------------------------ entry
 
         [MenuItem("SpaceSurvivors/Build/M20 Main Menu redesign")]
@@ -195,13 +203,12 @@ namespace SpaceSurvivors.EditorTools
 
             var panelSpr = AssetDatabase.LoadAssetAtPath<Sprite>(Gen + "MenuPanel.png");
             var vignetteSpr = AssetDatabase.LoadAssetAtPath<Sprite>(Gen + "MenuVignette.png");
-            var scrapSpr = AssetDatabase.LoadAssetAtPath<Sprite>(Gen + "ScrapChip.png");
 
             // Rescue the meta buttons before nuking a MetaRow left by a previous run —
             // they carry LoadSceneButton / PanelToggle wiring we must not destroy.
             var oldRow = canvas.Find("MetaRow");
             if (oldRow != null)
-                foreach (var n in new[] { "ShopButton", "HangarButton", "AchievementsButton", "SettingsButton" })
+                foreach (var n in MetaButtonNames)
                 {
                     var b = oldRow.Find(n);
                     if (b != null) b.SetParent(canvas, false);
@@ -217,7 +224,8 @@ namespace SpaceSurvivors.EditorTools
             Kill(canvas, "Tagline");
             Kill(canvas, "TitleTop");
             Kill(canvas, "TitleShadow");
-            Kill(canvas, "PilotRecord");
+            Kill(canvas, "PilotRecord");       // replaced by the leaderboard; kill any left by an older run
+            Kill(canvas, "MenuLeaderboard");
             Kill(canvas, "MetaRow");
             Kill(canvas, "VersionLabel");
 
@@ -271,14 +279,16 @@ namespace SpaceSurvivors.EditorTools
             row.anchorMin = row.anchorMax = new Vector2(0.5f, 0f);
             row.pivot = new Vector2(0.5f, 0f);
             row.anchoredPosition = new Vector2(0f, 34f);
-            row.sizeDelta = new Vector2(880, 60);
+            row.sizeDelta = new Vector2(1000, 60);
             var hlg = row.gameObject.AddComponent<HorizontalLayoutGroup>();
-            hlg.spacing = 14f;
+            hlg.spacing = 12f;
             hlg.childAlignment = TextAnchor.MiddleCenter;
             hlg.childControlWidth = hlg.childControlHeight = true;
             hlg.childForceExpandWidth = hlg.childForceExpandHeight = false;
 
-            foreach (var name in new[] { "ShopButton", "HangarButton", "AchievementsButton", "SettingsButton" })
+            // StatsButton is created by StatsBuilder's own menu item; StyleMetaButton skips it
+            // if it is not there yet, so the order the two builders run in does not matter.
+            foreach (var name in MetaButtonNames)
                 StyleMetaButton(canvas, name, row, semi, panelSpr);
 
             // Quit — small, bottom-right
@@ -293,8 +303,9 @@ namespace SpaceSurvivors.EditorTools
             var quitLabel = NewText("Label", quit.transform, semi, "QUIT", 20, new Color(1f, 0.9f, 0.9f));
             Stretch(quitLabel.rectTransform);
 
-            // Pilot record panel — left side
-            BuildPilotRecord(canvas, panelSpr, scrapSpr, semi, med);
+            // Leaderboard panel — left side, in the slot the pilot-record card used to hold.
+            // The career stats it carried now live on their own Stats screen (StatsBuilder).
+            BuildLeaderboard(canvas, panelSpr, semi, med);
 
             var version = NewText("VersionLabel", canvas, light, "v0.20", 16,
                 new Color(InkMute.r, InkMute.g, InkMute.b, 0.7f));
@@ -369,49 +380,129 @@ namespace SpaceSurvivors.EditorTools
             }
         }
 
-        private static void BuildPilotRecord(Transform canvas, Sprite panel, Sprite scrap, Font semi, Font med)
+        /// <summary>
+        /// The ranked board in the menu's left slot: a title, two mode tabs, and a column of
+        /// fixed rows filled at runtime by <see cref="MenuLeaderboard"/>. Taller and a little
+        /// wider than the old pilot card because a list needs the room.
+        /// </summary>
+        private static void BuildLeaderboard(Transform canvas, Sprite panel, Font semi, Font med)
         {
-            var card = NewImage("PilotRecord", canvas, panel, new Color(0.55f, 0.78f, 1f, 0.92f));
+            const int rowCount = 8;
+            const float rowHeight = 34f;
+            const float headerSpace = 96f;   // title + tab strip
+            const float footerSpace = 30f;   // status line
+
+            var card = NewImage("MenuLeaderboard", canvas, panel, new Color(0.55f, 0.78f, 1f, 0.92f));
             card.type = Image.Type.Sliced;
             var rt = card.rectTransform;
             rt.anchorMin = rt.anchorMax = new Vector2(0f, 0.5f);
             rt.pivot = new Vector2(0f, 0.5f);
-            rt.anchoredPosition = new Vector2(40f, -30f);
-            rt.sizeDelta = new Vector2(300, 250);
+            rt.anchoredPosition = new Vector2(40f, -20f);
+            rt.sizeDelta = new Vector2(340, headerSpace + rowCount * rowHeight + footerSpace + 24f);
 
-            var header = NewText("Header", card.transform, semi, "PILOT RECORD", 20, new Color(0.8f, 0.93f, 1f));
+            var header = NewText("Header", card.transform, semi, "LEADERBOARD", 20, new Color(0.8f, 0.93f, 1f));
             var hrt = (RectTransform)header.transform;
             hrt.anchorMin = new Vector2(0f, 1f); hrt.anchorMax = new Vector2(1f, 1f); hrt.pivot = new Vector2(0.5f, 1f);
-            hrt.sizeDelta = new Vector2(-32, 40); hrt.anchoredPosition = new Vector2(0f, -14f);
+            hrt.sizeDelta = new Vector2(-32, 34); hrt.anchoredPosition = new Vector2(0f, -12f);
             header.alignment = TextAnchor.MiddleLeft;
 
-            var stats = card.gameObject.AddComponent<MenuStatsReadout>();
-            var so = new SerializedObject(stats);
-            so.FindProperty("_bestTimeValue").objectReferenceValue = Row(card.transform, med, semi, "BEST TIME", 0.63f);
-            so.FindProperty("_killsValue").objectReferenceValue = Row(card.transform, med, semi, "KILLS", 0.45f);
-            so.FindProperty("_scrapValue").objectReferenceValue = Row(card.transform, med, semi, "SCRAP", 0.27f);
-            so.FindProperty("_achievementsValue").objectReferenceValue = Row(card.transform, med, semi, "ACHIEVEMENTS", 0.09f);
+            // Two tabs, side by side under the title.
+            Button infiniteTab = Tab(card.transform, panel, semi, "INFINITE", 0f);
+            Button campaignTab = Tab(card.transform, panel, semi, "CAMPAIGN", 0.5f);
+
+            var board = card.gameObject.AddComponent<MenuLeaderboard>();
+            var so = new SerializedObject(board);
+            so.FindProperty("_infiniteTab").objectReferenceValue = infiniteTab;
+            so.FindProperty("_campaignTab").objectReferenceValue = campaignTab;
+
+            var rowsProp = so.FindProperty("_rows");
+            rowsProp.arraySize = rowCount;
+            for (int i = 0; i < rowCount; i++)
+            {
+                float top = -(headerSpace + i * rowHeight);
+                var element = rowsProp.GetArrayElementAtIndex(i);
+                BoardRow(card.transform, med, semi, i, top, rowHeight,
+                    out var rowRoot, out var rank, out var name, out var time, out var highlight);
+                element.FindPropertyRelative("root").objectReferenceValue = rowRoot;
+                element.FindPropertyRelative("rank").objectReferenceValue = rank;
+                element.FindPropertyRelative("name").objectReferenceValue = name;
+                element.FindPropertyRelative("time").objectReferenceValue = time;
+                element.FindPropertyRelative("highlight").objectReferenceValue = highlight;
+            }
+
+            var status = NewText("Status", card.transform, med, "", 15, new Color(0.62f, 0.76f, 0.9f));
+            var srt = (RectTransform)status.transform;
+            srt.anchorMin = new Vector2(0f, 0f); srt.anchorMax = new Vector2(1f, 0f); srt.pivot = new Vector2(0.5f, 0f);
+            srt.sizeDelta = new Vector2(-28, 24); srt.anchoredPosition = new Vector2(0f, 10f);
+            status.alignment = TextAnchor.MiddleLeft;
+            status.fontStyle = FontStyle.Italic;
+            so.FindProperty("_statusLabel").objectReferenceValue = status;
+
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        private static Text Row(Transform card, Font labelFont, Font valueFont, string label, float y)
+        private static Button Tab(Transform card, Sprite panel, Font font, string label, float xFraction)
         {
-            var l = NewText(label + "Label", card, labelFont, label, 17, new Color(0.66f, 0.8f, 0.92f));
-            var lrt = (RectTransform)l.transform;
-            lrt.anchorMin = lrt.anchorMax = new Vector2(0f, y);
-            lrt.pivot = new Vector2(0f, 0.5f);
-            lrt.anchoredPosition = new Vector2(18f, 0f);
-            lrt.sizeDelta = new Vector2(190, 30);
-            l.alignment = TextAnchor.MiddleLeft;
+            var go = new GameObject(label + "Tab", typeof(RectTransform), typeof(Image), typeof(Button));
+            go.transform.SetParent(card, false);
+            var img = go.GetComponent<Image>();
+            img.sprite = panel;
+            img.type = Image.Type.Sliced;
 
-            var v = NewText(label + "Value", card, valueFont, "0", 19, new Color(0.94f, 0.99f, 1f));
-            var vrt = (RectTransform)v.transform;
-            vrt.anchorMin = vrt.anchorMax = new Vector2(1f, y);
-            vrt.pivot = new Vector2(1f, 0.5f);
-            vrt.anchoredPosition = new Vector2(-18f, 0f);
-            vrt.sizeDelta = new Vector2(120, 30);
-            v.alignment = TextAnchor.MiddleRight;
-            return v;
+            var brt = (RectTransform)go.transform;
+            brt.anchorMin = new Vector2(xFraction, 1f);
+            brt.anchorMax = new Vector2(xFraction + 0.5f, 1f);
+            brt.pivot = new Vector2(0.5f, 1f);
+            brt.offsetMin = new Vector2(xFraction == 0f ? 14f : 4f, 0f);
+            brt.offsetMax = new Vector2(xFraction == 0f ? -4f : -14f, 0f);
+            brt.sizeDelta = new Vector2(brt.sizeDelta.x, 32f);
+            brt.anchoredPosition = new Vector2(brt.anchoredPosition.x, -52f);
+
+            var txt = NewText("Label", go.transform, font, label, 15, new Color(0.9f, 0.97f, 1f));
+            Stretch(txt.rectTransform);
+            txt.alignment = TextAnchor.MiddleCenter;
+            return go.GetComponent<Button>();
+        }
+
+        private static void BoardRow(Transform card, Font labelFont, Font valueFont, int index,
+            float top, float height,
+            out GameObject root, out Text rank, out Text name, out Text time, out Image highlight)
+        {
+            var rowGo = new GameObject($"Row{index}", typeof(RectTransform));
+            rowGo.transform.SetParent(card, false);
+            var rrt = (RectTransform)rowGo.transform;
+            rrt.anchorMin = new Vector2(0f, 1f); rrt.anchorMax = new Vector2(1f, 1f); rrt.pivot = new Vector2(0.5f, 1f);
+            rrt.sizeDelta = new Vector2(-20, height);
+            rrt.anchoredPosition = new Vector2(0f, top);
+            root = rowGo;
+
+            var hi = new GameObject("Highlight", typeof(RectTransform), typeof(Image));
+            hi.transform.SetParent(rowGo.transform, false);
+            var hiImg = hi.GetComponent<Image>();
+            hiImg.color = new Color(1f, 0.86f, 0.4f, 0.16f);
+            hiImg.raycastTarget = false;
+            hiImg.enabled = false;
+            Stretch((RectTransform)hi.transform);
+            highlight = hiImg;
+
+            rank = NewText("Rank", rowGo.transform, valueFont, "", 16, new Color(0.7f, 0.83f, 0.95f));
+            var rankRt = (RectTransform)rank.transform;
+            rankRt.anchorMin = new Vector2(0f, 0f); rankRt.anchorMax = new Vector2(0f, 1f); rankRt.pivot = new Vector2(0f, 0.5f);
+            rankRt.sizeDelta = new Vector2(38f, 0f); rankRt.anchoredPosition = new Vector2(12f, 0f);
+            rank.alignment = TextAnchor.MiddleLeft;
+
+            name = NewText("Name", rowGo.transform, labelFont, "", 16, new Color(0.92f, 0.98f, 1f));
+            var nameRt = (RectTransform)name.transform;
+            nameRt.anchorMin = new Vector2(0f, 0f); nameRt.anchorMax = new Vector2(1f, 1f); nameRt.pivot = new Vector2(0f, 0.5f);
+            nameRt.offsetMin = new Vector2(54f, 0f); nameRt.offsetMax = new Vector2(-78f, 0f);
+            name.alignment = TextAnchor.MiddleLeft;
+            name.horizontalOverflow = HorizontalWrapMode.Overflow;
+
+            time = NewText("Time", rowGo.transform, valueFont, "", 16, new Color(0.94f, 0.99f, 1f));
+            var timeRt = (RectTransform)time.transform;
+            timeRt.anchorMin = new Vector2(1f, 0f); timeRt.anchorMax = new Vector2(1f, 1f); timeRt.pivot = new Vector2(1f, 0.5f);
+            timeRt.sizeDelta = new Vector2(74f, 0f); timeRt.anchoredPosition = new Vector2(-12f, 0f);
+            time.alignment = TextAnchor.MiddleRight;
         }
 
         private static void RestyleSettings(Transform canvas, Font semi, Font med)

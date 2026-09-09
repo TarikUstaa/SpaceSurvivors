@@ -33,5 +33,14 @@ namespace SpaceSurvivors.Core
             if (record) RecordSet?.Invoke(modeId, run.SurvivedSeconds);
             return record;
         }
+
+        /// <summary>
+        /// Fetch the ranked board for a mode. The callback runs once on the main thread and
+        /// is never handed null — an offline store answers with this device's own best,
+        /// flagged <see cref="LeaderboardBoard.FromServer"/> false. See
+        /// <see cref="ILeaderboardStore.FetchBoard"/>.
+        /// </summary>
+        public static void FetchBoard(string modeId, int limit, Action<LeaderboardBoard> onDone)
+            => Store.FetchBoard(modeId, limit, onDone);
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceSurvivors.Core
@@ -41,6 +43,87 @@ namespace SpaceSurvivors.Core
 
             Post(modeId, run);
             return isLocalRecord;
+        }
+
+        /// <summary>
+        /// Pull the ranked board. Falls back to the local store's single "your best" row when
+        /// the mode is not one the server ranks, or when the request does not come back — the
+        /// screen distinguishes the two by <see cref="LeaderboardBoard.FromServer"/>.
+        /// </summary>
+        public void FetchBoard(string modeId, int limit, Action<LeaderboardBoard> onDone)
+        {
+            string mode = ToWireMode(modeId);
+            if (mode == null)
+            {
+                _local.FetchBoard(modeId, limit, onDone);
+                return;
+            }
+
+            int clamped = Mathf.Clamp(limit, 1, 100);
+            string url = $"{_url}?mode={mode}&limit={clamped}";
+
+            BackendRequest.Send(url, "GET", null, (code, body) =>
+            {
+                if (code != 200)
+                {
+                    // Offline, or the server refused: show what this device knows, marked as
+                    // not a real ranking. A 401 will already have been retried once upstream.
+                    if (code != BackendRequest.NoConnection)
+                        Debug.LogWarning($"[Backend] leaderboard fetch failed ({code}): {body}");
+                    _local.FetchBoard(modeId, clamped, onDone);
+                    return;
+                }
+
+                var parsed = BackendRequest.Parse<BoardResponse>(body);
+                if (parsed?.entries == null)
+                {
+                    _local.FetchBoard(modeId, clamped, onDone);
+                    return;
+                }
+
+                onDone(ToBoard(modeId, parsed));
+            });
+        }
+
+        private static LeaderboardBoard ToBoard(string modeId, BoardResponse wire)
+        {
+            int myRank = wire.me?.rank ?? -1;
+
+            var rows = new List<LeaderboardRow>(wire.entries.Length);
+            foreach (var e in wire.entries)
+            {
+                rows.Add(new LeaderboardRow
+                {
+                    Rank = e.rank,
+                    Name = string.IsNullOrEmpty(e.displayName) ? "—" : e.displayName,
+                    Seconds = (float)e.survivedSeconds,
+                    Kills = e.kills,
+                    Level = e.reachedLevel,
+                    // The server does not name whose row is whose; the rank in `me` is how we
+                    // find it. Falls through harmlessly when the player is outside the top N.
+                    IsMe = e.rank == myRank,
+                });
+            }
+
+            LeaderboardRow me = null;
+            if (wire.me != null)
+            {
+                me = rows.Find(r => r.IsMe) ?? new LeaderboardRow
+                {
+                    Rank = wire.me.rank,
+                    Name = "YOU",
+                    Seconds = (float)wire.me.survivedSeconds,
+                    IsMe = true,
+                };
+            }
+
+            return new LeaderboardBoard
+            {
+                ModeId = modeId,
+                FromServer = true,
+                Entries = rows,
+                Me = me,
+            };
         }
 
         /// <summary>
@@ -122,6 +205,28 @@ namespace SpaceSurvivors.Core
             public float personalBest;
             public bool isNewRecord;
             public int? rank;
+        }
+
+        private sealed class BoardResponse
+        {
+            public string mode;
+            public BoardEntry[] entries;
+            public MeStanding me;
+        }
+
+        private sealed class BoardEntry
+        {
+            public int rank;
+            public string displayName;
+            public double survivedSeconds;
+            public int kills;
+            public int reachedLevel;
+        }
+
+        private sealed class MeStanding
+        {
+            public int rank;
+            public double survivedSeconds;
         }
     }
 }
