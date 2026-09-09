@@ -13,7 +13,7 @@ namespace SpaceSurvivors.UI
     /// one scroll.
     ///
     /// <para>The two halves come from different places and that is the reason they are on
-    /// one screen rather than two. The account — name, id, member since — belongs to the
+    /// one screen rather than two. The account — name, member since — belongs to the
     /// <em>server</em> and is only ever asked to change (<see cref="PlayerIdentity"/>); the
     /// stats are the local save, written by the game and merely stored by the server
     /// (<see cref="ProfileService"/>). A player thinks of both as "me", so they are shown
@@ -33,7 +33,6 @@ namespace SpaceSurvivors.UI
         [SerializeField] private InputField _nameInput;
         [SerializeField] private Button _saveButton;
         [SerializeField] private Text _nameStatus;
-        [SerializeField] private Text _playerIdValue;
         [SerializeField] private Text _memberSinceValue;
         [SerializeField] private Text _countryValue;
 
@@ -130,9 +129,6 @@ namespace SpaceSurvivors.UI
                 _confirmedName = account.DisplayName;
                 if (_nameInput != null && !_nameInput.isFocused) _nameInput.text = account.DisplayName;
 
-                Set(_playerIdValue, account.FromServer && !string.IsNullOrEmpty(account.PlayerId)
-                    ? account.PlayerId
-                    : "–");
                 Set(_memberSinceValue, account.FirstLogin.HasValue
                     ? account.FirstLogin.Value.ToString("d MMM yyyy")
                     : "–");

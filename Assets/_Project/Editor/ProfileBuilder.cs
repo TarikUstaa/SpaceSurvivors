@@ -12,7 +12,7 @@ namespace SpaceSurvivors.EditorTools
 {
     /// <summary>
     /// Builds <c>Assets/_Project/Scenes/Profile.unity</c> — the player's own page: the
-    /// account at the top (rename, id, member since, country), the career numbers below,
+    /// account at the top (rename, member since, country), the career numbers below,
     /// one scroll.
     ///
     /// <para>The content is a <see cref="VerticalLayoutGroup"/> under a
@@ -95,18 +95,21 @@ namespace SpaceSurvivors.EditorTools
             var content = BuildScroll(window.transform, out ScrollRect scroll);
 
             // ---- account section ----
-            Head(content, "ACCOUNT");
+            MajorHead(content, "ACCOUNT");
 
             BuildNameRow(content, so);
 
-            so.FindProperty("_playerIdValue").objectReferenceValue =
-                ValueRow(content, "Player ID", 17, Faint);
+            // The player id is deliberately not shown. The server will hand it over — it is
+            // theirs — but a raw uuid in a row is a wall of hex that means nothing to anyone
+            // reading their own profile. It goes back in the day there is somewhere to quote
+            // it to, next to something explaining why.
             so.FindProperty("_memberSinceValue").objectReferenceValue =
                 ValueRow(content, "Member since", 22, Ink);
             so.FindProperty("_countryValue").objectReferenceValue =
                 ValueRow(content, "Country", 22, Ink);
 
             // ---- career section ----
+            MajorHead(content, "STATS");
             foreach (var line in StatLines)
             {
                 if (line.section != null) Head(content, line.section);
@@ -270,6 +273,21 @@ namespace SpaceSurvivors.EditorTools
             le.preferredHeight = height;
             le.minHeight = height;
             return go.transform;
+        }
+
+        /// <summary>
+        /// A centred divider for the screen's two halves. Bigger and centred so ACCOUNT and
+        /// STATS read as peers, with the small left-aligned <see cref="Head"/> rows sitting
+        /// under them as subdivisions rather than competing with them.
+        /// </summary>
+        private static void MajorHead(Transform content, string text)
+        {
+            var row = Row(content, text + "Divider", HeadHeight + 22f);
+            var t = Label("Label", row, text, 28, Ink);
+            var rt = (RectTransform)t.transform;
+            rt.anchorMin = new Vector2(0f, 0f); rt.anchorMax = new Vector2(1f, 1f); rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.offsetMin = new Vector2(14f, 0f); rt.offsetMax = new Vector2(-14f, -8f);
+            t.alignment = TextAnchor.LowerCenter;
         }
 
         private static void Head(Transform content, string text)
