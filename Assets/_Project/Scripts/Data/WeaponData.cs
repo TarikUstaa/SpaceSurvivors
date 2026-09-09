@@ -14,12 +14,17 @@ namespace SpaceSurvivors.Data
         Projectile,
         /// <summary>Orbs circle the ship and hurt whatever they touch (no firing).</summary>
         Orbital,
-        /// <summary>Drops a stationary mine behind the ship every <see cref="WeaponData.cooldown"/>s.
-        /// The mine detonates (splash) on enemy contact or after <see cref="WeaponData.projectileLifetime"/>s.</summary>
+        /// <summary>Retired (was the Mine Layer, removed in G5). Kept so the enum indices of the
+        /// values below it do not shift under already-serialised weapon assets.</summary>
         Trail,
         /// <summary>A persistent damage ring around the ship: every <see cref="WeaponData.cooldown"/>s it
         /// hits every enemy within <see cref="WeaponData.orbitRadius"/>. No projectiles, no aiming.</summary>
         Aura,
+        /// <summary>An arc that strikes the nearest enemy, then leaps to the nearest not-yet-hit
+        /// enemy within <see cref="WeaponData.chainRange"/>, up to <see cref="WeaponData.projectilesPerShot"/>
+        /// targets, each hit doing <see cref="WeaponData.chainFalloff"/>× the last. Instant, no
+        /// projectile. MultiShot feeds the jump count, so it grows into a swarm-clearer.</summary>
+        Chain,
     }
 
     [CreateAssetMenu(menuName = "SpaceSurvivors/Combat/Weapon Data", fileName = "WeaponData")]
@@ -69,6 +74,15 @@ namespace SpaceSurvivors.Data
         [Header("Aura (kind = Aura)")]
         [Tooltip("Ring colour for an Aura weapon's glow. Alpha scales how strong the glow reads.")]
         public Color auraTint = new Color(0.4f, 0.85f, 1f, 0.16f);
+
+        [Header("Chain (kind = Chain)")]
+        [Tooltip("How far the arc can leap from one enemy to the next (world units). " +
+                 "The first target is found within aimRange of the ship.")]
+        [Min(0.5f)] public float chainRange = 3.5f;
+        [Tooltip("Damage kept on each leap: 0.75 = every jump hits for 75% of the last.")]
+        [Range(0.1f, 1f)] public float chainFalloff = 0.75f;
+        [Tooltip("Arc colour. projectilesPerShot is the base number of targets (MultiShot adds more).")]
+        public Color chainTint = new Color(0.6f, 0.85f, 1f, 1f);
 
         [Header("Targeting")]
         [Tooltip("Radius the auto-aim searches for enemies. Also the projectile cull range guide.")]

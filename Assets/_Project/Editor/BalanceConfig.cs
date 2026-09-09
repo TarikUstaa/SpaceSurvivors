@@ -200,7 +200,7 @@ namespace SpaceSurvivors.EditorTools
             SetUpgrade("GetRailSpike",   0.70f, 1);
             SetUpgrade("GetOrbiter",     0.70f, 1);
             SetUpgrade("GetStaticField", 0.70f, 1);
-            SetUpgrade("GetMineLayer",   0.55f, 1);   // slated for removal in G5
+            SetUpgrade("GetArcCoil",     0.60f, 1);   // G5: chain lightning, replaced Mine Layer
         }
 
         private static void SetUpgrade(string name, float weight, int maxStacks,

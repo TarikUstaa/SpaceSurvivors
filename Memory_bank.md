@@ -1212,6 +1212,37 @@ rework cost the client four field renames and two strings.
 Verified: Unity compiles clean (0 errors), wire shapes checked against the running backend on
 all four paths, URLs resolve, existing device id preserved.
 
+## G5 — Mine Layer replaced by Arc Coil (chain lightning) (2026-09-09)
+The Mine weapon is gone: `MineLayer.cs`, `Mine.cs`, `MineLayer.asset`, `DeepMine.asset`,
+`GetMineLayer.asset`, `Mine.prefab`, `Evo_DeepMine.prefab` all deleted. `WeaponKind.Trail`
+stays in the enum as a dead value so the indices of `Aura`/`Chain` below it do not shift
+under already-serialised weapon assets.
+
+**Arc Coil** — new `WeaponKind.Chain`, driven by `Combat/ChainLightning`. Every `cooldown`s
+it strikes the nearest enemy within `aimRange` of the ship, then leaps to the nearest
+not-yet-hit enemy within `chainRange`, up to `projectilesPerShot` targets, each hit
+`chainFalloff`× the last. **MultiShot feeds the target count** through the ProjectileCount
+stat — the upgrade that widens a shotgun instead lengthens the chain, which is the fantasy.
+Instant, no projectile, hard cap 12 targets. Evolves into **Chain Storm** (violet, faster,
+more jumps) with MultiShot as the catalyst.
+
+The bolt is `Combat/ChainArcView` — one `LineRenderer` polyline through ship + every struck
+enemy, snapped on and faded over 0.14s, one instance per rig, reused each cast (no alloc,
+no pool). Hot-white core cooling to the tint as it fades.
+
+`Editor/ChainWeaponBuilder` (`SpaceSurvivors/Build/G5 Arc Coil weapon`) creates the three
+assets and re-points the level-up catalogue. **Its scene-edit half did not stick under the
+MCP RunCommand harness** (scene saves there are unreliable); the `Game.unity` catalogue
+entry was swapped by editing the YAML directly. The builder is idempotent — re-running it
+from the real menu will find GetArcCoil already present and no-op the scene part.
+
+**Verified:** compiles clean, all Mine assets gone, the three assets + evolution + catalyst
+wired, catalogue has GetArcCoil and no null, and in play mode granting Arc Coil spawns the
+`Chain_Arc Coil` rig with its `ChainLightning` component. **Not machine-verified: the bolt
+rendering and damage landing** — the coroutine logging did not come back through the bridge.
+Check by hand: level into Arc Coil (or grant it) and watch for the blue arc zapping between
+enemies near the ship.
+
 ## Menu leaderboard + Profile screen (2026-09-09, committed `8ec06a3` … `d6c369b`)
 The main-menu pilot card (best time / kills / scrap / achievements) is replaced by the
 ranked board; those four numbers move to a new Stats scene beside Shop and Hangar.

@@ -244,11 +244,6 @@ namespace SpaceSurvivors.EditorTools
                 core = "Orb", coreColor = new Color(0.2f, 1f, 0.8f),
                 rootScale = 0.52f, pulse = 0.16f, spin = 90f,
             });
-            Style("Mine", mat, new Look
-            {
-                core = "Orb", coreColor = new Color(1f, 0.28f, 0.24f),
-                rootScale = 0.5f, pulse = 0.22f,
-            });
         }
 
         private static void Style(string prefabName, Material mat, Look look)
@@ -468,11 +463,6 @@ namespace SpaceSurvivors.EditorTools
                 core = "Orb", coreColor = new Color(0.55f, 0.15f, 1f),
                 glow = "twirl_02", glowColor = new Color(0.55f, 0.25f, 1f, 0.5f), glowScale = 2.4f,
                 rootScale = 0.58f, pulse = 0.12f, spin = -200f,
-            });
-            Evolve("Mine", "Evo_DeepMine", "DeepMine", mat, new Look
-            {
-                core = "Orb", coreColor = new Color(1f, 0.2f, 0.36f),
-                rootScale = 0.56f, pulse = 0.28f,
             });
         }
 

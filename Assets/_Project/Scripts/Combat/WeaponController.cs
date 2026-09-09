@@ -158,11 +158,11 @@ namespace SpaceSurvivors.Combat
                     case WeaponKind.Orbital:
                         go.AddComponent<OrbitalWeapon>().Configure(d, _pool, _stats, transform, gameObject);
                         break;
-                    case WeaponKind.Trail:
-                        go.AddComponent<MineLayer>().Configure(d, _pool, _stats, transform, gameObject);
-                        break;
                     case WeaponKind.Aura:
                         go.AddComponent<AuraWeapon>().Configure(d, _stats, gameObject, _auraRingSprite, _auraRingMaterial);
+                        break;
+                    case WeaponKind.Chain:
+                        go.AddComponent<ChainLightning>().Configure(d, _stats, transform, gameObject);
                         break;
                 }
                 _specialRigs.Add(go);
