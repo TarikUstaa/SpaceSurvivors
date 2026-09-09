@@ -2,10 +2,27 @@
 
 > Working memory log. Update after every major milestone. Newest entry on top.
 
-## Current State
-**M1–M14c approved. M15 committed `fb4c354` (environment & maps, revised per user). M16 BUILT 2026-08-31, awaiting human playtest sign-off = balance pass — `Editor/BalanceConfig` (one-shot tuning applier for all curves/roster/bosses/XP/ceilings) + `Editor/BalancePlaytest` telemetry harness (orbit-the-horde bot via `Player/ExternalMoveInput`, CSV output). Iter-3: first 3:00 gentle (no elites, mini-boss @180), then a hard mid/late ramp; Campaign now a 4-boss/5-stage/~15-min arc; Damage/FireRate stack ceilings 5→4 / 8→6. Bot is noisy on survivability — needs the human feel-check. Next: M17 (nothing formally scoped yet) or address the M16 caveats.**
+## Current State (2026-09-09)
 
-Deferred: gameplay music (needs a CC0 pack); in-run achievement toast (M14c follow-on); enemy obstacle-avoidance `IVelocityModifier`; map preview art; the M16 caveats (bot noise, on-screen density, MaxHealth stacking, hazard-zone count). Full detail for each milestone is in its section below.
+**Feature-complete, unvalidated.** M1–M20 built + committed. Post-M20 goals G1/G3/G4 done,
+G2 (readability) deferred, G5 (replace Mine weapon) not started. Difficulty tuned through
+iter-6c + a boss-HP bump (`8b16aec`); all weapon experiments reverted (`4fe5248`).
+
+**Backend integration done.** Cloud save, online leaderboard, and a rename-capable Profile
+screen all talk to `~/SpaceSurvivors-backend` (separate repo, its own Memory_bank). The
+main menu shows the ranked board (Infinite/Campaign tabs); the Profile screen (was Stats)
+renames through `PATCH /v1/player`. Backend is localhost-only — nothing deployed.
+
+**The one blocker: no human has played it.** M14c, M16–M20 and the iter-6b/6c curves are
+all "committed, awaiting sign-off". The recurring open question is mid/late-game feel — the
+sim bot kites and never drops below ~90% HP past ~6 min, so it cannot judge the ramp.
+
+**Next by value:** (1) Tarik plays a full Campaign + a long Infinite run; (2) deploy the
+backend to Azure so the online features are actually online. See `Open Decisions / TODO`.
+
+Deferred: gameplay music (no CC0 pack yet, no music path in the code at all); in-run
+achievement toast; map preview art; the M16 caveats (on-screen density, MaxHealth stacking,
+hazard-zone count). Full detail for each milestone is in its section below.
 
 ### M7 — Mini-boss / boss schedule (built, play-tested OK)
 - `DifficultyConfig` +`List<BossEntry> bossSchedule` (`{triggerTime, bossData, count, warningLead}`). Default entry at 180s. Wired: [{180s, MiniBoss, ×1, lead 4s}, {360s, MiniBoss, ×2, lead 4s}].
