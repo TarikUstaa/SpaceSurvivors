@@ -82,11 +82,8 @@ namespace SpaceSurvivors.EditorTools
             wrt.sizeDelta = new Vector2(720, 780);
             wrt.anchoredPosition = new Vector2(0f, 20f);
 
-            var title = Label("Title", canvasGo.transform, "CAREER", 46, Ink);
-            var trt = (RectTransform)title.transform;
-            trt.anchorMin = trt.anchorMax = trt.pivot = new Vector2(0.5f, 0.5f);
-            trt.sizeDelta = new Vector2(600, 70);
-            trt.anchoredPosition = new Vector2(0f, 470f);
+            // The screen title is added by MetaScreenSkinner ("CAREER", inside the window at
+            // the top, matching HANGAR / UPGRADES / the rest). No separate title here.
 
             // ---- rows ----
             var so = new SerializedObject(screen);
@@ -125,7 +122,7 @@ namespace SpaceSurvivors.EditorTools
             brt.anchorMin = brt.anchorMax = brt.pivot = new Vector2(0.5f, 0.5f);
             brt.sizeDelta = new Vector2(260, 68);
             brt.anchoredPosition = new Vector2(0f, -440f);
-            var backLabel = Label("Label", back.transform, "BACK", 26, new Color(0.1f, 0.16f, 0.24f));
+            var backLabel = Label("Label", back.transform, "BACK", 26, new Color(0.96f, 0.99f, 1f));
             Stretch(backLabel.rectTransform);
 
             so.FindProperty("_backButton").objectReferenceValue = back.GetComponent<Button>();
