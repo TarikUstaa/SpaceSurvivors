@@ -1195,6 +1195,30 @@ rework cost the client four field renames and two strings.
 Verified: Unity compiles clean (0 errors), wire shapes checked against the running backend on
 all four paths, URLs resolve, existing device id preserved.
 
+## Menu leaderboard + Stats screen (2026-09-09, committed `8ec06a3`/`1e542ee`)
+The main-menu pilot card (best time / kills / scrap / achievements) is replaced by the
+ranked board; those four numbers move to a new Stats scene beside Shop and Hangar.
+
+- **`ILeaderboardStore` gains `FetchBoard(modeId, limit, cb)`** — the one part of that seam
+  with no synchronous answer, because a board is other players' data. `LeaderboardBoard` /
+  `LeaderboardRow` are the shapes. `HttpLeaderboardStore` calls `GET /v1/leaderboard` and,
+  when offline or the backend is off, falls back to `LocalPrefsLeaderboardStore`'s single
+  "your best" row, flagged `FromServer = false`. `HighScoreService.FetchBoard` passes through.
+- **`MenuLeaderboard`** (UI) — 8 fixed rows filled from the fetch, Infinite / Campaign tabs,
+  this player's row highlighted; if they rank below the visible rows their standing is forced
+  into the last one. Prefab-style, wired by `MainMenuBuilder`.
+- **`StatsScreen`** (UI) — read-only over `ProfileService` + `AchievementService`: runs,
+  best survival/level/kills, lifetime kills/bosses/scrap, wallet, achievements. Own scene
+  `Stats.unity`, built + registered by `StatsBuilder` (same two-menu-item pattern as
+  `ShopBuilder`). `StatsButton` added to the meta row; `MetaScreenSkinner` skins the scene.
+- **`MenuStatsReadout` deleted** — nothing builds it now.
+
+Verified: compiles clean (0 errors), all builders ran, scene structure + serialized wiring
+checked, and in play mode (backend on, server down) the board correctly showed
+"offline — your best only" with the local best in the highlighted row. **Still to check by
+hand:** the look of it, STATS -> career -> BACK navigation, and the board against a running
+server with real entries.
+
 ## Feature backlog captured (2026-08-28)
 User dumped 11 ideas before starting M10. Full list + milestone mapping + rationale is in
 `Project_Goals.md §8`. Milestone table there re-planned: M10 juice/UX, M11 combat content,
