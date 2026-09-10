@@ -23,7 +23,7 @@ namespace SpaceSurvivors.UI
         private void Awake()
         {
             if (_spawnDirector == null) _spawnDirector = FindFirstObjectByType<SpawnDirector>();
-            bool show = !GameSession.IsEndless && _spawnDirector != null && _spawnDirector.ScheduledBossCount > 0;
+            bool show = !GameSession.IsEndless && _spawnDirector != null && _spawnDirector.BossStageCount > 0;
             if (_root != null) _root.SetActive(show);
             enabled = show;
 
@@ -35,8 +35,11 @@ namespace SpaceSurvivors.UI
         {
             if (_spawnDirector == null || _label == null) return;
 
-            int total = _spawnDirector.ScheduledBossCount + 1;
-            int stage = Mathf.Clamp(_spawnDirector.BossesDefeated + 1, 1, total);
+            // Both halves must count schedule ENTRIES. BossesDefeated counts boss enemies, and an
+            // entry can spawn two, so using it here made the stage run ahead of the fight the
+            // player was actually in — the Clamp hid it as a premature "STAGE 5/5".
+            int total = _spawnDirector.BossStageCount + 1;
+            int stage = Mathf.Clamp(_spawnDirector.BossStagesCleared + 1, 1, total);
             if (stage == _lastStage) return;
 
             _lastStage = stage;

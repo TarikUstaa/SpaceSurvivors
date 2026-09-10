@@ -1400,6 +1400,56 @@ Lives in `Assembly-CSharp-Editor` because the RunCommand dynamic assembly can't 
 **Deferred to M9:** "STAGE 1/3" HUD indicator, audio, parallax starfield, settings, persistent high score,
 run-stats screen, TMP conversion, converting the rest of the bootstrap-code UI to prefabs.
 
+## D23 — QA pass (2026-09-10)
+
+A full automated sweep: static audit (script refs, prefabs, catalogues, build settings, scene
+wiring), a 20-minute Infinite sim, and Campaign sims until the win path actually ran. Zero console
+errors throughout. Five defects, all fixed except the balance call:
+
+1. **The menu stopped showing scrap.** `MainMenuBuilder` deliberately nulled
+   `MainMenuScreen._walletLabel` because "scrap lives in the pilot-record card" — but the
+   leaderboard replaced that card, so nothing displayed the wallet. `BuildWalletChip` now builds a
+   chip top-right and wires the field. *A field nulled with a comment explaining why is only true
+   until the thing the comment refers to is deleted.*
+
+2. **The ship stopped responding to the keyboard after any sim.** `BalancePlaytest.Start` points
+   `PlayerMovement._inputSourceBehaviour` at the bot's `ExternalMoveInput` at edit time. Leaving
+   play mode does not undo that: the editor restores the snapshot it took on *entering* play, which
+   already contained the rewiring. The sim now reloads `Game.unity` from disk when it ends. *An
+   edit-time change made before entering play survives leaving it.*
+
+3. **The campaign sim could never test the campaign.** `RunController` gates the win check on
+   `GameSession.IsEndless`, which is `true` when `SelectedMode` is null — and the sim, starting play
+   directly in `Game.unity`, never set a mode. Three campaign runs "passed" without the win
+   condition being reachable. The sim now carries the mode into play (applied in `Tick`, since
+   `GameSession` clears it on entering play) and records `won/died/cap` plus stages in the CSV.
+   *The same null that made scores submit as mode `"default"` also silently disabled the win.*
+
+4. **`STAGE n/N` counted two different things.** `BossesDefeated` counts boss *enemies*;
+   `ScheduledBossCount` counted schedule *entries*, and an entry can spawn two. The indicator ran
+   ahead of the actual fight and pinned at `5/5` while the final boss had not yet spawned — the
+   `Mathf.Clamp` hid it. Renamed to `BossStageCount`, added `BossStagesCleared`, both entry-based.
+
+5. **`_logEverySpawn` was left on in `Game.unity`** (`1`, while the code default is `false`) — a
+   `Debug.Log` per spawn, ~42/second late-game. Costs frame time and buries real errors. Set to `0`.
+
+**Also found, not a defect:** the campaign sim's 16-minute cap sat 60s after the final boss spawns
+at t=900. The winning run killed it at t=945 — the cap was 15 seconds short of ever observing a win.
+Raised to 20 minutes.
+
+**Verified working:** Campaign win fires correctly — `# won at t=945, stages 4/4, bosses killed 6`.
+Infinite ran the full 20 minutes clean. 16 weapons with 8 evolution chains, 7 weapon grants + 9 stat
+upgrades, 8 enemy prefabs, 5 Resources catalogues, all 7 scenes in Build Settings: no broken refs.
+
+**Open balance call for Tarik:** the whole permanent-upgrade tree costs ~28,800 scrap
+(damage 9.5k, health 6.3k, speed 3k, armor 10k) while a single 10-minute Infinite run banks ~29,000
+(`RunEndScreen:69` banks run scrap 1:1). One long run buys everything. Run scrap also grows
+superlinearly with run length (100k at 20 min), so raising costs does not fix the shape — the lever
+is the banked fraction, e.g. 15% of run scrap. Not changed without his say-so.
+
+**Sim-bot caveat unchanged:** it kites and cannot judge mid/late Infinite difficulty (HP pinned at
+max from ~t=390). Campaign's 60–110s window does have teeth — one of three runs died there.
+
 ## Open Decisions / TODO
 
 *The M1-era setup items (Input System, pooling, layer matrix, git) are all long done.*
@@ -1408,8 +1458,8 @@ run-stats screen, TMP conversion, converting the rest of the bootstrap-code UI t
       curves are all committed and unplayed by a human. The recurring open question is
       mid/late-game feel: the sim bot kites and never drops below ~90% HP past ~6 min, so
       it cannot judge whether the ramp is right.
-- [ ] **G5 — replace the Mine weapon.** Drop Mine Layer + Deep Mine; decide what fills the
-      slot. Assets still in the project (`MineLayer.asset`, `Mine.cs`, `Evo_DeepMine.prefab`…).
+- [ ] **Scrap economy** (D23) — one long run buys the entire permanent-upgrade tree. Tarik's
+      call; the suggested lever is banking a fraction of run scrap rather than raising costs.
 - [ ] **Leaderboard + Profile screens** (2026-09-09) — built and verified against the live
       backend, but not looked at by a human for feel/layout.
 - [ ] **G2 — readability** — deferred; enemy sprite tints looked worse. Revisit with a

@@ -50,12 +50,24 @@ namespace SpaceSurvivors.Enemies
         public int AliveCount => _aliveCount;
         public float CurrentSpawnRate => _config != null ? _config.SpawnRateAt(Now) : 0f;
 
-        /// <summary>How many scheduled bosses the player has killed this run.</summary>
+        /// <summary>How many boss ENEMIES the player has killed this run. One schedule entry can
+        /// spawn several, so this is not a stage counter — see <see cref="BossStagesCleared"/>.</summary>
         public int BossesDefeated { get; private set; }
 
-        /// <summary>Total bosses in this run's schedule (0 for endless configs with none).</summary>
-        public int ScheduledBossCount =>
+        /// <summary>
+        /// How many ENTRIES the boss schedule has — one stage each. Not the number of boss
+        /// enemies: an entry with <c>count: 2</c> is still a single stage. 0 for endless configs
+        /// with no schedule.
+        /// </summary>
+        public int BossStageCount =>
             _config != null && _config.bossSchedule != null ? _config.bossSchedule.Count : 0;
+
+        /// <summary>
+        /// Schedule entries fully dealt with: spawned, with nothing left alive from them. The
+        /// counterpart to <see cref="BossStageCount"/> — both count entries, so a readout built
+        /// from the pair cannot run past its own total.
+        /// </summary>
+        public int BossStagesCleared => _bossEntriesSpawned - (_bossesAlive > 0 ? 1 : 0);
 
         /// <summary>
         /// True once every entry in the boss schedule has spawned AND no boss is still alive.

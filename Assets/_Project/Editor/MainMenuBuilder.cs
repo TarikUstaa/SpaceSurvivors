@@ -217,8 +217,8 @@ namespace SpaceSurvivors.EditorTools
             Kill(canvas, "BG");
             Kill(canvas, "Subtitle");
             Kill(canvas, "WalletLabel");
-            Kill(canvas, "WalletChip"); // scrap now lives in the pilot-record card — no double display
-            Kill(canvas, "Wallet");
+            Kill(canvas, "WalletChip");
+            Kill(canvas, "Wallet");    // rebuilt below as WalletGroup, top-right
             Kill(canvas, "Vignette");
             Kill(canvas, "TitleRule");
             Kill(canvas, "Tagline");
@@ -226,6 +226,7 @@ namespace SpaceSurvivors.EditorTools
             Kill(canvas, "TitleShadow");
             Kill(canvas, "PilotRecord");       // replaced by the leaderboard; kill any left by an older run
             Kill(canvas, "MenuLeaderboard");
+            Kill(canvas, "WalletGroup");
             Kill(canvas, "MetaRow");
             Kill(canvas, "VersionLabel");
 
@@ -318,12 +319,15 @@ namespace SpaceSurvivors.EditorTools
             // Settings window text
             RestyleSettings(canvas, semi, med);
 
-            // Drop the now-dead wallet reference on MainMenuScreen.
+            // Scrap purse — top-right, the one place the menu shows the wallet now that the
+            // pilot-record card (which used to carry it) has become the leaderboard.
+            var walletLabel = BuildWalletChip(canvas, semi);
+
             var menuScreen = menuRoot.GetComponent<SpaceSurvivors.UI.MainMenuScreen>();
             if (menuScreen != null)
             {
                 var mso = new SerializedObject(menuScreen);
-                mso.FindProperty("_walletLabel").objectReferenceValue = null;
+                mso.FindProperty("_walletLabel").objectReferenceValue = walletLabel;
                 mso.ApplyModifiedPropertiesWithoutUndo();
             }
         }
@@ -385,6 +389,45 @@ namespace SpaceSurvivors.EditorTools
         /// fixed rows filled at runtime by <see cref="MenuLeaderboard"/>. Taller and a little
         /// wider than the old pilot card because a list needs the room.
         /// </summary>
+        /// <summary>
+        /// The scrap purse in the top-right corner: chip icon + amount on a small panel.
+        /// Returns the <see cref="Text"/> so the caller can hand it to
+        /// <c>MainMenuScreen._walletLabel</c> — the label is only ever written by
+        /// <c>RefreshWallet</c>, so an unwired field means the menu silently stops showing scrap.
+        /// </summary>
+        private static Text BuildWalletChip(Transform canvas, Font semi)
+        {
+            var group = NewImage("WalletGroup", canvas,
+                AssetDatabase.LoadAssetAtPath<Sprite>(Gen + "MenuPanel.png"),
+                new Color(0.55f, 0.78f, 1f, 0.85f));
+            group.type = Image.Type.Sliced;
+            group.raycastTarget = false;
+            var rt = group.rectTransform;
+            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(1f, 1f);
+            rt.sizeDelta = new Vector2(230, 52);
+            rt.anchoredPosition = new Vector2(-24f, -20f);
+
+            var chip = NewImage("Chip", group.transform,
+                AssetDatabase.LoadAssetAtPath<Sprite>(Gen + "ScrapChip.png"), Color.white);
+            chip.raycastTarget = false;
+            var crt = chip.rectTransform;
+            crt.anchorMin = crt.anchorMax = crt.pivot = new Vector2(0f, 0.5f);
+            crt.sizeDelta = new Vector2(30, 30);
+            crt.anchoredPosition = new Vector2(16f, 0f);
+
+            // Placeholder text only — MainMenuScreen.RefreshWallet overwrites it on enable.
+            var label = NewText("WalletLabel", group.transform, semi, "SCRAP  0", 24, Ink);
+            label.alignment = TextAnchor.MiddleRight;
+            label.raycastTarget = false;
+            var lrt = label.rectTransform;
+            lrt.anchorMin = lrt.anchorMax = lrt.pivot = new Vector2(1f, 0.5f);
+            lrt.sizeDelta = new Vector2(170, 40);
+            lrt.anchoredPosition = new Vector2(-16f, 0f);
+            AddOutline(label.gameObject, new Color(0.03f, 0.09f, 0.16f, 0.9f), new Vector2(1.5f, -1.5f));
+
+            return label;
+        }
+
         private static void BuildLeaderboard(Transform canvas, Sprite panel, Font semi, Font med)
         {
             const int rowCount = 8;

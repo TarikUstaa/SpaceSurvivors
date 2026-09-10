@@ -3,6 +3,7 @@ using System.Linq;
 using SpaceSurvivors.Combat;
 using SpaceSurvivors.Data;
 using SpaceSurvivors.Enemies;
+using SpaceSurvivors.Game;
 using SpaceSurvivors.Player;
 using SpaceSurvivors.Progression;
 using SpaceSurvivors.UI;
@@ -19,12 +20,14 @@ namespace SpaceSurvivors.EditorTools
     /// <see cref="ExternalMoveInput"/>), auto-answers level-ups, runs the game fast, and every
     /// 10 game-seconds appends a telemetry row to
     /// <c>persistentDataPath/balance_&lt;label&gt;.csv</c>. Exits play at the time cap or player
-    /// death. The scene is never saved. The bot is deliberately mediocre — survivability numbers
+    /// death, then reloads Game.unity from disk so the bot's wiring does not linger in the
+    /// editor. The scene is never saved. The bot is deliberately mediocre — survivability numbers
     /// are a conservative floor.
     /// </summary>
     internal static class BalancePlaytest
     {
         private const string Cfg = "Assets/_Project/ScriptableObjects/Config/";
+        private const string GameScene = "Assets/_Project/Scenes/Game.unity";
         private const float SimSpeed = 2.5f;
         private const float SampleEvery = 10f;
 
@@ -33,6 +36,9 @@ namespace SpaceSurvivors.EditorTools
         private static string _label;
         private static float _maxSeconds;
         private static string _csv;
+
+        private static GameModeData _mode;
+        private static RunController _run;
 
         private static Transform _player;
         private static ExternalMoveInput _input;
@@ -47,16 +53,19 @@ namespace SpaceSurvivors.EditorTools
         private static int _enemyMask, _threatMask, _pickupMask;
 
         [MenuItem("SpaceSurvivors/Balance/M16 Sim — Infinite")]
-        private static void SimInfinite() => Start("DifficultyConfig", "infinite", 20f * 60f);
+        private static void SimInfinite() => Start("DifficultyConfig", "Mode_Infinite", "infinite", 20f * 60f);
 
         [MenuItem("SpaceSurvivors/Balance/M16 Sim — Campaign")]
-        private static void SimCampaign() => Start("CampaignDifficulty", "campaign", 16f * 60f);
+        // 20 min, not 16: the campaign's final boss lands at t=900, and a 16-minute cap left only
+        // 60 seconds to kill it — the run always timed out one fight short of the win it exists to
+        // check. The run ends itself on a win, so the extra headroom costs nothing when it lands.
+        private static void SimCampaign() => Start("CampaignDifficulty", "Mode_Campaign", "campaign", 20f * 60f);
 
-        private static void Start(string configName, string label, float seconds)
+        private static void Start(string configName, string modeName, string label, float seconds)
         {
             if (EditorApplication.isPlaying) { Debug.LogWarning("[BalancePlaytest] already playing."); return; }
 
-            EditorSceneManager.OpenScene("Assets/_Project/Scenes/Game.unity", OpenSceneMode.Single);
+            EditorSceneManager.OpenScene(GameScene, OpenSceneMode.Single);
 
             var config = AssetDatabase.LoadAssetAtPath<DifficultyConfig>(Cfg + configName + ".asset");
             var sd = Object.FindFirstObjectByType<SpawnDirector>();
@@ -72,12 +81,20 @@ namespace SpaceSurvivors.EditorTools
             var ext = move.GetComponent<ExternalMoveInput>() ?? move.gameObject.AddComponent<ExternalMoveInput>();
             new SerializedObject(move).Do(s => s.FindProperty("_inputSourceBehaviour").objectReferenceValue = ext);
 
+            // The mode the menu would have picked. Without it GameSession.SelectedMode stays null,
+            // and null reads as endless — which switches OFF RunController's campaign win check and
+            // makes scores submit under mode "default". A campaign sim that cannot win is not
+            // testing the thing the campaign sim exists for, so carry the mode in.
+            // It is applied in Tick, not here: GameSession clears SelectedMode on entering play.
+            _mode = AssetDatabase.LoadAssetAtPath<GameModeData>(Cfg + modeName + ".asset");
+            if (_mode == null) Debug.LogWarning($"[BalancePlaytest] no mode asset {modeName} — running as endless.");
+
             _armed = true;
             _label = label;
             _maxSeconds = seconds;
             _csv = Path.Combine(Application.persistentDataPath, $"balance_{label}.csv");
             File.WriteAllText(_csv, "t,level,kills,scrap,hp,enemiesAlive,spawnRate\n");
-            _player = null; _input = null; _stats = null; _level = null; _health = null; _spawn = null;
+            _player = null; _input = null; _stats = null; _level = null; _health = null; _spawn = null; _run = null;
             _nextSample = 0f; _heading = Vector2.right; _headingUntil = 0f;
             _enemyMask = 1 << LayerMask.NameToLayer("Enemy");
             _threatMask = _enemyMask | (1 << LayerMask.NameToLayer("EnemyProjectile"));
@@ -100,6 +117,20 @@ namespace SpaceSurvivors.EditorTools
             Time.timeScale = 1f;
             _armed = false;
             if (_csv != null) Debug.Log($"[BalancePlaytest] done → {_csv}");
+
+            // Put the scene back the way it was on disk. Start() rewires two serialized fields at
+            // edit time — the SpawnDirector's difficulty config, and the player's input source,
+            // which it points at the bot's ExternalMoveInput. Leaving play mode does NOT undo
+            // those: the editor restores the snapshot it took on ENTERING play, which already
+            // contained them. Left alone, the ship then ignores the keyboard for the rest of the
+            // session (and the next Play uses the sim's difficulty config), which reads as
+            // "the ship stopped moving" long after the sim is forgotten.
+            // Deferred: reloading a scene from inside the play-mode callback is not safe.
+            EditorApplication.delayCall += () =>
+            {
+                EditorSceneManager.OpenScene(GameScene, OpenSceneMode.Single);
+                Debug.Log("[BalancePlaytest] Game.unity reloaded from disk — bot wiring dropped.");
+            };
         }
 
         private static void Tick()
@@ -116,6 +147,10 @@ namespace SpaceSurvivors.EditorTools
                 _stats = Object.FindFirstObjectByType<RunStats>();
                 _level = Object.FindFirstObjectByType<LevelSystem>();
                 _spawn = Object.FindFirstObjectByType<SpawnDirector>();
+                _run = Object.FindFirstObjectByType<RunController>();
+
+                // Now that the runtime reset has run, put the chosen mode back.
+                if (_mode != null) GameSession.SelectedMode = _mode;
 
                 Application.runInBackground = true;   // don't throttle when the editor is unfocused
                 // A competent player sweeps XP and takes pickup upgrades — model that so the
@@ -140,10 +175,14 @@ namespace SpaceSurvivors.EditorTools
             if (t >= _nextSample) { _nextSample = t + SampleEvery; Sample(t); }
 
             bool dead = _health != null && !_health.IsAlive;
-            if (t >= _maxSeconds || dead)
+            bool won = _run != null && _run.RunOver && _run.Won;
+            if (t >= _maxSeconds || dead || won)
             {
-                File.AppendAllText(_csv, dead ? $"# player died at t={(int)t}\n" : $"# time cap {(int)t}\n");
-                Debug.Log($"[BalancePlaytest] {_label} ended ({(dead ? "died" : "cap")}) at t={(int)t}");
+                string how = won ? "won" : dead ? "died" : "cap";
+                File.AppendAllText(_csv, $"# {how} at t={(int)t}"
+                    + (_spawn != null ? $", stages {_spawn.BossStagesCleared}/{_spawn.BossStageCount}"
+                                      + $", bosses killed {_spawn.BossesDefeated}" : "") + "\n");
+                Debug.Log($"[BalancePlaytest] {_label} ended ({how}) at t={(int)t}");
                 _armed = false;
                 EditorApplication.isPlaying = false;
             }

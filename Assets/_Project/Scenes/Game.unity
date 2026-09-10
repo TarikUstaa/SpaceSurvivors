@@ -9115,7 +9115,7 @@ MonoBehaviour:
   _offscreenMargin: 2
   _leadBias: 0.6
   _leadArcDegrees: 75
-  _logEverySpawn: 1
+  _logEverySpawn: 0
 --- !u!114 &2065986490
 MonoBehaviour:
   m_ObjectHideFlags: 0
