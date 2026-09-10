@@ -18,6 +18,24 @@ namespace SpaceSurvivors.Core
     {
         private const int TimeoutSeconds = 10;
 
+        /// <summary>
+        /// Longer allowance for the one request that may have to wake the service.
+        ///
+        /// <para>The deployed backend scales to zero when nobody is playing, so the first call
+        /// after a quiet spell waits for a container to start and a JVM to boot — measured at
+        /// about twenty seconds. Ten was not enough, and the failure was the misleading kind:
+        /// the client reported "no connection" against a service that was busy starting up, so
+        /// the first player of the day saw an empty leaderboard and cloud sync apparently
+        /// broken, while the second saw everything working.</para>
+        ///
+        /// <para>Only the token request needs this, because every authenticated call goes
+        /// through <see cref="BackendSession.WithToken"/> first — so it is always the token
+        /// request that pays the cold start, and by the time the real one is sent the service is
+        /// warm. Nothing blocks a frame while this waits, so the cost of the longer wait is only
+        /// that a genuinely unreachable server takes this long to be called unreachable.</para>
+        /// </summary>
+        public const int WakeTimeoutSeconds = 45;
+
         /// <summary>Status code used for "the request never reached the server".</summary>
         public const long NoConnection = 0;
 
@@ -61,14 +79,14 @@ namespace SpaceSurvivors.Core
         /// endpoint itself is called. Everything else should use <see cref="Send"/>.
         /// </summary>
         public static void SendRaw(string url, string method, string body, string token,
-                                   Action<long, string> onDone)
+                                   Action<long, string> onDone, int timeoutSeconds = TimeoutSeconds)
         {
             try
             {
                 var request = new UnityWebRequest(url, method)
                 {
                     downloadHandler = new DownloadHandlerBuffer(),
-                    timeout = TimeoutSeconds,
+                    timeout = timeoutSeconds,
                 };
 
                 if (body != null)

@@ -69,7 +69,11 @@ namespace SpaceSurvivors.Core
                 return;
             }
 
-            BackendRequest.SendRaw(BackendConfig.TokenUrl, "POST", body, null, OnTokenResponse);
+            // The generous timeout belongs here and nowhere else: this is the first request of
+            // any session, so it is the one that waits for a scaled-to-zero service to start.
+            // See BackendRequest.WakeTimeoutSeconds.
+            BackendRequest.SendRaw(BackendConfig.TokenUrl, "POST", body, null, OnTokenResponse,
+                                   BackendRequest.WakeTimeoutSeconds);
         }
 
         private static void OnTokenResponse(long code, string body)
