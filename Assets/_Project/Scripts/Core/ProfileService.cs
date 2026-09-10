@@ -81,6 +81,32 @@ namespace SpaceSurvivors.Core
         /// <summary>A remote store folded server data into <see cref="Current"/> — redraw.</summary>
         private static void RaiseChanged() => Changed?.Invoke();
 
+        /// <summary>
+        /// The share of a run's collected scrap that reaches the wallet. Banking it 1:1 made the
+        /// permanent-upgrade tree (~28,800 scrap all told) cost less than a single ten-minute
+        /// Infinite run, so the first long run ended meta progression outright. Run scrap also
+        /// grows roughly with the square of run length — 29k at ten minutes, 100k at twenty — so
+        /// raising upgrade prices would only move where that cliff sits; the rate is the lever
+        /// that changes its shape.
+        /// <para>At this rate a 3-minute run banks ~420 (several first-level upgrades), ten
+        /// minutes ~4,350, twenty ~15,100 — the tree takes a handful of good runs instead of one.</para>
+        /// </summary>
+        public const float RunScrapBankedShare = 0.15f;
+
+        /// <summary>
+        /// Bank what a finished run earned and return the amount actually credited, which is a
+        /// fraction of what was collected (<see cref="RunScrapBankedShare"/>). Callers must show
+        /// the returned figure, not the run's own total — otherwise the end screen promises scrap
+        /// the wallet never receives. A run that collected anything at all banks at least 1.
+        /// </summary>
+        public static long BankRunScrap(long collected)
+        {
+            if (collected <= 0) return 0;
+            long banked = System.Math.Max(1, (long)System.Math.Round(collected * (double)RunScrapBankedShare));
+            AddScrap(banked);
+            return banked;
+        }
+
         /// <summary>Credit scrap carried out of a run. Non-positive amounts are ignored.</summary>
         public static void AddScrap(long amount)
         {

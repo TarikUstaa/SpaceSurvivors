@@ -63,10 +63,12 @@ namespace SpaceSurvivors.UI
                 _scoreValue.text = Clock(survivedSeconds);
 
             // Bank the run's earnings + history before showing the numbers (Vampire-Survivors
-            // rule: you keep the scrap even on a defeat). One seam — ProfileService.
+            // rule: you keep the scrap even on a defeat). One seam — ProfileService. Only a share
+            // of what was collected is banked, so display what came back, never _stats.Scrap.
+            long banked = 0;
             if (_stats != null)
             {
-                ProfileService.AddScrap(_stats.Scrap);
+                banked = ProfileService.BankRunScrap(_stats.Scrap);
                 ProfileService.RecordRun(_stats.Kills, _stats.Level, survivedSeconds, _stats.BossesDefeated);
             }
             ProfileService.Save();
@@ -77,7 +79,10 @@ namespace SpaceSurvivors.UI
             if (_statsValue != null && _stats != null)
                 _statsValue.text =
                     $"KILLS  {_stats.Kills:n0}\nLEVEL  {_stats.Level}\n" +
-                    $"SCRAP  +{_stats.Scrap:n0}\nWALLET  {ProfileService.Wallet:n0}";
+                    // "of" the run total on purpose: the HUD counted every piece picked up, only a
+                    // share of it is banked, and a bare "+750" after a run that showed 5,000 reads
+                    // as a bug rather than a rule.
+                    $"SCRAP  +{banked:n0} of {_stats.Scrap:n0}\nWALLET  {ProfileService.Wallet:n0}";
 
             string modeId = GameSession.SelectedMode != null ? GameSession.SelectedMode.name : "default";
             var runResult = new RunResult(

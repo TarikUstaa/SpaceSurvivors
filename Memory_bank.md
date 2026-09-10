@@ -1404,7 +1404,7 @@ run-stats screen, TMP conversion, converting the rest of the bootstrap-code UI t
 
 A full automated sweep: static audit (script refs, prefabs, catalogues, build settings, scene
 wiring), a 20-minute Infinite sim, and Campaign sims until the win path actually ran. Zero console
-errors throughout. Five defects, all fixed except the balance call:
+errors throughout. Six defects, all fixed:
 
 1. **The menu stopped showing scrap.** `MainMenuBuilder` deliberately nulled
    `MainMenuScreen._walletLabel` because "scrap lives in the pilot-record card" — but the
@@ -1441,11 +1441,19 @@ Raised to 20 minutes.
 Infinite ran the full 20 minutes clean. 16 weapons with 8 evolution chains, 7 weapon grants + 9 stat
 upgrades, 8 enemy prefabs, 5 Resources catalogues, all 7 scenes in Build Settings: no broken refs.
 
-**Open balance call for Tarik:** the whole permanent-upgrade tree costs ~28,800 scrap
-(damage 9.5k, health 6.3k, speed 3k, armor 10k) while a single 10-minute Infinite run banks ~29,000
-(`RunEndScreen:69` banks run scrap 1:1). One long run buys everything. Run scrap also grows
-superlinearly with run length (100k at 20 min), so raising costs does not fix the shape — the lever
-is the banked fraction, e.g. 15% of run scrap. Not changed without his say-so.
+6. **The scrap economy paid out a whole progression per run.** The permanent-upgrade tree costs
+   ~28,800 scrap all told (damage 9.5k, health 6.3k, speed 3k, armor 10k), while `RunEndScreen`
+   banked a run's take 1:1 — and a ten-minute Infinite run collects ~29,000. The first long run
+   ended meta progression. Run scrap grows roughly with the square of run length (100k at twenty
+   minutes), so raising prices only moves the cliff; the banked *share* is what changes its shape.
+   **Fixed (Tarik approved 2026-09-10):** `ProfileService.BankRunScrap` banks
+   `RunScrapBankedShare = 0.15` and returns what it credited; the end screen shows that figure, not
+   the run total. `AddScrap` now has exactly one caller. Payouts: ~420 at 3 min, ~4,350 at 10,
+   ~15,100 at 20 — the tree takes a handful of good runs.
+   The end screen reads `SCRAP  +750 of 5,000` on purpose: the HUD counted every piece picked up,
+   so a bare `+750` after a run that displayed 5,000 would read as a bug rather than a rule.
+   Knock-on: `Ach_scrap_baron` (5,000 lifetime) went from ~2.5 minutes of one run to ~5 runs —
+   left as is, it was trivially awarded before.
 
 **Sim-bot caveat unchanged:** it kites and cannot judge mid/late Infinite difficulty (HP pinned at
 max from ~t=390). Campaign's 60–110s window does have teeth — one of three runs died there.
@@ -1458,8 +1466,6 @@ max from ~t=390). Campaign's 60–110s window does have teeth — one of three r
       curves are all committed and unplayed by a human. The recurring open question is
       mid/late-game feel: the sim bot kites and never drops below ~90% HP past ~6 min, so
       it cannot judge whether the ramp is right.
-- [ ] **Scrap economy** (D23) — one long run buys the entire permanent-upgrade tree. Tarik's
-      call; the suggested lever is banking a fraction of run scrap rather than raising costs.
 - [ ] **Leaderboard + Profile screens** (2026-09-09) — built and verified against the live
       backend, but not looked at by a human for feel/layout.
 - [ ] **G2 — readability** — deferred; enemy sprite tints looked worse. Revisit with a
