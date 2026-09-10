@@ -114,7 +114,9 @@ namespace SpaceSurvivors.EditorTools
                 winImg.color = GlassButton;
                 var wrt = (RectTransform)win;
                 wrt.anchorMin = wrt.anchorMax = wrt.pivot = new Vector2(0.5f, 0.5f);
-                wrt.sizeDelta = new Vector2(660, 600);
+                // 700, not 600: five rows at 96 apart plus the cloud-sync explanation and the
+                // close button do not fit in 600 — the last row lands on top of the button.
+                wrt.sizeDelta = new Vector2(660, 700);
                 wrt.anchoredPosition = Vector2.zero;
 
                 // opaque backing so the modal reads solid, not see-through (MenuPanel's own
@@ -149,7 +151,10 @@ namespace SpaceSurvivors.EditorTools
         {
             if (win == null) return;
 
-            string[] rows = { "MasterRow", "MusicRow", "SfxRow", "FullscreenRow" };
+            // This method, not the builder's anchors, decides where the rows sit — it runs last
+            // and overwrites them. A row added to the panel and not added here keeps its
+            // builder position and lands on top of whatever the skinner puts in that space.
+            string[] rows = { "MasterRow", "MusicRow", "SfxRow", "FullscreenRow", "CloudSyncRow" };
             float y = -150f;
             foreach (var name in rows)
             {
@@ -171,6 +176,16 @@ namespace SpaceSurvivors.EditorTools
                         g.color = new Color(0.9f, 0.97f, 1f, 1f);
                     else if (g.name == "Checkmark")
                         g.color = new Color(0.42f, 0.9f, 1f, 1f);
+            }
+
+            // Sits directly under the cloud-sync row it explains, in the gap left by `y` having
+            // already stepped past the last row.
+            if (FindDeep(win, "CloudSyncStatus") is { } status)
+            {
+                var srt = (RectTransform)status;
+                srt.anchorMin = srt.anchorMax = srt.pivot = new Vector2(0.5f, 1f);
+                srt.sizeDelta = new Vector2(560, 30);
+                srt.anchoredPosition = new Vector2(0f, y + 36f);
             }
 
             var close = FindDeep(win, "CloseButton");

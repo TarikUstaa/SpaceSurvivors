@@ -33,10 +33,14 @@ namespace SpaceSurvivors.EditorTools
             var menuCanvas = canvas.transform;
             var menuRoot = menuCanvas.parent;
 
-            var oldBtn = menuCanvas.Find("SettingsButton");
-            if (oldBtn != null) Object.DestroyImmediate(oldBtn.gameObject);
-            var oldGrp = menuCanvas.Find("MenuSettingsGroup");
-            if (oldGrp != null) Object.DestroyImmediate(oldGrp.gameObject);
+            // Search the whole canvas, not just its direct children: the M20 redesign moves this
+            // button into MetaRow, so a shallow Find comes back empty on a re-run and this builder
+            // cheerfully makes a second SETTINGS button while the first one is still sitting in
+            // the row. Clear every one of them, wherever they ended up.
+            foreach (var stale in DeepFindAll(menuCanvas, "SettingsButton"))
+                Object.DestroyImmediate(stale.gameObject);
+            foreach (var stale in DeepFindAll(menuCanvas, "MenuSettingsGroup"))
+                Object.DestroyImmediate(stale.gameObject);
 
             var btn = TextButton("SettingsButton", menuCanvas, S("Shop/Prise_BTN_Table.png"), "SETTINGS");
             var btnRt = (RectTransform)btn.transform;
@@ -57,12 +61,24 @@ namespace SpaceSurvivors.EditorTools
             var hdr = Img("Header", win.transform, S("Setting/Header.png"), Color.white);
             Place(hdr, new Vector2(0.5f, 1f), new Vector2(430, 90), new Vector2(0, -4));
 
-            var master = SliderRow(win.transform, "Master", "MASTER", 0.64f, out var mv);
-            var music = SliderRow(win.transform, "Music", "MUSIC", 0.48f, out var muv);
-            var sfx = SliderRow(win.transform, "Sfx", "SFX", 0.32f, out var sv);
-            var fs = ToggleRow(win.transform, "Fullscreen", "FULLSCREEN", 0.16f);
+            // Five rows now rather than four, so the spacing tightens from 0.16 to 0.12. Anchors
+            // are normalised, so this holds whatever size MetaScreenSkinner gives the window.
+            var master = SliderRow(win.transform, "Master", "MASTER", 0.78f, out var mv);
+            var music = SliderRow(win.transform, "Music", "MUSIC", 0.66f, out var muv);
+            var sfx = SliderRow(win.transform, "Sfx", "SFX", 0.54f, out var sv);
+            var fs = ToggleRow(win.transform, "Fullscreen", "FULLSCREEN", 0.42f);
+
+            // The switch that decides whether progress leaves this machine. It sits last and
+            // carries a line of explanation, because it is the only setting here with a
+            // consequence a player cannot see by looking at the screen.
+            var cloud = ToggleRow(win.transform, "CloudSync", "CLOUD SAVE", 0.30f);
+            var cloudStatus = Label("CloudSyncStatus", win.transform,
+                                    "progress is kept on this device only", 18,
+                                    new Color(0.62f, 0.74f, 0.88f));
+            Place(cloudStatus.transform, new Vector2(0.5f, 0.22f), new Vector2(560, 30), Vector2.zero);
+
             var close = TextButton("CloseButton", win.transform, S("Shop/Prise_BTN_Table.png"), "CLOSE");
-            Place(close, new Vector2(0.5f, 0.05f), new Vector2(280, 84), Vector2.zero);
+            Place(close, new Vector2(0.5f, 0.09f), new Vector2(280, 84), Vector2.zero);
 
             var panel = group.AddComponent<SettingsPanel>();
             var pso = new SerializedObject(panel);
@@ -70,6 +86,8 @@ namespace SpaceSurvivors.EditorTools
             pso.FindProperty("_musicSlider").objectReferenceValue = music;
             pso.FindProperty("_sfxSlider").objectReferenceValue = sfx;
             pso.FindProperty("_fullscreenToggle").objectReferenceValue = fs;
+            pso.FindProperty("_cloudSyncToggle").objectReferenceValue = cloud;
+            pso.FindProperty("_cloudSyncStatus").objectReferenceValue = cloudStatus;
             pso.FindProperty("_masterValue").objectReferenceValue = mv;
             pso.FindProperty("_musicValue").objectReferenceValue = muv;
             pso.FindProperty("_sfxValue").objectReferenceValue = sv;
@@ -230,6 +248,8 @@ namespace SpaceSurvivors.EditorTools
             pso.FindProperty("_musicSlider").objectReferenceValue = music;
             pso.FindProperty("_sfxSlider").objectReferenceValue = sfx;
             pso.FindProperty("_fullscreenToggle").objectReferenceValue = fs;
+            // No cloud-sync control on the pause panel, deliberately: mid-run is no place to
+            // change where the save lives. The fields stay null and SettingsPanel skips them.
             pso.FindProperty("_masterValue").objectReferenceValue = masterVal;
             pso.FindProperty("_musicValue").objectReferenceValue = musicVal;
             pso.FindProperty("_sfxValue").objectReferenceValue = sfxVal;
@@ -436,6 +456,18 @@ namespace SpaceSurvivors.EditorTools
             im.color = color;
             im.raycastTarget = raycast;
             return im;
+        }
+
+        /// <summary>
+        /// Every descendant with this name, collected before anything is destroyed — deleting
+        /// while walking a hierarchy is how a "sometimes it leaves one behind" bug is written.
+        /// </summary>
+        private static System.Collections.Generic.List<Transform> DeepFindAll(Transform root, string name)
+        {
+            var found = new System.Collections.Generic.List<Transform>();
+            foreach (var t in root.GetComponentsInChildren<Transform>(true))
+                if (t != root && t.name == name) found.Add(t);
+            return found;
         }
 
         private static Text Label(string name, Transform parent, string text, int size, Color color)
