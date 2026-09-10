@@ -21,8 +21,17 @@ namespace SpaceSurvivors.Core
         private const string DeviceIdKey = "backend.userId";       // key kept: existing installs keep their id
         private const string DeviceSecretKey = "backend.deviceSecret";
 
-        /// <summary>Local Spring Boot server. Replaced by the deployed URL later.</summary>
-        public const string DefaultBaseUrl = "http://localhost:8080";
+        /// <summary>
+        /// The deployed service — an Azure Container App in Italy North, in front of a
+        /// Postgres Flexible Server. HTTPS is not optional here: the ingress answers a plain
+        /// HTTP request with a 301 rather than serving it, and this client sends a device
+        /// secret on every token exchange.
+        /// <para>A build installed on another machine now reaches this without anyone running
+        /// a server. To point at a local one while working on the backend, set
+        /// <see cref="BaseUrl"/> — it is stored per install and overrides this.</para>
+        /// </summary>
+        public const string DefaultBaseUrl =
+            "https://spacesurvivors-api.salmonmeadow-a79134b3.italynorth.azurecontainerapps.io";
 
         /// <summary>Whether <see cref="BackendBootstrap"/> installs the HTTP stores at startup.</summary>
         public static bool Enabled
