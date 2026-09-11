@@ -1261,6 +1261,14 @@ ranked board; those four numbers move to a new Stats scene beside Shop and Hanga
   `ShopBuilder`). `StatsButton` added to the meta row; `MetaScreenSkinner` skins the scene.
 - **`MenuStatsReadout` deleted** — nothing builds it now.
 
+**Cold start told honestly** (`94a321b`, 2026-09-11) — the deployed backend scales to zero, so
+the first board of the day waits ~20s for a container and a JVM. `MenuLeaderboard` showed "…"
+throughout and then often "offline", which reads as a broken game rather than a slow one. It
+now says "waking the server…" once the wait passes 2.5s (never seen against a warm server,
+which answers in well under a second), and the fallback names *which* reason produced a local
+board: unreachable, or cloud save switched off. The second one is a setting the player chose,
+and calling it "offline" sends them hunting a problem that isn't there.
+
 **The Stats screen became Profile** (`04e69dc`, `730e48d`, `d6c369b`) — the account on top,
 the career below, one scroll. The two halves are deliberately not the same kind of thing:
 the account belongs to the *server* and is only ever asked to change, the career is the
