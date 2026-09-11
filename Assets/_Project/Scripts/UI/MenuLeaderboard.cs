@@ -51,10 +51,21 @@ namespace SpaceSurvivors.UI
         [SerializeField] private Color _tabSelected = new(0.7f, 0.88f, 1f, 0.95f);
         [SerializeField] private Color _tabIdle = new(0.4f, 0.55f, 0.7f, 0.6f);
 
+        /// <summary>
+        /// How long a fetch may take before the status line stops saying "loading" and admits
+        /// what is really happening. Short enough that nobody stares at a silent screen, long
+        /// enough that a warm server — which answers in well under a second — never shows it.
+        /// </summary>
+        [Header("Cold start")]
+        [SerializeField] private float _wakeNoticeAfterSeconds = 2.5f;
+
         private bool _showingCampaign;
 
         /// <summary>Bumped every fetch so a slow reply for the old tab is ignored when it lands.</summary>
         private int _request;
+
+        /// <summary>The pending "still waiting" notice, kept so a fast reply can cancel it.</summary>
+        private Coroutine _wakeNotice;
 
         private void Awake()
         {
@@ -82,13 +93,44 @@ namespace SpaceSurvivors.UI
             int token = ++_request;
             string modeId = _showingCampaign ? _campaignModeId : _infiniteModeId;
 
-            SetStatus("…");
+            SetStatus("loading…");
+            StopWakeNotice();
+            if (BackendConfig.Enabled) _wakeNotice = StartCoroutine(WakeNotice(token));
+
             HighScoreService.FetchBoard(modeId, _rows.Length, board =>
             {
                 if (token != _request) return;   // the player switched tabs before this came back
+                StopWakeNotice();
                 Populate(board);
             });
         }
+
+        /// <summary>
+        /// Say why the wait is long, once it is long enough to need saying.
+        ///
+        /// <para>The deployed service scales to zero when nobody is playing, so the first fetch
+        /// of the day waits for a container to start and a JVM to boot — around twenty seconds.
+        /// The wait is unavoidable at this tier; being told nothing during it is not. A silent
+        /// "…" for twenty seconds reads as a broken game, which is a worse bug than the delay
+        /// it is hiding.</para>
+        ///
+        /// <para>Realtime, because a paused menu would freeze a scaled wait forever.</para>
+        /// </summary>
+        private System.Collections.IEnumerator WakeNotice(int token)
+        {
+            yield return new WaitForSecondsRealtime(_wakeNoticeAfterSeconds);
+            if (token == _request) SetStatus("waking the server…");
+            _wakeNotice = null;
+        }
+
+        private void StopWakeNotice()
+        {
+            if (_wakeNotice == null) return;
+            StopCoroutine(_wakeNotice);
+            _wakeNotice = null;
+        }
+
+        private void OnDisable() => StopWakeNotice();
 
         private void Populate(LeaderboardBoard board)
         {
@@ -123,7 +165,16 @@ namespace SpaceSurvivors.UI
             }
 
             if (!board.FromServer)
-                SetStatus(shown > 0 ? "offline — your best only" : "offline");
+            {
+                // Two very different reasons produce the same board, and calling both "offline"
+                // blames the network for a setting the player chose. The one they can act on is
+                // the switch in Settings, so name it.
+                if (!BackendConfig.Enabled)
+                    SetStatus(shown > 0 ? "cloud save is off — your best only" : "cloud save is off");
+                else
+                    SetStatus(shown > 0 ? "cannot reach the server — your best only"
+                                        : "cannot reach the server");
+            }
             else if (shown == 0)
                 SetStatus("no runs yet — be the first");
             else
