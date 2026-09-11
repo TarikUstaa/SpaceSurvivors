@@ -1531,13 +1531,27 @@ against it, and a grep for last year's spelling of a problem proves nothing abou
 Unity compiling the project is this repo's equivalent of the backend's test suite, and it should
 be run before any claim about the code is written down.
 
-### Deliberately not done
+### D32 — the port that would have silently stopped hitting triggers
 
-Three warnings remain: `Physics2D.OverlapCircleNonAlloc` / `OverlapBoxNonAlloc` in `HazardZone`,
-`IonStormEvent` and `SolarFlareEvent`. The replacement is not a rename — the new overloads take
-a `ContactFilter2D` instead of a layer-mask int — so it is a real edit in damage-dealing code,
-with no tests and a sign-off playthrough pending. Four warnings is a readable console; fifty was
-not. Worth doing as its own change.
+The last three warnings were `Physics2D.OverlapCircleNonAlloc` / `OverlapBoxNonAlloc` in
+`HazardZone`, `IonStormEvent` and `SolarFlareEvent` — the three places that deal area damage.
+Not a rename: the replacements take a `ContactFilter2D` instead of a layer-mask int.
+
+**The trap.** The deprecated calls obeyed the project-wide *Queries Hit Triggers* setting, which
+is **on** here (`Physics2D2DSettings: m_QueriesHitTriggers: 1`). A freshly constructed
+`ContactFilter2D` has `useTriggers` **false**. So the obvious port — change the method name,
+pass `new ContactFilter2D()` — stops every one of those queries from seeing a trigger collider.
+The hazards would still draw, still tick, still damage *something*, and nothing would appear in
+the console. That is the exact shape of the bug this whole pass exists to avoid, and it was one
+keystroke away.
+
+`OverlapFilter.For(LayerMask)` now builds the filter, reading `Physics2D.queriesHitTriggers` so
+the two stay in step even if that setting changes. One helper rather than the same three lines
+in three files, because the next area effect will need it.
+
+**Result: the project compiles with zero errors and zero warnings from its own code**, down from
+50. Nothing about what the game does was changed — but "nothing changed" here rests on reading
+the defaults of an API, not on a test, which is the standing weakness of this repo.
 
 ## Open Decisions / TODO
 

@@ -37,7 +37,8 @@ namespace SpaceSurvivors.Environment
             if (Elapsed < _next) return;
             _next = Elapsed + _pulseInterval;
 
-            int n = Physics2D.OverlapCircleNonAlloc(PlayerPos, _pulseRadius, _hits, _enemyLayers);
+            int n = Physics2D.OverlapCircle(PlayerPos, _pulseRadius,
+                OverlapFilter.For(_enemyLayers), _hits);
             for (int i = 0; i < n; i++)
             {
                 var col = _hits[i];

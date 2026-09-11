@@ -65,8 +65,8 @@ namespace SpaceSurvivors.Environment
             _nextTick = Elapsed + _tickInterval;
 
             float bandAngle = Vector2.SignedAngle(Vector2.right, _perp);
-            int n = Physics2D.OverlapBoxNonAlloc(_band.position, new Vector2(_span * 2f, _bandThickness),
-                bandAngle, _hits, _targetLayers);
+            int n = Physics2D.OverlapBox(_band.position, new Vector2(_span * 2f, _bandThickness),
+                bandAngle, OverlapFilter.For(_targetLayers), _hits);
             for (int i = 0; i < n; i++)
             {
                 var col = _hits[i];

@@ -7,8 +7,8 @@ namespace SpaceSurvivors.Environment
     /// A stationary damage field (M15): an ion storm cell, a mine cluster, a radiation pocket.
     /// On a fixed tick it overlaps a circle and damages every <see cref="IDamageable"/> inside
     /// — the player <b>and</b> enemies (positioning is the only defence, GDD). No physics
-    /// layer, no rigidbody: a pure <see cref="Physics2D.OverlapCircleAll"/> ticker so it works
-    /// the same whether it's placed by hand or streamed by the <see cref="EnvironmentDirector"/>.
+    /// layer, no rigidbody: a pure overlap ticker into a shared buffer, so it works the same
+    /// whether it's placed by hand or streamed by the <see cref="EnvironmentDirector"/>.
     ///
     /// The child sprite (assigned in the prefab) just pulses for readability.
     /// </summary>
@@ -50,7 +50,8 @@ namespace SpaceSurvivors.Environment
             if (Time.time < _nextTick || _damagePerTick <= 0f) return;
             _nextTick = Time.time + _tickInterval;
 
-            int n = Physics2D.OverlapCircleNonAlloc(transform.position, _radius, _hits, _targetLayers);
+            int n = Physics2D.OverlapCircle(transform.position, _radius,
+                OverlapFilter.For(_targetLayers), _hits);
             for (int i = 0; i < n; i++)
             {
                 var col = _hits[i];
