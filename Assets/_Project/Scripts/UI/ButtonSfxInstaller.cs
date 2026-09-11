@@ -18,10 +18,10 @@ namespace SpaceSurvivors.UI
 
         private void Start()
         {
-            if (_audio == null) _audio = FindFirstObjectByType<AudioDirector>();
+            if (_audio == null) _audio = FindAnyObjectByType<AudioDirector>();
             if (_audio == null) return;
 
-            foreach (var button in FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (var button in FindObjectsByType<Button>(FindObjectsInactive.Include))
             {
                 var b = button;
                 b.onClick.AddListener(() => _audio.Play(SfxId.UiClick));

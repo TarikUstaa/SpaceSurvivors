@@ -38,9 +38,9 @@ namespace SpaceSurvivors.UI
 
         private void Awake()
         {
-            if (_levelSystem == null) _levelSystem = FindFirstObjectByType<LevelSystem>();
-            if (_upgrades == null) _upgrades = FindFirstObjectByType<UpgradeService>();
-            if (_run == null) _run = FindFirstObjectByType<RunController>();
+            if (_levelSystem == null) _levelSystem = FindAnyObjectByType<LevelSystem>();
+            if (_upgrades == null) _upgrades = FindAnyObjectByType<UpgradeService>();
+            if (_run == null) _run = FindAnyObjectByType<RunController>();
             if (_panel != null) _panel.SetActive(false);
         }
 

@@ -357,11 +357,11 @@ namespace SpaceSurvivors.EditorTools
         {
             var scene = EditorSceneManager.OpenScene("Assets/_Project/Scenes/MainMenu.unity", OpenSceneMode.Single);
 
-            var all = Object.FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var all = Object.FindObjectsByType<Button>(FindObjectsInactive.Include);
             var anchor = all.FirstOrDefault(b => b.name == "HangarButton")
                          ?? all.FirstOrDefault(b => b.name == "ShopButton");
             var parent = anchor != null ? anchor.transform.parent
-                : Object.FindFirstObjectByType<Canvas>().transform;
+                : Object.FindAnyObjectByType<Canvas>().transform;
 
             // The screen was called Stats before it grew the account section.
             foreach (var stale in new[] { "ProfileButton", "StatsButton" })

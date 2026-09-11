@@ -5,10 +5,11 @@ namespace SpaceSurvivors.Core
 {
     /// <summary>
     /// Persistence seam for per-mode best results, mirroring <see cref="IProfileStore"/>.
-    /// M13 ships <see cref="LocalPrefsLeaderboardStore"/> (PlayerPrefs, this device only); an
-    /// online leaderboard drops in later behind this same interface so
-    /// <see cref="HighScoreService"/> and its callers never change (Project_Goals §8: online
-    /// leaderboards for Infinite mode are a planned backend feature).
+    ///
+    /// Two implementations exist: <see cref="LocalPrefsLeaderboardStore"/> (PlayerPrefs, this
+    /// device only) and <see cref="HttpLeaderboardStore"/> (the deployed backend's ranked
+    /// board). <see cref="BackendBootstrap"/> installs one at startup and
+    /// <see cref="HighScoreService"/> never learns which — that is the point of the seam.
     ///
     /// Like <see cref="IProfileStore"/> the contract is synchronous / cache-first: a networked
     /// store answers <see cref="BestSeconds"/> from its last known value and reconciles in the

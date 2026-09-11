@@ -39,7 +39,7 @@ namespace SpaceSurvivors.Progression
 
         public virtual void OnSpawned()
         {
-            if (Collector == null) Collector = FindFirstObjectByType<ScrapCollector>();
+            if (Collector == null) Collector = FindAnyObjectByType<ScrapCollector>();
             _flying = false;
             _speed = 0f;
             _restPos = transform.position;

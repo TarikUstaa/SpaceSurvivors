@@ -30,8 +30,8 @@ namespace SpaceSurvivors.Environment
         private void Awake()
         {
             _handle = GetComponent<PoolHandle>();
-            _pool = FindFirstObjectByType<PoolManager>();
-            _collector = FindFirstObjectByType<ScrapCollector>();
+            _pool = FindAnyObjectByType<PoolManager>();
+            _collector = FindAnyObjectByType<ScrapCollector>();
             GetComponent<Collider2D>().isTrigger = true;
         }
 

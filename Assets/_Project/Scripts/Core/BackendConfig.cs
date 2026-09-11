@@ -20,6 +20,7 @@ namespace SpaceSurvivors.Core
         private const string BaseUrlKey = "backend.baseUrl";
         private const string DeviceIdKey = "backend.userId";       // key kept: existing installs keep their id
         private const string DeviceSecretKey = "backend.deviceSecret";
+        private const string SandboxKey = "backend.sandbox";
 
         /// <summary>
         /// The deployed service — an Azure Container App in Italy North, in front of a
@@ -56,8 +57,12 @@ namespace SpaceSurvivors.Core
         }
 
         /// <summary>
-        /// Who this install claims to be. Sent as <c>Authorization: Device &lt;id&gt;</c>, which the
-        /// The device's public half of its credential: which device this is.
+        /// The device's public half of its credential: which device this claims to be.
+        ///
+        /// <para>Sent only to <see cref="TokenUrl"/>, paired with <see cref="DeviceSecret"/>,
+        /// in exchange for a short-lived token; every other request carries that token instead.
+        /// (An earlier design sent this on its own as an <c>Authorization: Device …</c> header
+        /// and the server believed it — which is why the exchange exists.)</para>
         ///
         /// <para>Generated once and kept, so repeated launches map to the same server-side
         /// player. Safe to read and to log — on its own it proves nothing, because the server
@@ -116,13 +121,11 @@ namespace SpaceSurvivors.Core
             set { PlayerPrefs.SetInt(SandboxKey, value ? 1 : 0); PlayerPrefs.Save(); }
         }
 
-        private const string SandboxKey = "backend.sandbox";
-
         /// <summary>File the <see cref="LocalJsonProfileStore"/> cache should use.</summary>
         public static string CacheFileName => Sandbox ? "profile.backend-sandbox.json" : "profile.json";
 
-        public static string ProgressUrl => BaseUrl + "/v1/progress";
-        public static string PlayerUrl   => BaseUrl + "/v1/player";
+        public static string ProgressUrl    => BaseUrl + "/v1/progress";
+        public static string PlayerUrl      => BaseUrl + "/v1/player";
         public static string LeaderboardUrl => BaseUrl + "/v1/leaderboard";
         public static string TokenUrl       => BaseUrl + "/v1/auth/token";
     }

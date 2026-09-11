@@ -48,13 +48,13 @@ namespace SpaceSurvivors.UI
                 _sources[i] = src;
             }
 
-            _weapons = FindFirstObjectByType<WeaponController>();
-            _spawnDirector = FindFirstObjectByType<SpawnDirector>();
-            _level = FindFirstObjectByType<LevelSystem>();
-            _scrap = FindFirstObjectByType<ScrapCollector>();
-            _shield = FindFirstObjectByType<ShieldComponent>();
+            _weapons = FindAnyObjectByType<WeaponController>();
+            _spawnDirector = FindAnyObjectByType<SpawnDirector>();
+            _level = FindAnyObjectByType<LevelSystem>();
+            _scrap = FindAnyObjectByType<ScrapCollector>();
+            _shield = FindAnyObjectByType<ShieldComponent>();
             _playerHealth = _level != null ? _level.GetComponent<HealthComponent>() : null;
-            _run = FindFirstObjectByType<RunController>();
+            _run = FindAnyObjectByType<RunController>();
         }
 
         private void OnEnable()

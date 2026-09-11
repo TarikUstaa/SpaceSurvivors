@@ -65,7 +65,7 @@ namespace SpaceSurvivors.Environment
         private void Start()
         {
             if (_camera == null) _camera = Camera.main;
-            if (_collector == null) _collector = FindFirstObjectByType<ScrapCollector>();
+            if (_collector == null) _collector = FindAnyObjectByType<ScrapCollector>();
 
             ApplyLook(MapService.Selected != null ? MapService.Selected : _fallbackMap);
 

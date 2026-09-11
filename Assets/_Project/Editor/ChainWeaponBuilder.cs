@@ -115,7 +115,7 @@ namespace SpaceSurvivors.EditorTools
             var scene = EditorSceneManager.OpenScene(GameScene, OpenSceneMode.Single);
 
             int touched = 0;
-            foreach (var service in Object.FindObjectsByType<UpgradeService>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (var service in Object.FindObjectsByType<UpgradeService>(FindObjectsInactive.Include))
             {
                 var so = new SerializedObject(service);
                 var list = so.FindProperty("_catalogue");

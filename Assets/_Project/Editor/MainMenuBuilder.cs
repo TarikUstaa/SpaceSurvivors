@@ -54,7 +54,7 @@ namespace SpaceSurvivors.EditorTools
 
             var scene = EditorSceneManager.OpenScene(Scene, OpenSceneMode.Single);
 
-            var cam = Object.FindObjectsByType<Camera>(FindObjectsSortMode.None)
+            var cam = Object.FindObjectsByType<Camera>()
                 .FirstOrDefault(c => c.CompareTag("MainCamera")) ?? Camera.main;
             if (cam == null) { Debug.LogError("[MainMenuBuilder] no Main Camera in the scene."); return; }
 
@@ -192,7 +192,7 @@ namespace SpaceSurvivors.EditorTools
 
         private static void RestyleCanvas(Camera cam, StarfieldParallax starfield)
         {
-            var scaler = Object.FindFirstObjectByType<CanvasScaler>();
+            var scaler = Object.FindAnyObjectByType<CanvasScaler>();
             if (scaler == null) { Debug.LogError("[MainMenuBuilder] MenuCanvas not found."); return; }
             var canvas = scaler.transform;
             var menuRoot = canvas.parent;

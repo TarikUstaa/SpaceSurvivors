@@ -22,12 +22,12 @@ namespace SpaceSurvivors.UI
 
         private void Awake()
         {
-            if (_spawnDirector == null) _spawnDirector = FindFirstObjectByType<SpawnDirector>();
+            if (_spawnDirector == null) _spawnDirector = FindAnyObjectByType<SpawnDirector>();
             bool show = !GameSession.IsEndless && _spawnDirector != null && _spawnDirector.BossStageCount > 0;
             if (_root != null) _root.SetActive(show);
             enabled = show;
 
-            var run = FindFirstObjectByType<RunController>();
+            var run = FindAnyObjectByType<RunController>();
             if (run != null) run.RunEnded += (_, __) => { if (_root != null) _root.SetActive(false); };
         }
 

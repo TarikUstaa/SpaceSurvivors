@@ -1466,6 +1466,79 @@ upgrades, 8 enemy prefabs, 5 Resources catalogues, all 7 scenes in Build Setting
 **Sim-bot caveat unchanged:** it kites and cannot judge mid/late Infinite difficulty (HP pinned at
 max from ~t=390). Campaign's 60–110s window does have teeth — one of three runs died there.
 
+## Clean-code pass over the game scripts (2026-09-11)
+
+Tarik asked for the same review the backend had just had. 146 scripts, ~12,000 lines. Core was
+read line by line; the rest was scanned for the defect classes Core turned up. No gameplay logic
+was changed — the whole change set is comments, one bootstrap file, and a mechanical API rename.
+
+**The safety net is different here and that shaped the scope.** `Assets/_Project/Tests` is
+empty, so nothing pins behaviour the way the backend's 175 tests do. The compiler is the only
+automatic check, and it turned out to be a better one than expected — see below.
+
+### What was clean
+
+Worth recording, because a review's value is also in what it clears. Every static-event
+subscription in a MonoBehaviour has a matching release (6 for 6). No static holds a scene object
+except `BossMarker.Active`, which resets. One silent `catch`, deliberate and commented. No
+TODO/HACK/FIXME anywhere. And the ~137 public fields a first grep flagged are **all** required
+by serialization — ScriptableObject definitions, JSON DTOs, Inspector row structs. "Fixing"
+those would have broken save files and prefab references; the grep's biggest find was a thing
+that must not be touched.
+
+### Fixed
+
+- **`AchievementService` subscribed with a lambda that could never be removed.** This project
+  runs with Domain Reload disabled, so statics survive between Play sessions while
+  `[RuntimeInitializeOnLoadMethod]` fires again on each one — the fifth Play press meant every
+  profile change re-evaluated every achievement five times. Now a named method with a `-=`
+  before the `+=`. `GameSession` and `BossMarker` already guarded this hazard; this was the one
+  place the pattern had not reached.
+- **`LocalJsonProfileStore.Save` could lose the profile entirely.** It deleted the real file and
+  then moved the temp file over — a window in which no save existed. The comment claimed a crash
+  "can't leave a half-written profile", which was true and beside the point. Now `File.Replace`,
+  with a plain `Move` on the first save where there is nothing to lose.
+- **Four comments that described a world that no longer exists**: `BackendConfig.UserId` had two
+  half-sentences spliced together, the first describing the pre-token `Authorization: Device …`
+  header; `IProfileStore` and `ILeaderboardStore` both said a networked implementation "drops in
+  later" (both shipped) and `IProfileStore` claimed "tests use a fake in-memory store" (there are
+  no tests); `PlayerProfile` still said M13 only used the wallet and that the ship/achievement
+  fields were reserved for later. **A provenance tag like "M18 event —" ages fine; a claim about
+  the present does not.** 28 of the 32 milestone mentions were the former and were left alone.
+- **Culture.** Two dozen `ToString("n0")` / `$"{x:0.00}"` sites used the machine's culture, so a
+  Turkish system rendered `x1,50` and `1.234` beside English labels — and the same code produced
+  different output on Tarik's machine than in a build. Fixed once in `CultureBootstrap` rather
+  than at 26 call sites, because the twenty-seventh would have started it again. When there are
+  real translations, that one file changes.
+
+### D31 — the compiler found two things the review had asserted were fine
+
+Both worth remembering, because they are the same mistake twice.
+
+1. The review reported **"0 obsolete Unity APIs"**. It had grepped for `FindObjectOfType` — the
+   *previous* generation of deprecation. The code uses the newer `FindFirstObjectByType`, which
+   Unity 6 has now also deprecated: **99 call sites across 45 files**, and the console was
+   carrying 50 warnings, which is the same as carrying none. Swapped to `FindAnyObjectByType`
+   (Unity's own recommendation) and the redundant `FindObjectsSortMode.None` arguments dropped.
+   Safe because every type looked up is scene-unique; the two candidates that were not obviously
+   so — `ShieldComponent` and `HealthComponent` — turned out to be player-only and a
+   broken-scene fallback behind a `"Player"` tag lookup. Warnings: **50 → 4**.
+2. `File.Move(tmp, path, overwrite: true)` was written on the reasoning that the project targets
+   .NET Standard 2.1, where that overload exists. It does not compile in Unity's profile.
+
+**The lesson is the backend's, restated:** reasoning about an API is not the same as compiling
+against it, and a grep for last year's spelling of a problem proves nothing about this year's.
+Unity compiling the project is this repo's equivalent of the backend's test suite, and it should
+be run before any claim about the code is written down.
+
+### Deliberately not done
+
+Three warnings remain: `Physics2D.OverlapCircleNonAlloc` / `OverlapBoxNonAlloc` in `HazardZone`,
+`IonStormEvent` and `SolarFlareEvent`. The replacement is not a rename — the new overloads take
+a `ContactFilter2D` instead of a layer-mask int — so it is a real edit in damage-dealing code,
+with no tests and a sign-off playthrough pending. Four warnings is a readable console; fifty was
+not. Worth doing as its own change.
+
 ## Open Decisions / TODO
 
 *The M1-era setup items (Input System, pooling, layer matrix, git) are all long done.*

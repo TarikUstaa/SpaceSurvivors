@@ -96,7 +96,7 @@ namespace SpaceSurvivors.EditorTools
 
         private static void EnsureEventSystem(Scene scene)
         {
-            if (Object.FindFirstObjectByType<EventSystem>() != null) return;
+            if (Object.FindAnyObjectByType<EventSystem>() != null) return;
             var go = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
             EditorSceneManager.MoveGameObjectToScene(go, scene);
         }

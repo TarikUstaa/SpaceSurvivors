@@ -200,10 +200,10 @@ namespace SpaceSurvivors.EditorTools
             var scene = EditorSceneManager.OpenScene("Assets/_Project/Scenes/MainMenu.unity", OpenSceneMode.Single);
 
             // sit it just under the existing SETTINGS button, same parent / anchor / size
-            var settings = Object.FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            var settings = Object.FindObjectsByType<Button>(FindObjectsInactive.Include)
                 .FirstOrDefault(b => b.name == "SettingsButton");
             var parent = settings != null ? settings.transform.parent
-                : Object.FindFirstObjectByType<Canvas>().transform;
+                : Object.FindAnyObjectByType<Canvas>().transform;
             var srt = settings != null ? (RectTransform)settings.transform : null;
 
             var existing = parent.Find("ShopButton");

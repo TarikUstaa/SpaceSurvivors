@@ -163,12 +163,12 @@ namespace SpaceSurvivors.EditorTools
         {
             var scene = EditorSceneManager.OpenScene("Assets/_Project/Scenes/MainMenu.unity", OpenSceneMode.Single);
 
-            var shop = Object.FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            var shop = Object.FindObjectsByType<Button>(FindObjectsInactive.Include)
                 .FirstOrDefault(b => b.name == "ShopButton");
-            var settings = Object.FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            var settings = Object.FindObjectsByType<Button>(FindObjectsInactive.Include)
                 .FirstOrDefault(b => b.name == "SettingsButton");
             var anchor = shop != null ? (RectTransform)shop.transform : settings != null ? (RectTransform)settings.transform : null;
-            var parent = anchor != null ? anchor.parent : Object.FindFirstObjectByType<Canvas>().transform;
+            var parent = anchor != null ? anchor.parent : Object.FindAnyObjectByType<Canvas>().transform;
 
             var existing = parent.Find("HangarButton");
             if (existing != null) Object.DestroyImmediate(existing.gameObject);

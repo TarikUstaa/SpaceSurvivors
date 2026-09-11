@@ -458,14 +458,14 @@ namespace SpaceSurvivors.EditorTools
         {
             var scene = EditorSceneManager.OpenScene(GameScene, OpenSceneMode.Single);
 
-            var pool = UnityEngine.Object.FindFirstObjectByType<SpaceSurvivors.Core.PoolManager>();
+            var pool = UnityEngine.Object.FindAnyObjectByType<SpaceSurvivors.Core.PoolManager>();
             var systems = pool != null ? pool.gameObject : GameObject.Find("Systems");
-            var envDir = UnityEngine.Object.FindFirstObjectByType<EnvironmentDirector>();
-            var starfield = UnityEngine.Object.FindFirstObjectByType<SpaceSurvivors.Core.StarfieldParallax>();
-            var move = UnityEngine.Object.FindFirstObjectByType<SpaceSurvivors.Player.PlayerMovement>();
-            var clock = UnityEngine.Object.FindFirstObjectByType<SpaceSurvivors.Core.RunClock>();
-            var spawns = UnityEngine.Object.FindFirstObjectByType<SpaceSurvivors.Enemies.SpawnDirector>();
-            var collector = UnityEngine.Object.FindFirstObjectByType<SpaceSurvivors.Progression.ScrapCollector>();
+            var envDir = UnityEngine.Object.FindAnyObjectByType<EnvironmentDirector>();
+            var starfield = UnityEngine.Object.FindAnyObjectByType<SpaceSurvivors.Core.StarfieldParallax>();
+            var move = UnityEngine.Object.FindAnyObjectByType<SpaceSurvivors.Player.PlayerMovement>();
+            var clock = UnityEngine.Object.FindAnyObjectByType<SpaceSurvivors.Core.RunClock>();
+            var spawns = UnityEngine.Object.FindAnyObjectByType<SpaceSurvivors.Enemies.SpawnDirector>();
+            var collector = UnityEngine.Object.FindAnyObjectByType<SpaceSurvivors.Progression.ScrapCollector>();
             if (systems == null || move == null) { Debug.LogError("[M18] systems/player not found"); return; }
 
             // 1. EventDirector on Systems.

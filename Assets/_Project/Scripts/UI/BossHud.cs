@@ -28,7 +28,7 @@ namespace SpaceSurvivors.UI
 
         private void Awake()
         {
-            if (_spawnDirector == null) _spawnDirector = FindFirstObjectByType<SpawnDirector>();
+            if (_spawnDirector == null) _spawnDirector = FindAnyObjectByType<SpawnDirector>();
             if (_warningRoot != null) _warningRoot.SetActive(false);
             if (_barRoot != null) _barRoot.SetActive(false);
         }

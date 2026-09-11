@@ -3,10 +3,12 @@ using System;
 namespace SpaceSurvivors.Core
 {
     /// <summary>
-    /// Persistence seam for the <see cref="PlayerProfile"/>. M13 ships
-    /// <see cref="LocalJsonProfileStore"/>; a backend implementation drops in later behind
-    /// this same interface without touching gameplay code (Project_Goals §8). Tests use a
-    /// fake in-memory store.
+    /// Persistence seam for the <see cref="PlayerProfile"/>.
+    ///
+    /// Two implementations exist: <see cref="LocalJsonProfileStore"/> (a JSON file on this
+    /// device) and <see cref="HttpProfileStore"/> (the deployed backend, with that same local
+    /// file as its cache). <see cref="BackendBootstrap"/> installs one at startup and no
+    /// gameplay code learns which.
     ///
     /// Both methods are synchronous by contract: a remote store is expected to be
     /// <b>cache-first</b> — <see cref="Load"/> returns the last known profile immediately and

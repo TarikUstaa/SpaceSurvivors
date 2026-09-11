@@ -31,9 +31,25 @@ namespace SpaceSurvivors.Progression
         /// at run end and on shop purchases — never per-frame — so this is cheap. Callers can
         /// still invoke <see cref="Evaluate"/> directly (the run-end screen does, to read back
         /// what was unlocked).
+        ///
+        /// <para><b>Detach before attaching, and a named method rather than a lambda.</b> This
+        /// project runs with Domain Reload disabled (Editor → Enter Play Mode Options), so
+        /// statics survive between Play sessions while this hook runs again on every one. A
+        /// lambda cannot be removed — nothing holds a reference to it — so the old subscription
+        /// stayed attached and a fifth Play press meant every profile change re-evaluated every
+        /// achievement five times. The <c>-=</c> is a no-op the first time round, which is what
+        /// makes the pair safe to run repeatedly. <c>GameSession</c> and <c>BossMarker</c> guard
+        /// the same hazard with a <c>SubsystemRegistration</c> reset; this was the one place the
+        /// pattern had not reached.</para>
         /// </summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Boot() => ProfileService.Changed += () => Evaluate();
+        private static void Boot()
+        {
+            ProfileService.Changed -= OnProfileChanged;
+            ProfileService.Changed += OnProfileChanged;
+        }
+
+        private static void OnProfileChanged() => Evaluate();
 
         public static IReadOnlyList<AchievementData> All
         {

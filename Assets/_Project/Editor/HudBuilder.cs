@@ -164,12 +164,12 @@ namespace SpaceSurvivors.EditorTools
             stRt.anchoredPosition = new Vector2(-50, 0);
 
             var so = new SerializedObject(hud);
-            var ls = Object.FindFirstObjectByType<LevelSystem>();
+            var ls = Object.FindAnyObjectByType<LevelSystem>();
             so.FindProperty("_levelSystem").objectReferenceValue = ls;
-            so.FindProperty("_clock").objectReferenceValue = Object.FindFirstObjectByType<RunClock>();
+            so.FindProperty("_clock").objectReferenceValue = Object.FindAnyObjectByType<RunClock>();
             so.FindProperty("_playerHealth").objectReferenceValue = ls != null ? ls.GetComponent<HealthComponent>() : null;
-            so.FindProperty("_shield").objectReferenceValue = Object.FindFirstObjectByType<ShieldComponent>();
-            so.FindProperty("_scrap").objectReferenceValue = Object.FindFirstObjectByType<ScrapCollector>();
+            so.FindProperty("_shield").objectReferenceValue = Object.FindAnyObjectByType<ShieldComponent>();
+            so.FindProperty("_scrap").objectReferenceValue = Object.FindAnyObjectByType<ScrapCollector>();
             so.FindProperty("_xpFill").objectReferenceValue = xpFill;
             so.FindProperty("_levelLabel").objectReferenceValue = levelLabel;
             so.FindProperty("_timerLabel").objectReferenceValue = timer;
@@ -236,9 +236,9 @@ namespace SpaceSurvivors.EditorTools
             panel.SetActive(false);
 
             var so = new SerializedObject(screen);
-            so.FindProperty("_levelSystem").objectReferenceValue = Object.FindFirstObjectByType<LevelSystem>();
-            so.FindProperty("_upgrades").objectReferenceValue = Object.FindFirstObjectByType<UpgradeService>();
-            so.FindProperty("_run").objectReferenceValue = Object.FindFirstObjectByType<RunController>();
+            so.FindProperty("_levelSystem").objectReferenceValue = Object.FindAnyObjectByType<LevelSystem>();
+            so.FindProperty("_upgrades").objectReferenceValue = Object.FindAnyObjectByType<UpgradeService>();
+            so.FindProperty("_run").objectReferenceValue = Object.FindAnyObjectByType<RunController>();
             so.FindProperty("_panel").objectReferenceValue = panel;
             so.FindProperty("_header").objectReferenceValue = header;
             var bp = so.FindProperty("_choiceButtons"); bp.arraySize = 3;
@@ -296,7 +296,7 @@ namespace SpaceSurvivors.EditorTools
             Stretch(bossName.rectTransform);
 
             var so = new SerializedObject(hud);
-            so.FindProperty("_spawnDirector").objectReferenceValue = Object.FindFirstObjectByType<SpawnDirector>();
+            so.FindProperty("_spawnDirector").objectReferenceValue = Object.FindAnyObjectByType<SpawnDirector>();
             so.FindProperty("_warningRoot").objectReferenceValue = warning;
             so.FindProperty("_warningText").objectReferenceValue = wText;
             so.FindProperty("_barRoot").objectReferenceValue = bar.gameObject;

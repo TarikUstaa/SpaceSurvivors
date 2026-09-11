@@ -27,10 +27,10 @@ namespace SpaceSurvivors.Progression
 
         private void Awake()
         {
-            if (_spawnDirector == null) _spawnDirector = FindFirstObjectByType<SpawnDirector>();
-            if (_levelSystem == null) _levelSystem = FindFirstObjectByType<LevelSystem>();
-            if (_scrapCollector == null) _scrapCollector = FindFirstObjectByType<ScrapCollector>();
-            if (_clock == null) _clock = FindFirstObjectByType<RunClock>();
+            if (_spawnDirector == null) _spawnDirector = FindAnyObjectByType<SpawnDirector>();
+            if (_levelSystem == null) _levelSystem = FindAnyObjectByType<LevelSystem>();
+            if (_scrapCollector == null) _scrapCollector = FindAnyObjectByType<ScrapCollector>();
+            if (_clock == null) _clock = FindAnyObjectByType<RunClock>();
         }
 
         private void OnEnable()

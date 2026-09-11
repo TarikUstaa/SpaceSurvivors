@@ -29,7 +29,7 @@ namespace SpaceSurvivors.Enemies
         private void Awake()
         {
             _health = GetComponent<HealthComponent>();
-            _director = FindFirstObjectByType<SpawnDirector>();
+            _director = FindAnyObjectByType<SpawnDirector>();
         }
 
         private void OnEnable()

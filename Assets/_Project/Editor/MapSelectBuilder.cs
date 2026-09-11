@@ -130,11 +130,11 @@ namespace SpaceSurvivors.EditorTools
             var scene = EditorSceneManager.OpenScene("Assets/_Project/Scenes/MainMenu.unity", OpenSceneMode.Single);
 
             // No standalone MAPS section — the map picker opens after choosing a mode.
-            var stray = Object.FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            var stray = Object.FindObjectsByType<Button>(FindObjectsInactive.Include)
                 .FirstOrDefault(b => b.name == "MapsButton");
             if (stray != null) Object.DestroyImmediate(stray.gameObject);
 
-            var menu = Object.FindFirstObjectByType<MainMenuScreen>();
+            var menu = Object.FindAnyObjectByType<MainMenuScreen>();
             if (menu != null)
             {
                 var mso = new SerializedObject(menu);

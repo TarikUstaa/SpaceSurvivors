@@ -27,7 +27,7 @@ namespace SpaceSurvivors.Progression
         public override void OnSpawned()
         {
             base.OnSpawned();
-            if (_pool == null) _pool = FindFirstObjectByType<PoolManager>();
+            if (_pool == null) _pool = FindAnyObjectByType<PoolManager>();
         }
 
         protected override void OnCollected(GameObject collector)

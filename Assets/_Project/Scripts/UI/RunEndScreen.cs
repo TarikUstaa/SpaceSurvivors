@@ -37,8 +37,8 @@ namespace SpaceSurvivors.UI
 
         private void Awake()
         {
-            if (_run == null) _run = FindFirstObjectByType<RunController>();
-            if (_stats == null) _stats = FindFirstObjectByType<RunStats>();
+            if (_run == null) _run = FindAnyObjectByType<RunController>();
+            if (_stats == null) _stats = FindAnyObjectByType<RunStats>();
             if (_root != null) _root.SetActive(false);
             if (_replayButton != null) _replayButton.onClick.AddListener(Replay);
             if (_menuButton != null) _menuButton.onClick.AddListener(ToMenu);

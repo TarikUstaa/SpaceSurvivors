@@ -28,7 +28,7 @@ namespace SpaceSurvivors.EditorTools
         private static void BuildMainMenuSettings()
         {
             var scene = EditorSceneManager.OpenScene("Assets/_Project/Scenes/MainMenu.unity", OpenSceneMode.Single);
-            var canvas = Object.FindFirstObjectByType<CanvasScaler>();
+            var canvas = Object.FindAnyObjectByType<CanvasScaler>();
             if (canvas == null) { Debug.LogError("[M10] MenuCanvas not found — run the M8 main-menu builder first."); return; }
             var menuCanvas = canvas.transform;
             var menuRoot = menuCanvas.parent;
@@ -142,9 +142,9 @@ namespace SpaceSurvivors.EditorTools
             var rs = systems.GetComponent<RunStats>() ?? systems.AddComponent<RunStats>();
             var so = new SerializedObject(rs);
             so.FindProperty("_spawnDirector").objectReferenceValue = systems.GetComponent<SpawnDirector>();
-            so.FindProperty("_levelSystem").objectReferenceValue = Object.FindFirstObjectByType<LevelSystem>();
-            so.FindProperty("_scrapCollector").objectReferenceValue = Object.FindFirstObjectByType<ScrapCollector>();
-            so.FindProperty("_clock").objectReferenceValue = Object.FindFirstObjectByType<SpaceSurvivors.Core.RunClock>();
+            so.FindProperty("_levelSystem").objectReferenceValue = Object.FindAnyObjectByType<LevelSystem>();
+            so.FindProperty("_scrapCollector").objectReferenceValue = Object.FindAnyObjectByType<ScrapCollector>();
+            so.FindProperty("_clock").objectReferenceValue = Object.FindAnyObjectByType<SpaceSurvivors.Core.RunClock>();
             so.ApplyModifiedPropertiesWithoutUndo();
             return rs;
         }
@@ -209,15 +209,15 @@ namespace SpaceSurvivors.EditorTools
             svRt.anchoredPosition = new Vector2(-50, -118);
 
             var statsPanel = statsWin.gameObject.AddComponent<StatsPanel>();
-            var playerStats = Object.FindFirstObjectByType<SpaceSurvivors.Stats.StatSheet>();
+            var playerStats = Object.FindAnyObjectByType<SpaceSurvivors.Stats.StatSheet>();
             var stso = new SerializedObject(statsPanel);
             stso.FindProperty("_stats").objectReferenceValue = playerStats;
             stso.FindProperty("_playerConfig").objectReferenceValue = AssetDatabase.LoadAssetAtPath<SpaceSurvivors.Data.PlayerConfig>("Assets/_Project/ScriptableObjects/Config/PlayerConfig.asset");
             stso.FindProperty("_playerHealth").objectReferenceValue = playerStats != null ? playerStats.GetComponent<SpaceSurvivors.Combat.HealthComponent>() : null;
             stso.FindProperty("_shield").objectReferenceValue = playerStats != null ? playerStats.GetComponent<SpaceSurvivors.Combat.ShieldComponent>() : null;
-            stso.FindProperty("_level").objectReferenceValue = Object.FindFirstObjectByType<SpaceSurvivors.Progression.LevelSystem>();
+            stso.FindProperty("_level").objectReferenceValue = Object.FindAnyObjectByType<SpaceSurvivors.Progression.LevelSystem>();
             stso.FindProperty("_runStats").objectReferenceValue = systems.GetComponent<RunStats>();
-            stso.FindProperty("_weapons").objectReferenceValue = Object.FindFirstObjectByType<SpaceSurvivors.Combat.WeaponController>();
+            stso.FindProperty("_weapons").objectReferenceValue = Object.FindAnyObjectByType<SpaceSurvivors.Combat.WeaponController>();
             stso.FindProperty("_labels").objectReferenceValue = statLabels;
             stso.FindProperty("_values").objectReferenceValue = statValues;
             stso.ApplyModifiedPropertiesWithoutUndo();
@@ -527,7 +527,7 @@ namespace SpaceSurvivors.EditorTools
 
         private static void EnsureEventSystem(Scene scene)
         {
-            if (Object.FindFirstObjectByType<EventSystem>() != null) return;
+            if (Object.FindAnyObjectByType<EventSystem>() != null) return;
             var go = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
             EditorSceneManager.MoveGameObjectToScene(go, scene);
         }

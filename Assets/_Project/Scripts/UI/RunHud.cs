@@ -42,12 +42,12 @@ namespace SpaceSurvivors.UI
 
         private void Awake()
         {
-            if (_levelSystem == null) _levelSystem = FindFirstObjectByType<LevelSystem>();
-            if (_clock == null) _clock = FindFirstObjectByType<RunClock>();
+            if (_levelSystem == null) _levelSystem = FindAnyObjectByType<LevelSystem>();
+            if (_clock == null) _clock = FindAnyObjectByType<RunClock>();
             if (_playerHealth == null && _levelSystem != null) _playerHealth = _levelSystem.GetComponent<HealthComponent>();
-            if (_shield == null) _shield = FindFirstObjectByType<ShieldComponent>();
-            if (_scrap == null) _scrap = FindFirstObjectByType<ScrapCollector>();
-            _run = FindFirstObjectByType<RunController>();
+            if (_shield == null) _shield = FindAnyObjectByType<ShieldComponent>();
+            if (_scrap == null) _scrap = FindAnyObjectByType<ScrapCollector>();
+            _run = FindAnyObjectByType<RunController>();
             // This component usually sits on a manager object, not under the HUD canvas —
             // so fall back to the canvas that actually renders one of our widgets.
             _canvas = GetComponentInParent<Canvas>();

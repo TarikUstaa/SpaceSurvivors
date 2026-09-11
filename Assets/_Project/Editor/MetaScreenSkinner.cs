@@ -45,9 +45,9 @@ namespace SpaceSurvivors.EditorTools
         {
             var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
 
-            var cam = Object.FindObjectsByType<Camera>(FindObjectsSortMode.None)
+            var cam = Object.FindObjectsByType<Camera>()
                 .FirstOrDefault(c => c.CompareTag("MainCamera")) ?? Camera.main;
-            var scaler = Object.FindFirstObjectByType<CanvasScaler>();
+            var scaler = Object.FindAnyObjectByType<CanvasScaler>();
             if (cam == null || scaler == null)
             {
                 Debug.LogWarning($"[MetaScreenSkinner] {path}: camera or canvas missing, skipped.");
@@ -96,7 +96,7 @@ namespace SpaceSurvivors.EditorTools
         private static void SkinSettingsPanel()
         {
             var scene = EditorSceneManager.OpenScene("Assets/_Project/Scenes/MainMenu.unity", OpenSceneMode.Single);
-            var scaler = Object.FindFirstObjectByType<CanvasScaler>();
+            var scaler = Object.FindAnyObjectByType<CanvasScaler>();
             if (scaler == null) return;
             var group = FindDeep(scaler.transform, "MenuSettingsGroup");
             if (group == null) return;

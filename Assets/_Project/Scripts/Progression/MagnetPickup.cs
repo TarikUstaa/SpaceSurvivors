@@ -19,12 +19,12 @@ namespace SpaceSurvivors.Progression
         public override void OnSpawned()
         {
             base.OnSpawned();
-            if (_pool == null) _pool = FindFirstObjectByType<PoolManager>();
+            if (_pool == null) _pool = FindAnyObjectByType<PoolManager>();
         }
 
         protected override void OnCollected(GameObject collector)
         {
-            foreach (var drop in FindObjectsByType<XpPickup>(FindObjectsSortMode.None))
+            foreach (var drop in FindObjectsByType<XpPickup>())
                 drop.Attract();
 
             if (_collectVfxPrefab != null && _pool != null)

@@ -58,10 +58,10 @@ namespace SpaceSurvivors.Environment
 
         private void Awake()
         {
-            if (_clock == null) _clock = FindFirstObjectByType<RunClock>();
-            if (_pool == null) _pool = FindFirstObjectByType<PoolManager>();
-            if (_spawns == null) _spawns = FindFirstObjectByType<SpawnDirector>();
-            if (_collector == null) _collector = FindFirstObjectByType<ScrapCollector>();
+            if (_clock == null) _clock = FindAnyObjectByType<RunClock>();
+            if (_pool == null) _pool = FindAnyObjectByType<PoolManager>();
+            if (_spawns == null) _spawns = FindAnyObjectByType<SpawnDirector>();
+            if (_collector == null) _collector = FindAnyObjectByType<ScrapCollector>();
             if (_camera == null) _camera = Camera.main;
             if (_catalogue == null) _catalogue = Resources.Load<SpaceEventCatalogue>("SpaceEventCatalogue");
         }

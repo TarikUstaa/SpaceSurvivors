@@ -30,12 +30,12 @@ namespace SpaceSurvivors.UI
 
         private void Awake()
         {
-            if (_stats == null) _stats = FindFirstObjectByType<StatSheet>();
+            if (_stats == null) _stats = FindAnyObjectByType<StatSheet>();
             if (_playerHealth == null && _stats != null) _playerHealth = _stats.GetComponent<HealthComponent>();
-            if (_shield == null) _shield = FindFirstObjectByType<ShieldComponent>();
-            if (_level == null) _level = FindFirstObjectByType<LevelSystem>();
-            if (_runStats == null) _runStats = FindFirstObjectByType<RunStats>();
-            if (_weapons == null) _weapons = FindFirstObjectByType<WeaponController>();
+            if (_shield == null) _shield = FindAnyObjectByType<ShieldComponent>();
+            if (_level == null) _level = FindAnyObjectByType<LevelSystem>();
+            if (_runStats == null) _runStats = FindAnyObjectByType<RunStats>();
+            if (_weapons == null) _weapons = FindAnyObjectByType<WeaponController>();
         }
 
         private void OnEnable() => Rebuild();

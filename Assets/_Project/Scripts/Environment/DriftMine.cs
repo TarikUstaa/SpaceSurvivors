@@ -38,7 +38,7 @@ namespace SpaceSurvivors.Environment
             _body.bodyType = RigidbodyType2D.Kinematic;
             _body.gravityScale = 0f;
             _handle = GetComponent<PoolHandle>();
-            _pool = FindFirstObjectByType<PoolManager>();
+            _pool = FindAnyObjectByType<PoolManager>();
             GetComponent<Collider2D>().isTrigger = true;
         }
 

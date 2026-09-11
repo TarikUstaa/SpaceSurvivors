@@ -68,8 +68,8 @@ namespace SpaceSurvivors.EditorTools
             EditorSceneManager.OpenScene(GameScene, OpenSceneMode.Single);
 
             var config = AssetDatabase.LoadAssetAtPath<DifficultyConfig>(Cfg + configName + ".asset");
-            var sd = Object.FindFirstObjectByType<SpawnDirector>();
-            var move = Object.FindFirstObjectByType<PlayerMovement>();
+            var sd = Object.FindAnyObjectByType<SpawnDirector>();
+            var move = Object.FindAnyObjectByType<PlayerMovement>();
             if (config == null || sd == null || move == null)
             {
                 Debug.LogError($"[BalancePlaytest] missing: config={config} spawnDirector={sd} player={move}");
@@ -139,15 +139,15 @@ namespace SpaceSurvivors.EditorTools
 
             if (_player == null)
             {
-                var move = Object.FindFirstObjectByType<PlayerMovement>();
+                var move = Object.FindAnyObjectByType<PlayerMovement>();
                 if (move == null) return;
                 _player = move.transform;
                 _input = move.GetComponent<ExternalMoveInput>();
                 _health = move.GetComponent<HealthComponent>();
-                _stats = Object.FindFirstObjectByType<RunStats>();
-                _level = Object.FindFirstObjectByType<LevelSystem>();
-                _spawn = Object.FindFirstObjectByType<SpawnDirector>();
-                _run = Object.FindFirstObjectByType<RunController>();
+                _stats = Object.FindAnyObjectByType<RunStats>();
+                _level = Object.FindAnyObjectByType<LevelSystem>();
+                _spawn = Object.FindAnyObjectByType<SpawnDirector>();
+                _run = Object.FindAnyObjectByType<RunController>();
 
                 // Now that the runtime reset has run, put the chosen mode back.
                 if (_mode != null) GameSession.SelectedMode = _mode;
@@ -254,7 +254,7 @@ namespace SpaceSurvivors.EditorTools
 
         private static void AutoAnswerLevelUp()
         {
-            var screen = Object.FindFirstObjectByType<LevelUpScreen>();
+            var screen = Object.FindAnyObjectByType<LevelUpScreen>();
             if (screen == null) return;
             var buttons = screen.GetComponentsInChildren<Button>(false)
                 .Where(b => b.gameObject.activeInHierarchy && b.isActiveAndEnabled).ToList();

@@ -29,7 +29,7 @@ namespace SpaceSurvivors.UI
 
         private void Awake()
         {
-            if (_run == null) _run = FindFirstObjectByType<RunController>();
+            if (_run == null) _run = FindAnyObjectByType<RunController>();
             if (_root != null) _root.SetActive(false);
             if (_settingsRoot != null) _settingsRoot.SetActive(false);
 

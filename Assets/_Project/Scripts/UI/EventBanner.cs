@@ -24,7 +24,7 @@ namespace SpaceSurvivors.UI
 
         private void Awake()
         {
-            if (_director == null) _director = FindFirstObjectByType<EventDirector>();
+            if (_director == null) _director = FindAnyObjectByType<EventDirector>();
             if (_group == null) _group = GetComponent<CanvasGroup>();
             if (_group != null) _group.alpha = 0f;
         }

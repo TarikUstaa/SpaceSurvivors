@@ -6,11 +6,14 @@ namespace SpaceSurvivors.Core
     /// <summary>
     /// The persistent player record — everything that must survive between runs. A plain
     /// serializable data bag with a <see cref="schemaVersion"/> so old saves can be migrated
-    /// (AI_Guidelines §3, and Project_Goals §8: this DTO is what a future backend stores, so
-    /// it stays framework-free — no UnityEngine types, round-trips through any JSON lib).
+    /// (AI_Guidelines §3, and Project_Goals §8).
     ///
-    /// M13 only uses <see cref="wallet"/> / run history. The M14 fields (owned upgrades,
-    /// ships, achievements) are declared now so adding those features doesn't bump the schema.
+    /// <para><b>Framework-free on purpose, and now literally so:</b> no UnityEngine types, so
+    /// it round-trips through any JSON library. This class <em>is</em> the wire shape the
+    /// backend stores — <see cref="HttpProfileStore"/> posts it verbatim as the
+    /// <c>progress</c> blob. Adding or renaming a field here changes both the save file on
+    /// disk and the API payload, so it wants <see cref="CurrentSchemaVersion"/> bumped and a
+    /// case in <c>LocalJsonProfileStore.Migrate</c>.</para>
     /// </summary>
     [Serializable]
     public class PlayerProfile
@@ -21,10 +24,13 @@ namespace SpaceSurvivors.Core
 
         // ---- Identity ----
         /// <summary>
-        /// The account this profile belongs to. Empty = local / anonymous play (the only mode
-        /// today). Set once the player signs in; the remote store keys on it and the local
-        /// cache namespaces its file by it, so switching accounts on one device stays clean.
-        /// Auth itself is out of band — the store carries a token; this is just the id.
+        /// The server-side player this profile belongs to. Empty while the game has never
+        /// synced — cloud sync is off by default and purely local play never fills it in.
+        ///
+        /// <para>The <em>server</em> stamps its own player id into the blob on a successful
+        /// save, so this is read rather than written here; <see cref="HttpProfileStore.Load"/>
+        /// deliberately leaves it alone rather than guessing. Auth is out of band — the store
+        /// carries a token, this is only the id.</para>
         /// </summary>
         public string userId = "";
 
@@ -50,9 +56,13 @@ namespace SpaceSurvivors.Core
         /// <summary>Owned level per meta-upgrade id. Absent id = level 0.</summary>
         public Dictionary<string, int> metaUpgradeLevels = new();
 
-        // ---- Reserved for M14b/M14c (declared early to keep the schema stable) ----
+        // ---- Ships (M14b) and achievements (M14c) ----
+        /// <summary>Hulls the player has bought. <c>ShipService</c> owns the rules.</summary>
         public List<string> ownedShipIds = new();
+        /// <summary>The hull the next run uses. Always one of <see cref="ownedShipIds"/> —
+        /// <c>ProfileMerge</c> falls back to the first owned hull if a sync leaves it dangling.</summary>
         public string selectedShipId = "";
+        /// <summary>Unlocked achievement ids. Earned, never spent, so a merge unions them.</summary>
         public List<string> unlockedAchievementIds = new();
 
         // ---- Maps (M15): all maps are free, this is just the last pick ----

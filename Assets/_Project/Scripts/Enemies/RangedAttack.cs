@@ -45,7 +45,7 @@ namespace SpaceSurvivors.Enemies
         private void Awake()
         {
             _brain = GetComponent<EnemyBrain>();
-            _pool = FindFirstObjectByType<PoolManager>();
+            _pool = FindAnyObjectByType<PoolManager>();
         }
 
         private void OnEnable() => _cooldown = _firstShotDelay;

@@ -284,12 +284,12 @@ namespace SpaceSurvivors.EditorTools
         {
             var scene = EditorSceneManager.OpenScene("Assets/_Project/Scenes/Game.unity", OpenSceneMode.Single);
 
-            var pool = Object.FindFirstObjectByType<SpaceSurvivors.Core.PoolManager>();
-            var move = Object.FindFirstObjectByType<SpaceSurvivors.Player.PlayerMovement>();
+            var pool = Object.FindAnyObjectByType<SpaceSurvivors.Core.PoolManager>();
+            var move = Object.FindAnyObjectByType<SpaceSurvivors.Player.PlayerMovement>();
             var player = move != null ? move.gameObject : null;
             var cam = Camera.main;
-            var collector = Object.FindFirstObjectByType<SpaceSurvivors.Progression.ScrapCollector>();
-            var starfield = Object.FindFirstObjectByType<SpaceSurvivors.Core.StarfieldParallax>();
+            var collector = Object.FindAnyObjectByType<SpaceSurvivors.Progression.ScrapCollector>();
+            var starfield = Object.FindAnyObjectByType<SpaceSurvivors.Core.StarfieldParallax>();
             var systems = pool != null ? pool.gameObject : GameObject.Find("Systems");
 
             if (systems == null || player == null)

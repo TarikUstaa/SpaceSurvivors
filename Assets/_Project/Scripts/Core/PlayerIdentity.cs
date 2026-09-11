@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using UnityEngine;
 
 namespace SpaceSurvivors.Core
@@ -191,8 +192,8 @@ namespace SpaceSurvivors.Core
         private static DateTime? ParseInstant(string iso)
         {
             if (string.IsNullOrWhiteSpace(iso)) return null;
-            return DateTime.TryParse(iso, System.Globalization.CultureInfo.InvariantCulture,
-                System.Globalization.DateTimeStyles.RoundtripKind, out var parsed)
+            return DateTime.TryParse(iso, CultureInfo.InvariantCulture,
+                DateTimeStyles.RoundtripKind, out var parsed)
                 ? parsed.ToLocalTime()
                 : null;
         }

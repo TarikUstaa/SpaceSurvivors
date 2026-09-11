@@ -518,7 +518,7 @@ namespace SpaceSurvivors.EditorTools
 
             // 2. Global bloom volume.
             var profile = AssetDatabase.LoadAssetAtPath<VolumeProfile>(ProfilePath);
-            var existing = Object.FindObjectsByType<Volume>(FindObjectsSortMode.None)
+            var existing = Object.FindObjectsByType<Volume>()
                 .FirstOrDefault(v => v.gameObject.name == "Global Volume");
             if (existing == null)
             {
@@ -532,7 +532,7 @@ namespace SpaceSurvivors.EditorTools
 
             // 3. Muzzle flash on the player's WeaponController. (The aura ring keeps its
             //    existing alpha-blended sprite/material — additive there just makes a blob.)
-            var wc = Object.FindFirstObjectByType<WeaponController>();
+            var wc = Object.FindAnyObjectByType<WeaponController>();
             var muzzle = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabDir + "MuzzleFlash.prefab");
             if (wc != null && muzzle != null)
             {

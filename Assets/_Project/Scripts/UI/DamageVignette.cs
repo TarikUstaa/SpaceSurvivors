@@ -31,7 +31,7 @@ namespace SpaceSurvivors.UI
             {
                 var player = GameObject.FindGameObjectWithTag("Player");
                 if (player != null) _playerHealth = player.GetComponent<HealthComponent>();
-                if (_playerHealth == null) _playerHealth = FindFirstObjectByType<HealthComponent>();
+                if (_playerHealth == null) _playerHealth = FindAnyObjectByType<HealthComponent>();
             }
             if (_vignetteSprite == null)
                 _vignetteSprite = Resources.Load<Sprite>("DamageVignette");

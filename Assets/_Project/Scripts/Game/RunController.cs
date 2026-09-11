@@ -42,7 +42,7 @@ namespace SpaceSurvivors.Game
         {
             if (_playerHealth == null)
                 Debug.LogError($"{nameof(RunController)} on '{name}' has no player HealthComponent assigned.", this);
-            if (_spawnDirector == null) _spawnDirector = FindFirstObjectByType<SpawnDirector>();
+            if (_spawnDirector == null) _spawnDirector = FindAnyObjectByType<SpawnDirector>();
         }
 
         private void OnEnable()

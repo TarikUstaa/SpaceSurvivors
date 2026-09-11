@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -11,8 +12,9 @@ namespace SpaceSurvivors.Core
     /// payload matches what a Jackson backend would produce (Project_Goals §8).
     ///
     /// Reads are defensive — a missing or corrupt file never throws into gameplay, it just
-    /// yields a fresh profile (the bad file is copied aside first). Writes go through a temp
-    /// file so a crash mid-save can't leave a half-written profile.
+    /// yields a fresh profile (the bad file is copied aside first). Writes go to a temp file
+    /// and are moved over the real one in a single step, so a crash mid-save leaves either the
+    /// old profile or the new one and never a half-written or absent file.
     /// </summary>
     public sealed class LocalJsonProfileStore : IProfileStore
     {
@@ -54,10 +56,28 @@ namespace SpaceSurvivors.Core
                 profile.schemaVersion = PlayerProfile.CurrentSchemaVersion;
                 var json = JsonConvert.SerializeObject(profile, Formatting.Indented);
 
+                // Write beside the real file, then swap it in without ever deleting it first.
+                //
+                // The delete-then-move this replaces had a window — short, but real — in which
+                // no profile existed at all. A crash or a kill landing there did not corrupt
+                // the save, it removed it, which is the worse of the two outcomes and the one
+                // the player notices.
+                //
+                // File.Replace does the swap in one step. It insists the destination exists, so
+                // the very first save takes the plain Move — and there, by definition, there is
+                // no profile to lose. (File.Move's overwrite overload would read better, but
+                // Unity's .NET profile does not expose it.)
                 var tmp = _path + ".tmp";
                 File.WriteAllText(tmp, json);
-                if (File.Exists(_path)) File.Delete(_path);
-                File.Move(tmp, _path);
+
+                if (File.Exists(_path))
+                {
+                    File.Replace(tmp, _path, destinationBackupFileName: null);
+                }
+                else
+                {
+                    File.Move(tmp, _path);
+                }
             }
             catch (Exception e)
             {
@@ -71,9 +91,9 @@ namespace SpaceSurvivors.Core
             // (M14c). v3 → v4: selectedMapId added (M15). v4 → v5: userId added (backend prep).
             // All additive — numbers default to 0, strings to "". Nothing to translate; only
             // normalise collections so callers never null-check.
-            profile.metaUpgradeLevels ??= new System.Collections.Generic.Dictionary<string, int>();
-            profile.ownedShipIds ??= new System.Collections.Generic.List<string>();
-            profile.unlockedAchievementIds ??= new System.Collections.Generic.List<string>();
+            profile.metaUpgradeLevels ??= new Dictionary<string, int>();
+            profile.ownedShipIds ??= new List<string>();
+            profile.unlockedAchievementIds ??= new List<string>();
 
             if (profile.schemaVersion < PlayerProfile.CurrentSchemaVersion)
                 profile.schemaVersion = PlayerProfile.CurrentSchemaVersion;

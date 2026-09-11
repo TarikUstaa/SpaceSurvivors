@@ -10,9 +10,10 @@ namespace SpaceSurvivors.Core
     /// <see cref="TryPurchase"/> so a future server-authoritative backend has one seam to
     /// intercept (Project_Goals §8).
     ///
-    /// The backing <see cref="IProfileStore"/> is swappable: local JSON by default, an HTTP
-    /// store later (cache-first — see <see cref="IRemoteProfileStore"/>), a fake in tests. The
-    /// live profile is held in memory for the session and written on <see cref="Save"/>.
+    /// The backing <see cref="IProfileStore"/> is swappable and <see cref="BackendBootstrap"/>
+    /// chooses it at startup: local JSON when cloud sync is off, otherwise the cache-first HTTP
+    /// store (see <see cref="IRemoteProfileStore"/>). Nothing here knows which it got. The live
+    /// profile is held in memory for the session and written on <see cref="Save"/>.
     /// </summary>
     public static class ProfileService
     {
@@ -102,7 +103,7 @@ namespace SpaceSurvivors.Core
         public static long BankRunScrap(long collected)
         {
             if (collected <= 0) return 0;
-            long banked = System.Math.Max(1, (long)System.Math.Round(collected * (double)RunScrapBankedShare));
+            long banked = Math.Max(1, (long)Math.Round(collected * (double)RunScrapBankedShare));
             AddScrap(banked);
             return banked;
         }
