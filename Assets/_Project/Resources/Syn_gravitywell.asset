@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6b78136230b540d88f190cbbe570881, type: 3}
+  m_Name: Syn_gravitywell
+  m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.WeaponSynergyData
+  displayName: Gravity Well
+  description: Orbiter and Event Horizon both bend space around the ship — together they
+    pull loot in from further out.
+  weaponA: {fileID: 11400000, guid: 4f64dc876b77d493baca5715aef5282c, type: 2}
+  weaponB: {fileID: 11400000, guid: 04104f2af32e74dcca53203d0be57028, type: 2}
+  bonuses:
+  - stat: 8
+    op: 1
+    value: 0.3

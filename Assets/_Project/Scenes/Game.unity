@@ -3813,6 +3813,7 @@ GameObject:
   - component: {fileID: 632278099}
   - component: {fileID: 632278100}
   - component: {fileID: 632278101}
+  - component: {fileID: 632278102}
   m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
@@ -4189,6 +4190,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: SpaceSurvivors.Player::SpaceSurvivors.Player.CombinedMoveInput
   _gamepadDeadzone: 0.15
+--- !u!114 &632278102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632278081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2afe24fd5b9534989b140b1ab5eb6b52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Combat::SpaceSurvivors.Combat.WeaponSynergyTracker
+  _weapons: {fileID: 0}
+  _stats: {fileID: 0}
 --- !u!1 &639183348
 GameObject:
   m_ObjectHideFlags: 0

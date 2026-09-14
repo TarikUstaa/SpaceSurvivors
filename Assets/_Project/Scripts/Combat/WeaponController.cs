@@ -79,6 +79,11 @@ namespace SpaceSurvivors.Combat
         /// <summary>Raised each time a weapon actually fires (for audio / VFX). Carries the weapon.</summary>
         public event System.Action<WeaponData> WeaponFired;
 
+        /// <summary>Raised whenever the equipped set of weapons changes (granted or evolved) —
+        /// not on every fire, only on a real loadout change. <see cref="WeaponSynergyTracker"/>
+        /// re-checks its catalogue off this instead of polling.</summary>
+        public event System.Action LoadoutChanged;
+
         /// <summary>Weapons currently equipped (read-only view for the evolution UI).</summary>
         public IReadOnlyList<WeaponData> Weapons
         {
@@ -167,6 +172,8 @@ namespace SpaceSurvivors.Combat
                 }
                 _specialRigs.Add(go);
             }
+
+            LoadoutChanged?.Invoke();
         }
 
         private void Update()
