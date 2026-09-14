@@ -41,6 +41,18 @@ namespace SpaceSurvivors.Combat
 
         private void HandleDamaged(DamageInfo _) => _timer = _duration;
 
+        /// <summary>
+        /// Change the colour a hit-flash settles back to. Needed because <see cref="_baseColor"/>
+        /// is cached once in <see cref="Awake"/> — without this, tinting a pooled enemy elite
+        /// (or back to normal) would look right for a moment and then snap back to whatever
+        /// colour this component started with the very first time it was ever spawned.
+        /// </summary>
+        public void SetBaseColor(Color c)
+        {
+            _baseColor = c;
+            if (_timer <= 0f && _renderer != null) _renderer.color = c;
+        }
+
         private void Update()
         {
             if (_timer > 0f)

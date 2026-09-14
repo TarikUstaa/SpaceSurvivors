@@ -123,15 +123,28 @@ namespace SpaceSurvivors.Enemies
         {
             EnemyData data = PickEnemy(now);
             if (data == null) return;
-            SpawnEnemyAt(data, GetOffscreenPosition());
+            SpawnEnemyAt(data, GetOffscreenPosition(), RollElite());
+        }
+
+        /// <summary>
+        /// One roll per regular timed spawn only — never for bosses (already special) and
+        /// never for a <see cref="SplitOnDeath"/> child (its caller doesn't pass this), so a
+        /// split can't chain into a swarm of elites.
+        /// </summary>
+        private EliteModifiers? RollElite()
+        {
+            if (Random.value >= _config.eliteChance) return null;
+            return new EliteModifiers(true, _config.eliteDamageMultiplier, _config.eliteScrapMultiplier,
+                                       _config.eliteScale, _config.eliteTint);
         }
 
         /// <summary>
         /// Spawn one extra enemy at a world position, fully wired into the alive-count and
         /// kill events (loot, kill-count, VFX all fire normally). Bypasses the spawn budget
-        /// and the alive cap — same as bosses. Used by <see cref="SplitOnDeath"/>.
+        /// and the alive cap — same as bosses. Used by <see cref="SplitOnDeath"/>, always with
+        /// <paramref name="elite"/> left null.
         /// </summary>
-        public EnemyBrain SpawnEnemyAt(EnemyData data, Vector3 position)
+        public EnemyBrain SpawnEnemyAt(EnemyData data, Vector3 position, EliteModifiers? elite = null)
         {
             if (_pool == null || _config == null || _player == null) return null;
             if (data == null || data.prefab == null) return null;
@@ -141,14 +154,18 @@ namespace SpaceSurvivors.Enemies
 
             float now = Now;
             float hp = data.baseHealth * _config.HealthMultiplierAt(now);
+            if (elite.HasValue) hp *= _config.eliteHealthMultiplier;
             float speedMul = _config.SpeedMultiplierAt(now);
 
             _aliveCount++;
             brain.Killed += HandleEnemyKilled;
-            brain.Initialize(_player, data, hp, speedMul, OnEnemyReleased);
+            brain.Initialize(_player, data, hp, speedMul, OnEnemyReleased, elite);
 
             if (_logEverySpawn)
-                Debug.Log($"[Spawn] {data.displayName} @ {now:0}s  hp={hp:0}  alive={_aliveCount}  rate={_config.SpawnRateAt(now):0.0}/s");
+            {
+                string tag = elite.HasValue ? "ELITE " : "";
+                Debug.Log($"[Spawn] {tag}{data.displayName} @ {now:0}s  hp={hp:0}  alive={_aliveCount}  rate={_config.SpawnRateAt(now):0.0}/s");
+            }
 
             return brain;
         }

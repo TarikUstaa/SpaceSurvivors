@@ -28,6 +28,11 @@ namespace SpaceSurvivors.Enemies
                  "Only applies when its EnemyData has cullWhenFarOffscreen = true.")]
         [SerializeField, Min(10f)] private float _farCullRadius = 45f;
 
+        [Tooltip("Optional. Empty = auto-resolve a SpriteRenderer on this GameObject or its children.")]
+        [SerializeField] private SpriteRenderer _renderer;
+        [Tooltip("Optional. Empty = auto-resolve a HitFlash on this GameObject.")]
+        [SerializeField] private HitFlash _hitFlash;
+
         private Rigidbody2D _body;
         private HealthComponent _health;
         private IMoveStrategy _move;
@@ -41,11 +46,21 @@ namespace SpaceSurvivors.Enemies
         private bool _active;
         private Action<EnemyBrain> _onReleased;
 
+        private Color _baseColor = Color.white;
+        private Vector3 _baseScale = Vector3.one;
+
         /// <summary>Raised the moment this enemy's health hits zero, before it despawns.</summary>
         public event Action<EnemyBrain, DamageInfo> Killed;
 
         public EnemyData Data => _data;
         public bool IsActive => _active;
+
+        /// <summary>True for the lifetime of this spawn if it won an elite roll (see
+        /// <see cref="DifficultyConfig.eliteChance"/>). Reset every <see cref="Initialize"/>.</summary>
+        public bool IsElite { get; private set; }
+
+        /// <summary>How much this kill's scrap/XP payout should be scaled by. 1 unless elite.</summary>
+        public float ScrapMultiplier { get; private set; } = 1f;
 
         /// <summary>The thing this enemy is hunting (the player). Null until <see cref="Initialize"/>.
         /// Read by abilities like <see cref="RangedAttack"/>.</summary>
@@ -60,6 +75,11 @@ namespace SpaceSurvivors.Enemies
             _contact = GetComponent<ContactDamage>();
             _handle = GetComponent<PoolHandle>();
 
+            if (_renderer == null) _renderer = GetComponentInChildren<SpriteRenderer>();
+            if (_hitFlash == null) _hitFlash = GetComponent<HitFlash>();
+            if (_renderer != null) _baseColor = _renderer.color;
+            _baseScale = transform.localScale;
+
             _body.gravityScale = 0f;
             _body.freezeRotation = true;
 
@@ -70,20 +90,41 @@ namespace SpaceSurvivors.Enemies
         private void OnEnable() => _health.Died += HandleDied;
         private void OnDisable() => _health.Died -= HandleDied;
 
-        /// <summary>Called by the spawn director right after the pool hands out this instance.</summary>
+        /// <summary>Called by the spawn director right after the pool hands out this instance.
+        /// <paramref name="elite"/> is null for every ordinary spawn (bosses and split-off
+        /// children never roll elite) — <see cref="EliteModifiers.None"/> is applied in that case.</summary>
         public void Initialize(Transform target, EnemyData data, float scaledHealth, float speedMultiplier,
-                               Action<EnemyBrain> onReleased)
+                               Action<EnemyBrain> onReleased, EliteModifiers? elite = null)
         {
+            EliteModifiers mods = elite ?? EliteModifiers.None;
+
             _target = target;
             _data = data;
             _onReleased = onReleased;
             _speed = data.moveSpeed * speedMultiplier;
 
             _health.SetMaxHealth(scaledHealth, healToFull: true);
-            _contact?.Configure(data.contactDamage, data.contactInterval);
+            _contact?.Configure(data.contactDamage * mods.DamageMultiplier, data.contactInterval);
+
+            IsElite = mods.IsElite;
+            ScrapMultiplier = mods.ScrapMultiplier;
+            ApplyEliteVisual(mods);
 
             _body.linearVelocity = Vector2.zero;
             _active = true;
+        }
+
+        /// <summary>Pooled instances get reused as both elite and non-elite over a run, so this
+        /// always sets an absolute state (tint/scale) rather than only changing something when
+        /// <paramref name="mods"/> is elite — otherwise a former elite handed back out as a
+        /// regular enemy would still look elite.</summary>
+        private void ApplyEliteVisual(EliteModifiers mods)
+        {
+            Color colour = mods.IsElite ? mods.Tint : _baseColor;
+            if (_renderer != null) _renderer.color = colour;
+            _hitFlash?.SetBaseColor(colour);
+
+            transform.localScale = _baseScale * (mods.IsElite ? mods.Scale : 1f);
         }
 
         private void FixedUpdate()

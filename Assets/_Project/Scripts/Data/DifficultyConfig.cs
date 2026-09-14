@@ -25,6 +25,21 @@ namespace SpaceSurvivors.Data
         [Tooltip("Hard ceiling on live enemies (performance safety valve).")]
         [Min(1)] public int maxAliveEnemies = 250;
 
+        [Header("Elites — a rare, stronger reroll of a regular timed spawn")]
+        [Tooltip("Chance a regular spawn (not a boss, not a split-off child) becomes elite.")]
+        [Range(0f, 1f)] public float eliteChance = 0.04f;
+        [Tooltip("Multiplies the enemy's already time-scaled health.")]
+        [Min(1f)] public float eliteHealthMultiplier = 3f;
+        [Tooltip("Multiplies contact damage. Ranged enemies' shot damage is deliberately left " +
+                 "alone, same as the time-based difficulty curve leaves it alone.")]
+        [Min(1f)] public float eliteDamageMultiplier = 1.6f;
+        [Tooltip("Multiplies the scrap (and therefore XP) this kill pays out.")]
+        [Min(1f)] public float eliteScrapMultiplier = 4f;
+        [Tooltip("Multiplies the sprite's scale — an elite should read as bigger at a glance.")]
+        [Min(1f)] public float eliteScale = 1.35f;
+        [Tooltip("Sprite tint while elite (and the colour HitFlash lerps back to after a hit).")]
+        public Color eliteTint = new(1f, 0.82f, 0.15f);
+
         [Header("Roster")]
         [Tooltip("Every enemy that can spawn in this run. Eligibility & weight live on each EnemyData.")]
         public List<EnemyData> roster = new();

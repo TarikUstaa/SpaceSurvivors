@@ -49,7 +49,8 @@ namespace SpaceSurvivors.Progression
 
         private void HandleEnemyKilled(EnemyBrain brain, Vector2 position, EnemyData data)
         {
-            int scrap = data != null ? data.scrapValue : 1;
+            float baseScrap = data != null ? data.scrapValue : 1;
+            int scrap = Mathf.RoundToInt(baseScrap * (brain != null ? brain.ScrapMultiplier : 1f));
             if (scrap <= 0 || _pool == null || _scrapPickupPrefab == null) return;
 
             GameObject prefab = data != null && data.specialLootPrefab != null
