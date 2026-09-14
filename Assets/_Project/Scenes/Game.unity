@@ -9102,6 +9102,7 @@ GameObject:
   - component: {fileID: 2065986495}
   - component: {fileID: 2065986496}
   - component: {fileID: 2065986497}
+  - component: {fileID: 2065986498}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -9381,6 +9382,25 @@ MonoBehaviour:
   _swarmEvent: {fileID: 11400000, guid: e704d67f0725d40ac96bc1d34899d269, type: 2}
   _firstSwarmAt: 60
   _swarmInterval: 45
+--- !u!114 &2065986498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065986486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64ac10c8b14e478a909cd03a9441299, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.UI::SpaceSurvivors.UI.TutorialHints
+  _levelSystem: {fileID: 0}
+  _startHint: WASD or arrow keys to move. Weapons fire on their own at the nearest
+    enemy.
+  _levelUpHint: Pick an upgrade. Building around one or two weapons beats spreading
+    thin.
+  _holdSeconds: 4
+  _fadeSeconds: 0.6
 --- !u!1 &2080803189
 GameObject:
   m_ObjectHideFlags: 0
