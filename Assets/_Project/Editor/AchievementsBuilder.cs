@@ -65,6 +65,10 @@ namespace SpaceSurvivors.EditorTools
                 "Sprites/Generated/ScrapChip.png", AchievementMetric.LifetimeScrap, 5000),
             new("full_hangar", "Full Hangar", "Own every ship in the hangar.",
                 "Sprites/Base_Assets/playerShip3_orange.png", AchievementMetric.ShipsOwned, 0),
+            new("boss_hunter", "Boss Hunter", "Defeat 25 bosses.",
+                "Sprites/Base_Assets/Power-ups/bolt_bronze.png", AchievementMetric.BossKills, 25),
+            new("upgrade_master", "Upgrade Master", "Reach a combined total of 20 permanent upgrade levels.",
+                "Sprites/Base_Assets/Power-ups/shield_silver.png", AchievementMetric.MetaUpgradeLevels, 20),
 
             // Hidden: the screen shows "???" for these while locked (AchievementsScreen.Refresh).
             // Both ride metrics no earlier achievement used yet, so nothing else changes.
