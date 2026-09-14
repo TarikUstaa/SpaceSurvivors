@@ -348,7 +348,29 @@ namespace SpaceSurvivors.EditorTools
                 var rt = (RectTransform)tileImages[i].transform;
                 rt.sizeDelta = new Vector2(rt.sizeDelta.x, tileH);
                 rt.anchoredPosition = new Vector2(col == 0 ? -280f : 280f, y0 - row * step);
+
+                // The background shrank; its children (icon, title, desc, "✓ UNLOCKED") still
+                // carry the builder's original full-tile-height layout and spill past the new,
+                // shorter edge otherwise — scale their vertical position and height down by the
+                // same factor. X stays put: only the row pitch is tight, tiles are still full width.
+                if (shrink < 1f)
+                    foreach (Transform child in rt)
+                        ShrinkVertically(child, shrink);
             }
+        }
+
+        private static void ShrinkVertically(Transform child, float shrink)
+        {
+            var rt = (RectTransform)child;
+            rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, rt.anchoredPosition.y * shrink);
+            rt.sizeDelta = new Vector2(rt.sizeDelta.x, rt.sizeDelta.y * shrink);
+
+            // Text ignores its RectTransform's height (Label() sets vertical overflow to
+            // Overflow, so a box shrinking doesn't clip anything) — the glyphs themselves have
+            // to get smaller too, or three lines that used to have room now sit closer together
+            // at their old size and can visually run into one another.
+            if (child.TryGetComponent(out Text txt))
+                txt.fontSize = Mathf.Max(12, Mathf.RoundToInt(txt.fontSize * shrink));
         }
 
         /// <summary>The builders anchor the bottom Back / primary buttons so close to the
