@@ -99,7 +99,8 @@ namespace SpaceSurvivors.Combat
             for (int i = 0; i < chainHops && current != null; i++)
             {
                 Vector3 pos = Position(current);
-                current.TakeDamage(new DamageInfo(damage, _owner, pos, (pos - fromPos).normalized));
+                if (current.TakeDamage(new DamageInfo(damage, _owner, pos, (pos - fromPos).normalized)))
+                    WeaponDamageEvents.Raise(_data, damage);
                 _hit.Add(current);
                 _nodes.Add(pos);
 
@@ -118,7 +119,8 @@ namespace SpaceSurvivors.Combat
                 if (branch == null) break;   // nothing untouched left nearby — fewer hits, not a wasted one
 
                 Vector3 pos = Position(branch);
-                branch.TakeDamage(new DamageInfo(baseDamage, _owner, pos, (pos - _center.position).normalized));
+                if (branch.TakeDamage(new DamageInfo(baseDamage, _owner, pos, (pos - _center.position).normalized)))
+                    WeaponDamageEvents.Raise(_data, baseDamage);
                 _hit.Add(branch);
                 _nodes.Add(_center.position);   // break the line back to the ship before the new branch
                 _nodes.Add(pos);

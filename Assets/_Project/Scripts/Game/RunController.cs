@@ -38,6 +38,10 @@ namespace SpaceSurvivors.Game
         public bool Won { get; private set; }
         public float SurvivalSeconds => _clock != null ? _clock.Elapsed : 0f;
 
+        /// <summary>The hit that ended the run in defeat. Null on a win (nothing killed the
+        /// player) and null before the run ends.</summary>
+        public DamageInfo? CauseOfDeath { get; private set; }
+
         private void Awake()
         {
             if (_playerHealth == null)
@@ -62,7 +66,11 @@ namespace SpaceSurvivors.Game
                 EndRun(won: true);
         }
 
-        private void HandlePlayerDied(DamageInfo _) => EndRun(won: false);
+        private void HandlePlayerDied(DamageInfo info)
+        {
+            CauseOfDeath = info;
+            EndRun(won: false);
+        }
 
         private void EndRun(bool won)
         {

@@ -1,4 +1,5 @@
 using SpaceSurvivors.Core;
+using SpaceSurvivors.Data;
 using UnityEngine;
 
 namespace SpaceSurvivors.Combat
@@ -12,8 +13,11 @@ namespace SpaceSurvivors.Combat
     {
         private static readonly Collider2D[] _buffer = new Collider2D[64];
 
+        /// <summary><paramref name="weapon"/> stays null for non-weapon callers (mines) — it
+        /// only feeds the run-end damage breakdown, so leaving it off there is correct, not
+        /// an oversight.</summary>
         public static void Splash(Vector2 center, float radius, float damage,
-                                  GameObject owner, IDamageable skip = null)
+                                  GameObject owner, IDamageable skip = null, WeaponData weapon = null)
         {
             if (damage <= 0f || radius <= 0f) return;
 
@@ -26,7 +30,8 @@ namespace SpaceSurvivors.Combat
                 var d = col.GetComponentInParent<IDamageable>();
                 if (d == null || ReferenceEquals(d, skip) || !d.IsAlive) continue;
 
-                d.TakeDamage(new DamageInfo(damage, owner, center, Vector2.zero));
+                if (d.TakeDamage(new DamageInfo(damage, owner, center, Vector2.zero)))
+                    WeaponDamageEvents.Raise(weapon, damage);
             }
         }
     }

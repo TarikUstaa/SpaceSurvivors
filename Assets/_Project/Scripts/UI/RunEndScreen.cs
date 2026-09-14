@@ -1,5 +1,6 @@
 using SpaceSurvivors.Core;
 using SpaceSurvivors.Data;
+using SpaceSurvivors.Enemies;
 using SpaceSurvivors.Game;
 using SpaceSurvivors.Progression;
 using UnityEngine;
@@ -77,12 +78,27 @@ namespace SpaceSurvivors.UI
             AchievementService.Evaluate();
 
             if (_statsValue != null && _stats != null)
-                _statsValue.text =
+            {
+                string text =
                     $"KILLS  {_stats.Kills:n0}\nLEVEL  {_stats.Level}\n" +
                     // "of" the run total on purpose: the HUD counted every piece picked up, only a
                     // share of it is banked, and a bare "+750" after a run that showed 5,000 reads
                     // as a bug rather than a rule.
                     $"SCRAP  +{banked:n0} of {_stats.Scrap:n0}\nWALLET  {ProfileService.Wallet:n0}";
+
+                if (!won)
+                    text += $"\nDEFEATED BY  {DescribeCause(_run.CauseOfDeath)}";
+
+                var top = _stats.TopWeapons(3);
+                if (top.Count > 0)
+                {
+                    text += "\n\nTOP DAMAGE";
+                    foreach (var (weapon, damage) in top)
+                        text += $"\n{weapon.displayName}  {damage:n0}";
+                }
+
+                _statsValue.text = text;
+            }
 
             string modeId = GameSession.SelectedMode != null ? GameSession.SelectedMode.name : "default";
             var runResult = new RunResult(
@@ -104,6 +120,20 @@ namespace SpaceSurvivors.UI
         {
             int t = Mathf.FloorToInt(Mathf.Max(0f, seconds));
             return $"{t / 60:0}:{t % 60:00}";
+        }
+
+        /// <summary>An enemy names itself through its EnemyData (readable — "Splitter", not
+        /// "Enemy_Splitter(Clone)"); a hazard or space event has no EnemyBrain, so it falls
+        /// back to its own GameObject name with the pooling "(Clone)" suffix trimmed off.</summary>
+        private static string DescribeCause(DamageInfo? cause)
+        {
+            if (cause == null || cause.Value.Source == null) return "the swarm";
+
+            var enemy = cause.Value.Source.GetComponent<EnemyBrain>();
+            if (enemy != null && enemy.Data != null) return enemy.Data.displayName;
+
+            string raw = cause.Value.Source.name;
+            return raw.EndsWith("(Clone)") ? raw[..^7] : raw;
         }
 
         private void Replay()

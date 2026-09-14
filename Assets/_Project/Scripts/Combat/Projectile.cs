@@ -32,6 +32,7 @@ namespace SpaceSurvivors.Combat
         private int _pierceLeft;
         private float _lifeLeft;
         private GameObject _owner;
+        private WeaponData _weapon;
 
         private PoolManager _pool;
         private GameObject _impactVfx;
@@ -66,6 +67,7 @@ namespace SpaceSurvivors.Combat
             _pierceLeft = shot.Pierce;
             _lifeLeft = shot.Lifetime;
             _owner = owner;
+            _weapon = data;
             _pool = pool;
             _impactVfx = data.impactVfxPrefab;
             _explosionRadius = data.explosionRadius;
@@ -91,6 +93,7 @@ namespace SpaceSurvivors.Combat
         {
             _velocity = Vector2.zero;
             _owner = null;
+            _weapon = null;
             if (_body != null) _body.linearVelocity = Vector2.zero;
         }
 
@@ -114,6 +117,7 @@ namespace SpaceSurvivors.Combat
             // killed this target this frame, TakeDamage returns false and we fly on.
             if (!target.TakeDamage(new DamageInfo(_damage, _owner, transform.position, _velocity)))
                 return;
+            WeaponDamageEvents.Raise(_weapon, _damage);
 
             SpawnImpact();
 
@@ -131,7 +135,7 @@ namespace SpaceSurvivors.Combat
         /// <summary>Deal splash damage to every other live target within the blast radius.</summary>
         private void Explode(IDamageable directHit)
         {
-            Aoe.Splash(transform.position, _explosionRadius, _damage * _splashFraction, _owner, directHit);
+            Aoe.Splash(transform.position, _explosionRadius, _damage * _splashFraction, _owner, directHit, _weapon);
 
             if (_explosionVfx != null && _pool != null)
                 _pool.Spawn(_explosionVfx, transform.position, Quaternion.identity);

@@ -103,8 +103,8 @@ namespace SpaceSurvivors.Combat
             {
                 if (c == null) continue;
                 var d = c.GetComponentInParent<IDamageable>();
-                if (d != null && d.IsAlive)
-                    d.TakeDamage(new DamageInfo(damage, _owner, transform.position, Vector2.zero));
+                if (d != null && d.IsAlive && d.TakeDamage(new DamageInfo(damage, _owner, transform.position, Vector2.zero)))
+                    WeaponDamageEvents.Raise(_data, damage);
             }
         }
     }

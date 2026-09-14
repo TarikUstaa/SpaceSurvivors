@@ -68,7 +68,7 @@ namespace SpaceSurvivors.Combat
                 h.transform.position = _center.position + offset;
 
                 if (h.TryGetComponent(out OrbHit orb))
-                    orb.Configure(damage, _data.orbitHitInterval, _owner);
+                    orb.Configure(damage, _data.orbitHitInterval, _owner, _data);
             }
         }
 
