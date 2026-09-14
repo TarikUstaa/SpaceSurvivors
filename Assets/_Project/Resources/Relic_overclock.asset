@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27a0b453795934dd8b7bdaa3d5205422, type: 3}
+  m_Name: Relic_overclock
+  m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.RelicData
+  id: relic_overclock
+  displayName: Overclock Chip
+  description: Shaves every millisecond it can off the firing cycle. Permanent, and it
+    never cools back down.
+  icon: {fileID: 0}
+  bonuses:
+  - stat: 3
+    op: 1
+    value: 0.15

@@ -3815,6 +3815,7 @@ GameObject:
   - component: {fileID: 632278101}
   - component: {fileID: 632278102}
   - component: {fileID: 632278103}
+  - component: {fileID: 632278104}
   m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
@@ -4220,6 +4221,19 @@ MonoBehaviour:
   _chargesPerRun: 1
   _reviveHealthFraction: 0.3
   _graceInvulnerability: 2
+--- !u!114 &632278104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632278081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0459d4974e1b04e2c977b9572d832d93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Progression::SpaceSurvivors.Progression.RelicService
+  _stats: {fileID: 0}
 --- !u!1 &639183348
 GameObject:
   m_ObjectHideFlags: 0
@@ -9103,6 +9117,7 @@ GameObject:
   - component: {fileID: 2065986496}
   - component: {fileID: 2065986497}
   - component: {fileID: 2065986498}
+  - component: {fileID: 2065986499}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -9401,6 +9416,24 @@ MonoBehaviour:
     thin.
   _holdSeconds: 4
   _fadeSeconds: 0.6
+--- !u!114 &2065986499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065986486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2195ad7114784c80bdcbc7b91d2b620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Progression::SpaceSurvivors.Progression.RelicDropper
+  _pool: {fileID: 2065986487}
+  _spawnDirector: {fileID: 2065986489}
+  _collector: {fileID: 632278094}
+  _relicService: {fileID: 632278104}
+  _relicPickupPrefab: {fileID: 5747322664020243352, guid: 7dd63c48795eb411891654a2c51cb7d8, type: 3}
+  _regularDropChance: 0.005
 --- !u!1 &2080803189
 GameObject:
   m_ObjectHideFlags: 0
