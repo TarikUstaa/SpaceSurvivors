@@ -199,7 +199,7 @@ namespace SpaceSurvivors.EditorTools
                 var progress = Label("Progress", bgImg.transform, "", 19, Steel);
                 progress.alignment = TextAnchor.LowerLeft;
                 progress.fontStyle = FontStyle.Bold;
-                Place(progress, new Vector2(0f, 0.5f), new Vector2(360, 28), new Vector2(340, -50));
+                Place(progress, new Vector2(0f, 0.5f), new Vector2(360, 28), new Vector2(340, -44));
                 Shadow(progress);
 
                 tiles.Add(new AchievementsScreen.Tile
