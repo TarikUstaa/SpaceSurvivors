@@ -178,16 +178,6 @@ namespace SpaceSurvivors.EditorTools
                         g.color = new Color(0.42f, 0.9f, 1f, 1f);
             }
 
-            // Sits directly under the cloud-sync row it explains, in the gap left by `y` having
-            // already stepped past the last row.
-            if (FindDeep(win, "CloudSyncStatus") is { } status)
-            {
-                var srt = (RectTransform)status;
-                srt.anchorMin = srt.anchorMax = srt.pivot = new Vector2(0.5f, 1f);
-                srt.sizeDelta = new Vector2(560, 30);
-                srt.anchoredPosition = new Vector2(0f, y + 36f);
-            }
-
             var close = FindDeep(win, "CloseButton");
             if (close != null)
             {
@@ -195,6 +185,19 @@ namespace SpaceSurvivors.EditorTools
                 rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0f);
                 rt.sizeDelta = new Vector2(240, 62);
                 rt.anchoredPosition = new Vector2(0f, 34f);
+            }
+
+            // Bottom-anchored off the close button itself, not derived from `y` after the row
+            // loop — that indirection put it right on top of the button (Tarik: "close tuşuyla
+            // çakışıyor"). Tied to what it actually needs to clear: the button's own position
+            // and half-height, plus a real margin, so moving the button can't silently break this.
+            if (FindDeep(win, "CloudSyncStatus") is { } status)
+            {
+                var srt = (RectTransform)status;
+                srt.anchorMin = srt.anchorMax = srt.pivot = new Vector2(0.5f, 0f);
+                srt.sizeDelta = new Vector2(560, 30);
+                float clearAboveButton = 34f + 62f / 2f; // close button's own anchoredPosition.y + half its height
+                srt.anchoredPosition = new Vector2(0f, clearAboveButton + 18f + srt.sizeDelta.y / 2f);
             }
         }
 
