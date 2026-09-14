@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6699ad602bfe4d05bb8419655aba13d, type: 3}
-  m_Name: Ach_exterminator
+  m_Name: Ach_veteran
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.AchievementData
-  id: exterminator
-  title: Exterminator
-  description: Destroy 5,000 enemies in total.
-  icon: {fileID: 4401285208069525587, guid: 937e158b50f3d47f8aaa94146874ed39, type: 3}
-  metric: 0
-  threshold: 5000
-  hidden: 0
+  id: veteran
+  title: Veteran
+  description: Play 50 runs.
+  icon: {fileID: -1403664739873535720, guid: 85703429e6e414512b76e33b41c81897, type: 3}
+  metric: 3
+  threshold: 50
+  hidden: 1

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6699ad602bfe4d05bb8419655aba13d, type: 3}
-  m_Name: Ach_exterminator
+  m_Name: Ach_ascendant
   m_EditorClassIdentifier: SpaceSurvivors.Data::SpaceSurvivors.Data.AchievementData
-  id: exterminator
-  title: Exterminator
-  description: Destroy 5,000 enemies in total.
-  icon: {fileID: 4401285208069525587, guid: 937e158b50f3d47f8aaa94146874ed39, type: 3}
-  metric: 0
-  threshold: 5000
-  hidden: 0
+  id: ascendant
+  title: Ascendant
+  description: Reach level 30 in a single run.
+  icon: {fileID: 6889696050467186604, guid: e42443c6b6a4d495cb5b063fe42da214, type: 3}
+  metric: 6
+  threshold: 30
+  hidden: 1

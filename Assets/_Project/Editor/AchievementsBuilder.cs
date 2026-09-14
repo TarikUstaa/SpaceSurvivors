@@ -41,8 +41,10 @@ namespace SpaceSurvivors.EditorTools
             public readonly string Id, Title, Desc, Icon;
             public readonly AchievementMetric Metric;
             public readonly long Threshold;
-            public Seed(string id, string title, string desc, string icon, AchievementMetric metric, long threshold)
-            { Id = id; Title = title; Desc = desc; Icon = icon; Metric = metric; Threshold = threshold; }
+            public readonly bool Hidden;
+            public Seed(string id, string title, string desc, string icon, AchievementMetric metric, long threshold,
+                        bool hidden = false)
+            { Id = id; Title = title; Desc = desc; Icon = icon; Metric = metric; Threshold = threshold; Hidden = hidden; }
         }
 
         private static readonly Seed[] Seeds =
@@ -63,6 +65,13 @@ namespace SpaceSurvivors.EditorTools
                 "Sprites/Generated/ScrapChip.png", AchievementMetric.LifetimeScrap, 5000),
             new("full_hangar", "Full Hangar", "Own every ship in the hangar.",
                 "Sprites/Base_Assets/playerShip3_orange.png", AchievementMetric.ShipsOwned, 0),
+
+            // Hidden: the screen shows "???" for these while locked (AchievementsScreen.Refresh).
+            // Both ride metrics no earlier achievement used yet, so nothing else changes.
+            new("ascendant", "Ascendant", "Reach level 30 in a single run.",
+                "Sprites/Base_Assets/Power-ups/things_gold.png", AchievementMetric.BestLevel, 30, hidden: true),
+            new("veteran", "Veteran", "Play 50 runs.",
+                "Sprites/Base_Assets/Power-ups/things_silver.png", AchievementMetric.RunsPlayed, 50, hidden: true),
         };
 
         [MenuItem("SpaceSurvivors/Build/M14c Seed achievement catalogue")]
@@ -90,6 +99,7 @@ namespace SpaceSurvivors.EditorTools
                 a.description = s.Desc;
                 a.metric = s.Metric;
                 a.threshold = s.Threshold;
+                a.hidden = s.Hidden;
                 a.icon = Ico(s.Icon);
                 if (a.icon == null) Debug.LogWarning($"[AchievementsBuilder] icon not found for '{s.Id}': {s.Icon}");
                 EditorUtility.SetDirty(a);
@@ -139,9 +149,20 @@ namespace SpaceSurvivors.EditorTools
 
             var screen = canvasGo.AddComponent<AchievementsScreen>();
 
+            // Panel height grows with the row count so the catalogue isn't stuck at whatever
+            // size fit the day it had exactly 8 entries. 1040 was hand-tuned for 4 rows
+            // (698 units of grid + header/summary/back-button chrome); keep that same chrome
+            // budget as more rows are added instead of hardcoding it for one catalogue size.
+            const int cols = 2;
+            int rows = Mathf.Max(1, Mathf.CeilToInt(list.Count / (float)cols));
+            const float tileH = 158f, gapY = 22f;
+            float gridHeight = rows * tileH + Mathf.Max(0, rows - 1) * gapY;
+            float fourRowGridHeight = 4f * tileH + 3f * gapY;
+            float panelHeight = 1040f + Mathf.Max(0f, gridHeight - fourRowGridHeight);
+
             var panel = Img("Panel", canvasGo.transform, S("Rating/Window.png"), Color.white);
             panel.type = Image.Type.Sliced;
-            Place(panel, new Vector2(0.5f, 0.5f), new Vector2(1180, 1040), Vector2.zero);
+            Place(panel, new Vector2(0.5f, 0.5f), new Vector2(1180, panelHeight), Vector2.zero);
 
             // The Rating/Header.png sprite has "RATING" baked in — use a plain label on the
             // panel's dark title bar instead (matches the map-select screen).
@@ -153,10 +174,9 @@ namespace SpaceSurvivors.EditorTools
             summary.fontStyle = FontStyle.Bold;
             Place(summary, new Vector2(0.5f, 1f), new Vector2(400, 38), new Vector2(0, -104));
 
-            // ---- 2 × 4 tile grid ----
+            // ---- tile grid, `cols` wide and however many `rows` the catalogue needs ----
             var tiles = new List<AchievementsScreen.Tile>();
-            const int cols = 2;
-            const float tileW = 540f, tileH = 158f, gapX = 20f, gapY = 22f;
+            const float tileW = 540f, gapX = 20f;
             float x0 = -(tileW + gapX) / 2f;
             float y0 = 208f;
 

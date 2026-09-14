@@ -39,5 +39,10 @@ namespace SpaceSurvivors.Data
         public AchievementMetric metric = AchievementMetric.LifetimeKills;
         [Tooltip("Value the metric must reach. For 'Ships Owned', 0 means \"all ships in the catalogue\".")]
         public long threshold = 1;
+
+        [Header("Secrecy")]
+        [Tooltip("While locked, the screen shows this achievement as '???' instead of its real " +
+                 "title/description/icon — for a goal meant to surprise rather than be chased.")]
+        public bool hidden = false;
     }
 }

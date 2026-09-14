@@ -18,3 +18,4 @@ MonoBehaviour:
   icon: {fileID: -4947266630110024882, guid: 6b7b6ffa4a56a49cc80962d92e9b9225, type: 3}
   metric: 4
   threshold: 5000
+  hidden: 0

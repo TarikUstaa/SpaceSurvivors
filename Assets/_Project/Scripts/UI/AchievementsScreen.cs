@@ -81,22 +81,26 @@ namespace SpaceSurvivors.UI
                 bool unlocked = AchievementService.IsUnlocked(a);
                 if (unlocked) unlockedCount++;
 
+                // A hidden achievement only conceals ITSELF, never what unlocking it earns —
+                // the moment it's earned it reads exactly like any other tile.
+                bool concealed = a.hidden && !unlocked;
+
                 if (tile.icon != null)
                 {
                     if (a.icon != null) tile.icon.sprite = a.icon;
-                    tile.icon.enabled = a.icon != null;
+                    tile.icon.enabled = a.icon != null && !concealed;
                     tile.icon.color = unlocked ? _unlockedTint : _lockedTint;
                 }
                 if (tile.background != null)
                     tile.background.color = unlocked ? _unlockedTint : _lockedTint;
                 if (tile.title != null)
                 {
-                    tile.title.text = a.title;
+                    tile.title.text = concealed ? "???" : a.title;
                     tile.title.color = unlocked ? _unlockedTitle : _lockedText;
                 }
                 if (tile.description != null)
                 {
-                    tile.description.text = a.description;
+                    tile.description.text = concealed ? "Keep playing to discover this one." : a.description;
                     tile.description.color = _lockedText;
                 }
                 if (tile.unlockedBadge != null) tile.unlockedBadge.SetActive(unlocked);
@@ -105,7 +109,9 @@ namespace SpaceSurvivors.UI
                 {
                     tile.progress.text = unlocked
                         ? "✓ UNLOCKED"
-                        : $"{Format(a.metric, AchievementService.Value(a))} / {Format(a.metric, AchievementService.Target(a))}";
+                        : concealed
+                            ? "???"
+                            : $"{Format(a.metric, AchievementService.Value(a))} / {Format(a.metric, AchievementService.Target(a))}";
                     tile.progress.color = unlocked ? _unlockedStamp : _lockedText;
                 }
             }
