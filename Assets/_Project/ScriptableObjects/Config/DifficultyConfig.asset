@@ -290,6 +290,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fc504e0fb25cc4413988cebe6806cf6a, type: 2}
   - {fileID: 11400000, guid: 202298f3357d54f6ca3f819230e77dba, type: 2}
   - {fileID: 11400000, guid: 207f1d0362fac415b80c98591d9c1b44, type: 2}
+  - {fileID: 11400000, guid: 41a3acb86ac134f4c8204e5f163512f1, type: 2}
+  - {fileID: 11400000, guid: 6e1a3fae66ac1439794cf6904abd8781, type: 2}
+  - {fileID: 11400000, guid: 27b9b87ee586a4593b4a50058d0dc214, type: 2}
   bossSchedule:
   - triggerTime: 180
     bossData: {fileID: 11400000, guid: bfa869031b7894d3fa7ff5a289aae7a0, type: 2}

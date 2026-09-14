@@ -62,6 +62,9 @@ namespace SpaceSurvivors.Enemies
         /// <summary>How much this kill's scrap/XP payout should be scaled by. 1 unless elite.</summary>
         public float ScrapMultiplier { get; private set; } = 1f;
 
+        private float _speedBuffMultiplier = 1f;
+        private float _speedBuffExpiry = -1f;
+
         /// <summary>The thing this enemy is hunting (the player). Null until <see cref="Initialize"/>.
         /// Read by abilities like <see cref="RangedAttack"/>.</summary>
         public Transform Target => _target;
@@ -144,9 +147,15 @@ namespace SpaceSurvivors.Enemies
                 }
             }
 
+            if (_speedBuffExpiry > 0f && Time.time >= _speedBuffExpiry)
+            {
+                _speedBuffMultiplier = 1f;
+                _speedBuffExpiry = -1f;
+            }
+
             float dt = Time.fixedDeltaTime;
             Vector2 velocity = _move != null
-                ? _move.GetDesiredVelocity(_body.position, (Vector2)_target.position, _speed, dt)
+                ? _move.GetDesiredVelocity(_body.position, (Vector2)_target.position, _speed * _speedBuffMultiplier, dt)
                 : Vector2.zero;
 
             // Layer steering tweaks (separation, hazard-avoidance, …) on top of the base move.
@@ -156,6 +165,15 @@ namespace SpaceSurvivors.Enemies
                         velocity = _modifiers[i].Modify(velocity, _body.position, _speed, dt);
 
             _body.linearVelocity = velocity;
+        }
+
+        /// <summary>Temporarily scale move speed (e.g. a support enemy's aura). If already
+        /// buffed, keeps the stronger multiplier and refreshes the expiry — a unit standing
+        /// in two overlapping auras isn't stacked, just kept topped up.</summary>
+        public void ApplySpeedBuff(float multiplier, float duration)
+        {
+            _speedBuffMultiplier = Mathf.Max(_speedBuffMultiplier, multiplier);
+            _speedBuffExpiry = Time.time + duration;
         }
 
         private void HandleDied(DamageInfo info)
@@ -172,6 +190,8 @@ namespace SpaceSurvivors.Enemies
             // Stay dormant until Initialize() supplies a target and stats.
             _active = false;
             _body.linearVelocity = Vector2.zero;
+            _speedBuffMultiplier = 1f;
+            _speedBuffExpiry = -1f;
         }
 
         public void OnDespawned()
