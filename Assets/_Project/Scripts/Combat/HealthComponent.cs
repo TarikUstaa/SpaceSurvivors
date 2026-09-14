@@ -59,6 +59,17 @@ namespace SpaceSurvivors.Combat
         public event Action<DamageInfo> Damaged;
         public event Action<DamageInfo> Died;
 
+        /// <summary>
+        /// Every landed hit on every <see cref="HealthComponent"/> in the game — player,
+        /// every enemy, all of them — through one static event. Lets a single scene-level
+        /// listener (<see cref="DamageNumberSpawner"/>) react to combat without being added
+        /// to the player prefab and all nine enemy prefabs individually (AI_Guidelines §1).
+        /// Carries the post-armour amount actually dealt (see <see cref="TakeDamage"/>), not
+        /// the raw incoming <see cref="DamageInfo.Amount"/> — a floating number should read
+        /// the hit the target really took.
+        /// </summary>
+        public static event Action<HealthComponent, DamageInfo> AnyDamaged;
+
         private HealthState _state;
         private float _iFrameTimer;
         private IDamageInterceptor[] _interceptors;
@@ -151,6 +162,7 @@ namespace SpaceSurvivors.Combat
             RaiseHealthChanged(applied);
             _onDamaged?.Invoke();
             Damaged?.Invoke(info);
+            AnyDamaged?.Invoke(this, new DamageInfo(amount, info.Source, info.HitPoint, info.HitDirection));
 
             if (!_state.IsAlive)
             {

@@ -3797,7 +3797,6 @@ GameObject:
   m_Component:
   - component: {fileID: 632278087}
   - component: {fileID: 632278086}
-  - component: {fileID: 632278085}
   - component: {fileID: 632278084}
   - component: {fileID: 632278083}
   - component: {fileID: 632278082}
@@ -3813,6 +3812,7 @@ GameObject:
   - component: {fileID: 632278098}
   - component: {fileID: 632278099}
   - component: {fileID: 632278100}
+  - component: {fileID: 632278101}
   m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
@@ -3902,18 +3902,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &632278085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 632278081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33cb2873aa9424e038dc8f9c227063d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Player.KeyboardMoveInput
 --- !u!212 &632278086
 SpriteRenderer:
   serializedVersion: 3
@@ -4188,6 +4176,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: SpaceSurvivors.Progression::SpaceSurvivors.Progression.ShipApplier
   _stats: {fileID: 632278095}
   _hull: {fileID: 632278086}
+--- !u!114 &632278101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632278081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28286b77d361d44bea3c1b2582a451c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Player::SpaceSurvivors.Player.CombinedMoveInput
+  _gamepadDeadzone: 0.15
 --- !u!1 &639183348
 GameObject:
   m_ObjectHideFlags: 0
@@ -7649,6 +7650,8 @@ MonoBehaviour:
   _musicSlider: {fileID: 673130029}
   _sfxSlider: {fileID: 528449766}
   _fullscreenToggle: {fileID: 2114672314}
+  _cloudSyncToggle: {fileID: 0}
+  _cloudSyncStatus: {fileID: 0}
   _masterValue: {fileID: 189348590}
   _musicValue: {fileID: 847941447}
   _sfxValue: {fileID: 1375288129}
@@ -7885,6 +7888,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1831646204}
   m_CullTransparentMesh: 1
+--- !u!1 &1843137488
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1843137490}
+  - component: {fileID: 1843137489}
+  m_Layer: 0
+  m_Name: Damage Number Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1843137489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843137488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1deae1b4c3e6947398e49a9458158a4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.Combat::SpaceSurvivors.Combat.DamageNumberSpawner
+  _pool: {fileID: 2065986487}
+  _damageNumberPrefab: {fileID: 6483566814017190243, guid: 5a71541b9814a4222803e0fa4cea6738, type: 3}
+--- !u!4 &1843137490
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843137488}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1852261575
 GameObject:
   m_ObjectHideFlags: 0
@@ -9840,3 +9889,4 @@ SceneRoots:
   - {fileID: 1488906421}
   - {fileID: 301966127}
   - {fileID: 420918511}
+  - {fileID: 1843137490}

@@ -14,14 +14,18 @@ namespace SpaceSurvivors.Player
     {
         public Vector2 MoveAxis { get; private set; }
 
-        private void Update()
+        private void Update() => MoveAxis = Read();
+
+        /// <summary>
+        /// The pure read, with no component state — so <see cref="CombinedMoveInput"/> can ask
+        /// "what is the keyboard doing right now" inside its own Update without depending on
+        /// this component's Update having already run this frame (Unity does not guarantee
+        /// sibling script order).
+        /// </summary>
+        internal static Vector2 Read()
         {
             var kb = Keyboard.current;
-            if (kb == null)
-            {
-                MoveAxis = Vector2.zero;
-                return;
-            }
+            if (kb == null) return Vector2.zero;
 
             float x = 0f, y = 0f;
             if (kb.aKey.isPressed || kb.leftArrowKey.isPressed)  x -= 1f;
@@ -31,7 +35,7 @@ namespace SpaceSurvivors.Player
 
             var v = new Vector2(x, y);
             // Clamp so diagonals are not faster than cardinals.
-            MoveAxis = v.sqrMagnitude > 1f ? v.normalized : v;
+            return v.sqrMagnitude > 1f ? v.normalized : v;
         }
     }
 }
