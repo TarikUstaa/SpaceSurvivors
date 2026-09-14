@@ -256,12 +256,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 207f1d0362fac415b80c98591d9c1b44, type: 2}
   bossSchedule:
   - triggerTime: 180
-    bossData: {fileID: 11400000, guid: 63b58cd595aef4cb59cafbc76d3d6518, type: 2}
+    bossData: {fileID: 11400000, guid: bfa869031b7894d3fa7ff5a289aae7a0, type: 2}
     count: 1
     warningLead: 4
   - triggerTime: 420
-    bossData: {fileID: 11400000, guid: 63b58cd595aef4cb59cafbc76d3d6518, type: 2}
-    count: 2
+    bossData: {fileID: 11400000, guid: d66dd3757e61e46f697fd1b15988b013, type: 2}
+    count: 1
     warningLead: 4
   - triggerTime: 660
     bossData: {fileID: 11400000, guid: 63b58cd595aef4cb59cafbc76d3d6518, type: 2}
