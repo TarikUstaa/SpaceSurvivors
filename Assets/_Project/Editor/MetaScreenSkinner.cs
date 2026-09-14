@@ -314,22 +314,38 @@ namespace SpaceSurvivors.EditorTools
             }
         }
 
-        /// <summary>Pull the Achievements 2×4 tile grid up and tighten its row pitch so there's
-        /// room for the Back button below it without the card overflowing the screen. Absolute
-        /// positions (derived from each tile's column + row) → safe to re-run.</summary>
+        /// <summary>Pull the Achievements tile grid up and tighten its row pitch so there's
+        /// room for the Back button below it without the card overflowing the screen.
+        ///
+        /// <para>Row/col come from each Tile_*'s position in the hierarchy, not from decoding
+        /// its (x, y) — the builder's own row spacing has changed size before (its tileH/gapY
+        /// aren't this method's business) and decoding it back out was the fragile half of the
+        /// coupling. `GetComponentsInChildren` walks in sibling order, which is creation order
+        /// for objects a builder never reparents or reorders, so tile N in that scan is
+        /// achievement N in the catalogue — same assumption the builder itself relies on.</para>
+        ///
+        /// <para>Row pitch and tile height both shrink past 4 rows, proportionally to how many
+        /// rows there are, so a catalogue that outgrows one screen's worth of achievements
+        /// keeps fitting the same panel instead of the 5th row overflowing it. Absolute
+        /// positions → safe to re-run.</para>
+        /// </summary>
         private static void TightenTileGrid(Transform panel)
         {
-            const float y0 = 150f, step = 150f, tileH = 140f;
-
+            var tileImages = new System.Collections.Generic.List<Image>();
             foreach (var img in panel.GetComponentsInChildren<Image>(true))
+                if (img.name.StartsWith("Tile_")) tileImages.Add(img);
+
+            const int cols = 2;
+            int rows = Mathf.Max(1, Mathf.CeilToInt(tileImages.Count / (float)cols));
+            const float baseStep = 150f, baseTileH = 140f, y0 = 150f;
+            float shrink = rows <= 4 ? 1f : 4f / rows;
+            float step = baseStep * shrink;
+            float tileH = baseTileH * shrink;
+
+            for (int i = 0; i < tileImages.Count; i++)
             {
-                if (!img.name.StartsWith("Tile_")) continue;
-                var rt = (RectTransform)img.transform;
-
-                // recover row/col from the builder's original layout (x0 = -280, y0 = 208, step 180)
-                int col = rt.anchoredPosition.x > 0f ? 1 : 0;
-                int row = Mathf.Clamp(Mathf.RoundToInt((208f - rt.anchoredPosition.y) / 180f), 0, 3);
-
+                int col = i % cols, row = i / cols;
+                var rt = (RectTransform)tileImages[i].transform;
                 rt.sizeDelta = new Vector2(rt.sizeDelta.x, tileH);
                 rt.anchoredPosition = new Vector2(col == 0 ? -280f : 280f, y0 - row * step);
             }

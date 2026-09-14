@@ -149,17 +149,6 @@ namespace SpaceSurvivors.EditorTools
 
             var screen = canvasGo.AddComponent<AchievementsScreen>();
 
-            // Panel stays the original fixed 1180×1040 — growing it taller instead (an earlier
-            // version of this tool tried that) pushed the header off the top of the screen,
-            // since the panel is centre-anchored and Achievements.unity has no scroll view.
-            // Instead the grid's own row height shrinks to fit however many rows the catalogue
-            // needs into the same 698-unit budget four rows used at the original tileH (158).
-            const int cols = 2;
-            int rows = Mathf.Max(1, Mathf.CeilToInt(list.Count / (float)cols));
-            const float fourRowGridHeight = 4f * 158f + 3f * 22f; // = 698, the proven "old style" budget
-            float tileH = rows <= 4 ? 158f : (fourRowGridHeight - (rows - 1) * 18f) / rows;
-            float gapY = rows <= 4 ? 22f : 18f;
-
             var panel = Img("Panel", canvasGo.transform, S("Rating/Window.png"), Color.white);
             panel.type = Image.Type.Sliced;
             Place(panel, new Vector2(0.5f, 0.5f), new Vector2(1180, 1040), Vector2.zero);
@@ -174,9 +163,10 @@ namespace SpaceSurvivors.EditorTools
             summary.fontStyle = FontStyle.Bold;
             Place(summary, new Vector2(0.5f, 1f), new Vector2(400, 38), new Vector2(0, -104));
 
-            // ---- tile grid, `cols` wide and however many `rows` the catalogue needs ----
+            // ---- 2-wide tile grid ----
             var tiles = new List<AchievementsScreen.Tile>();
-            const float tileW = 540f, gapX = 20f;
+            const int cols = 2;
+            const float tileW = 540f, tileH = 158f, gapX = 20f, gapY = 22f;
             float x0 = -(tileW + gapX) / 2f;
             float y0 = 208f;
 
