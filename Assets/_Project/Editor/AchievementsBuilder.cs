@@ -149,20 +149,20 @@ namespace SpaceSurvivors.EditorTools
 
             var screen = canvasGo.AddComponent<AchievementsScreen>();
 
-            // Panel height grows with the row count so the catalogue isn't stuck at whatever
-            // size fit the day it had exactly 8 entries. 1040 was hand-tuned for 4 rows
-            // (698 units of grid + header/summary/back-button chrome); keep that same chrome
-            // budget as more rows are added instead of hardcoding it for one catalogue size.
+            // Panel stays the original fixed 1180×1040 — growing it taller instead (an earlier
+            // version of this tool tried that) pushed the header off the top of the screen,
+            // since the panel is centre-anchored and Achievements.unity has no scroll view.
+            // Instead the grid's own row height shrinks to fit however many rows the catalogue
+            // needs into the same 698-unit budget four rows used at the original tileH (158).
             const int cols = 2;
             int rows = Mathf.Max(1, Mathf.CeilToInt(list.Count / (float)cols));
-            const float tileH = 158f, gapY = 22f;
-            float gridHeight = rows * tileH + Mathf.Max(0, rows - 1) * gapY;
-            float fourRowGridHeight = 4f * tileH + 3f * gapY;
-            float panelHeight = 1040f + Mathf.Max(0f, gridHeight - fourRowGridHeight);
+            const float fourRowGridHeight = 4f * 158f + 3f * 22f; // = 698, the proven "old style" budget
+            float tileH = rows <= 4 ? 158f : (fourRowGridHeight - (rows - 1) * 18f) / rows;
+            float gapY = rows <= 4 ? 22f : 18f;
 
             var panel = Img("Panel", canvasGo.transform, S("Rating/Window.png"), Color.white);
             panel.type = Image.Type.Sliced;
-            Place(panel, new Vector2(0.5f, 0.5f), new Vector2(1180, panelHeight), Vector2.zero);
+            Place(panel, new Vector2(0.5f, 0.5f), new Vector2(1180, 1040), Vector2.zero);
 
             // The Rating/Header.png sprite has "RATING" baked in — use a plain label on the
             // panel's dark title bar instead (matches the map-select screen).
