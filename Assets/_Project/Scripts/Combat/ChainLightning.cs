@@ -12,12 +12,18 @@ namespace SpaceSurvivors.Combat
     /// <see cref="WeaponData.aimRange"/> of the ship, then leaps to the nearest enemy it has
     /// not already hit within <see cref="WeaponData.chainRange"/>, repeating up to
     /// <see cref="WeaponData.projectilesPerShot"/> targets. Each leap deals
-    /// <see cref="WeaponData.chainFalloff"/>× the previous hit.
+    /// <see cref="WeaponData.chainFalloff"/>× the previous hit — that leap-and-decay sequence
+    /// is the weapon's designed depth.
     ///
     /// <para>MultiShot feeds the target count through the ProjectileCount stat — the same
-    /// pipeline every other weapon uses — so the upgrade that widens a shotgun instead
-    /// lengthens the chain. Damage runs through the Damage stat (§3). Instant: no projectile,
-    /// no pool. Created by <see cref="WeaponController"/>.</para>
+    /// pipeline every other weapon uses — but no longer stretches that one leap further once
+    /// it is stacked past the designed depth. Every target beyond it is an independent,
+    /// full-damage strike to a different untouched enemy near the ship instead, so a
+    /// MultiShot-heavy build reaches outward in several directions rather than snaking one
+    /// chain off wherever its first leap happened to go — matching how MultiShot fans a
+    /// Projectile weapon out instead of just lengthening a single shot. Damage runs through
+    /// the Damage stat (§3). Instant: no projectile, no pool. Created by
+    /// <see cref="WeaponController"/>.</para>
     /// </summary>
     [DisallowMultipleComponent]
     public class ChainLightning : MonoBehaviour
@@ -76,16 +82,21 @@ namespace SpaceSurvivors.Combat
                 : _data.projectilesPerShot;
             targets = Mathf.Clamp(targets, 1, MaxTargets);
 
-            float damage = _stats != null ? _stats.Modify(StatId.Damage, _data.damage) : _data.damage;
+            float baseDamage = _stats != null ? _stats.Modify(StatId.Damage, _data.damage) : _data.damage;
 
             _hit.Clear();
             _nodes.Clear();
             _nodes.Add(_center.position);
 
+            // The designed leap-and-decay chain, unchanged by MultiShot: hop to hop, each hit
+            // weaker than the last.
+            int chainHops = Mathf.Min(_data.projectilesPerShot, targets);
+
+            float damage = baseDamage;
             IDamageable current = first;
             Vector3 fromPos = _center.position;
 
-            for (int i = 0; i < targets && current != null; i++)
+            for (int i = 0; i < chainHops && current != null; i++)
             {
                 Vector3 pos = Position(current);
                 current.TakeDamage(new DamageInfo(damage, _owner, pos, (pos - fromPos).normalized));
@@ -95,6 +106,22 @@ namespace SpaceSurvivors.Combat
                 damage *= _data.chainFalloff;
                 fromPos = pos;
                 current = Nearest(pos, _data.chainRange, skipHit: true);
+            }
+
+            // Targets MultiShot adds past the designed depth: fresh full-damage strikes, each
+            // reaching from the ship to a different untouched enemy rather than continuing the
+            // same leap.
+            int extraStrikes = targets - chainHops;
+            for (int i = 0; i < extraStrikes; i++)
+            {
+                IDamageable branch = Nearest(_center.position, _data.aimRange, skipHit: true);
+                if (branch == null) break;   // nothing untouched left nearby — fewer hits, not a wasted one
+
+                Vector3 pos = Position(branch);
+                branch.TakeDamage(new DamageInfo(baseDamage, _owner, pos, (pos - _center.position).normalized));
+                _hit.Add(branch);
+                _nodes.Add(_center.position);   // break the line back to the ship before the new branch
+                _nodes.Add(pos);
             }
 
             if (_nodes.Count >= 2) _arc.Flash(_nodes);

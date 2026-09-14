@@ -23,7 +23,9 @@ namespace SpaceSurvivors.Data
         /// <summary>An arc that strikes the nearest enemy, then leaps to the nearest not-yet-hit
         /// enemy within <see cref="WeaponData.chainRange"/>, up to <see cref="WeaponData.projectilesPerShot"/>
         /// targets, each hit doing <see cref="WeaponData.chainFalloff"/>× the last. Instant, no
-        /// projectile. MultiShot feeds the jump count, so it grows into a swarm-clearer.</summary>
+        /// projectile. MultiShot past that designed depth opens fresh full-damage strikes on
+        /// different nearby enemies instead of lengthening the leap, so it grows into a
+        /// swarm-clearer that reaches outward rather than a single long chain.</summary>
         Chain,
     }
 
