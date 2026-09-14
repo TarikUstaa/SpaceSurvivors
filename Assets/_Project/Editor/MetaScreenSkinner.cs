@@ -338,7 +338,15 @@ namespace SpaceSurvivors.EditorTools
             foreach (var img in panel.GetComponentsInChildren<Image>(true))
                 if (img.name.StartsWith("Tile_")) tileImages.Add(img);
 
-            const int cols = 2;
+            // 3 columns, matching AchievementsBuilder's own grid — kept in sync by hand, not by
+            // reading the builder's tile positions, same reasoning as reading row/col from
+            // hierarchy order below: less to keep in sync is better, but the column count and
+            // spacing genuinely are this method's own business (it owns X here, not the builder).
+            const int cols = 3;
+            const float tileW = 540f, gapX = 20f;
+            float colSpan = tileW + gapX;
+            float x0 = -((cols - 1) * colSpan) / 2f;
+
             int rows = Mathf.Max(1, Mathf.CeilToInt(tileImages.Count / (float)cols));
             const float baseStep = 150f, baseTileH = 140f, y0 = 150f;
             float shrink = rows <= 4 ? 1f : 4f / rows;
@@ -350,7 +358,7 @@ namespace SpaceSurvivors.EditorTools
                 int col = i % cols, row = i / cols;
                 var rt = (RectTransform)tileImages[i].transform;
                 rt.sizeDelta = new Vector2(rt.sizeDelta.x, tileH);
-                rt.anchoredPosition = new Vector2(col == 0 ? -280f : 280f, y0 - row * step);
+                rt.anchoredPosition = new Vector2(x0 + col * colSpan, y0 - row * step);
 
                 // The background shrank; its children (icon, title, desc, "✓ UNLOCKED") still
                 // carry the builder's original full-tile-height layout and spill past the new,

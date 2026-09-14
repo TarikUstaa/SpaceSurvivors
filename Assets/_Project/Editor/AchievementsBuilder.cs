@@ -153,9 +153,21 @@ namespace SpaceSurvivors.EditorTools
 
             var screen = canvasGo.AddComponent<AchievementsScreen>();
 
+            // 3 columns, not 2: the canvas has plenty of unused width (1920 reference, panel was
+            // 1180) but almost no unused height (panel was already 1040 of a 1080-tall screen —
+            // there is nowhere for a taller panel to go without the top going off-screen, which
+            // is exactly what broke an earlier version of this build). Trading columns for rows
+            // fits more achievements at their full, undiminished size instead.
+            const int cols = 3;
+            const float tileW = 540f, tileH = 158f, gapX = 20f, gapY = 22f;
+            float colSpan = tileW + gapX;
+            float panelWidth = cols * tileW + (cols - 1) * gapX + 120f; // +120 = generous side margin
+            float x0 = -((cols - 1) * colSpan) / 2f;
+            float y0 = 208f;
+
             var panel = Img("Panel", canvasGo.transform, S("Rating/Window.png"), Color.white);
             panel.type = Image.Type.Sliced;
-            Place(panel, new Vector2(0.5f, 0.5f), new Vector2(1180, 1040), Vector2.zero);
+            Place(panel, new Vector2(0.5f, 0.5f), new Vector2(panelWidth, 1040), Vector2.zero);
 
             // The Rating/Header.png sprite has "RATING" baked in — use a plain label on the
             // panel's dark title bar instead (matches the map-select screen).
@@ -167,18 +179,13 @@ namespace SpaceSurvivors.EditorTools
             summary.fontStyle = FontStyle.Bold;
             Place(summary, new Vector2(0.5f, 1f), new Vector2(400, 38), new Vector2(0, -104));
 
-            // ---- 2-wide tile grid ----
             var tiles = new List<AchievementsScreen.Tile>();
-            const int cols = 2;
-            const float tileW = 540f, tileH = 158f, gapX = 20f, gapY = 22f;
-            float x0 = -(tileW + gapX) / 2f;
-            float y0 = 208f;
 
             for (int i = 0; i < list.Count; i++)
             {
                 var a = list[i];
                 int col = i % cols, rowIx = i / cols;
-                var pos = new Vector2(x0 + col * (tileW + gapX), y0 - rowIx * (tileH + gapY));
+                var pos = new Vector2(x0 + col * colSpan, y0 - rowIx * (tileH + gapY));
 
                 var bgImg = Img($"Tile_{a.id}", panel.transform, S("Rating/Table_01.png"), Color.white);
                 bgImg.type = Image.Type.Sliced;
