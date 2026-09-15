@@ -98,14 +98,30 @@ namespace SpaceSurvivors.Combat
                 Debug.LogError($"{nameof(HealthComponent)} on '{name}' has no HealthData assigned.", this);
         }
 
+        /// <summary>
+        /// Re-derive the ceiling from <see cref="StatId.MaxHealth"/> whenever the stats change.
+        ///
+        /// <para>Growing and shrinking are deliberately not symmetric. A bigger ceiling keeps
+        /// the same amount of <i>missing</i> health, so a +MaxHealth upgrade heals by what it
+        /// added rather than leaving the player proportionally worse off. A smaller one only
+        /// clamps: the health that is still there stays there.</para>
+        ///
+        /// <para>Applying the missing-HP rule in both directions is what it used to do, and it
+        /// meant a shrink subtracted the lost ceiling from current health as well — measured at
+        /// 36/100 becoming 6/70 for a −30% max-HP curse, and anyone below a quarter health hit
+        /// 0 outright. Nothing in the game reduced max health until curses existed, so the bug
+        /// had never had a way to fire.</para>
+        /// </summary>
         private void ApplyStatMaxHealth()
         {
             if (_data == null || _state == null) return;
             float missing = _state.Max - _state.Current;
             float newMax = _stats.Modify(SpaceSurvivors.Stats.StatId.MaxHealth, _data.maxHealth);
+            bool grew = newMax > _state.Max;
+
             _state.SetMax(newMax, refillToFull: false);
-            // Preserve the "missing HP" amount, so +MaxHealth also heals by that much now.
-            _state.Apply((newMax - missing) - _state.Current);
+            if (grew) _state.Apply((newMax - missing) - _state.Current);
+
             RaiseHealthChanged(0f);
         }
 
