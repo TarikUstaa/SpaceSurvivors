@@ -1,5 +1,6 @@
 using SpaceSurvivors.Data;
 using SpaceSurvivors.Environment;
+using SpaceSurvivors.Progression;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,14 +8,15 @@ namespace SpaceSurvivors.UI
 {
     /// <summary>
     /// Flashes a short announcement when the <see cref="EventDirector"/> starts a space event
-    /// (M18) — "☄ Meteor shower incoming". Prefab-style: the label + optional group are
-    /// Inspector references, this only drives text + a fade timer. Reads the director's event,
-    /// owns nothing (AI_Guidelines §1, §7).
+    /// (M18) — "☄ Meteor shower incoming" — or when a <see cref="RelicService"/> grants a relic.
+    /// Prefab-style: the label + optional group are Inspector references, this only drives text +
+    /// a fade timer. Reads the director's event, owns nothing (AI_Guidelines §1, §7).
     /// </summary>
     [DisallowMultipleComponent]
     public class EventBanner : MonoBehaviour
     {
         [SerializeField] private EventDirector _director;
+        [SerializeField] private RelicService _relicService;
         [SerializeField] private Text _label;
         [SerializeField] private CanvasGroup _group;
         [SerializeField, Min(0.5f)] private float _holdSeconds = 2.4f;
@@ -25,6 +27,7 @@ namespace SpaceSurvivors.UI
         private void Awake()
         {
             if (_director == null) _director = FindAnyObjectByType<EventDirector>();
+            if (_relicService == null) _relicService = FindAnyObjectByType<RelicService>();
             if (_group == null) _group = GetComponent<CanvasGroup>();
             if (_group != null) _group.alpha = 0f;
         }
@@ -32,11 +35,13 @@ namespace SpaceSurvivors.UI
         private void OnEnable()
         {
             if (_director != null) _director.EventStarted += Show;
+            if (_relicService != null) _relicService.RelicGranted += HandleRelicGranted;
         }
 
         private void OnDisable()
         {
             if (_director != null) _director.EventStarted -= Show;
+            if (_relicService != null) _relicService.RelicGranted -= HandleRelicGranted;
         }
 
         private void Show(SpaceEventData data)
@@ -44,6 +49,13 @@ namespace SpaceSurvivors.UI
             if (data == null) return;
             if (_label != null)
                 _label.text = string.IsNullOrEmpty(data.announce) ? data.displayName : data.announce;
+            _showLeft = _holdSeconds + _fadeSeconds;
+        }
+
+        private void HandleRelicGranted(RelicData relic)
+        {
+            if (relic == null) return;
+            if (_label != null) _label.text = $"✦ Relic: {relic.displayName}";
             _showLeft = _holdSeconds + _fadeSeconds;
         }
 

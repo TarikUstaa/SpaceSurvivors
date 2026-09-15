@@ -9002,6 +9002,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: SpaceSurvivors.UI::SpaceSurvivors.UI.EventBanner
   _director: {fileID: 2065986497}
+  _relicService: {fileID: 0}
   _label: {fileID: 2003879974}
   _group: {fileID: 2015563482}
   _holdSeconds: 2.4
@@ -9118,6 +9119,7 @@ GameObject:
   - component: {fileID: 2065986497}
   - component: {fileID: 2065986498}
   - component: {fileID: 2065986499}
+  - component: {fileID: 2065986500}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -9434,6 +9436,23 @@ MonoBehaviour:
   _relicService: {fileID: 632278104}
   _relicPickupPrefab: {fileID: 5747322664020243352, guid: 7dd63c48795eb411891654a2c51cb7d8, type: 3}
   _regularDropChance: 0.005
+--- !u!114 &2065986500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065986486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c1f64a6f27f471db2718fa8e969b6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SpaceSurvivors.UI::SpaceSurvivors.UI.RelicTray
+  _relicService: {fileID: 0}
+  _filledColor: {r: 1, g: 0.85, b: 0.25, a: 1}
+  _emptyColor: {r: 1, g: 1, b: 1, a: 0.12}
+  _slotSize: {x: 26, y: 26}
+  _slotSpacing: 6
 --- !u!1 &2080803189
 GameObject:
   m_ObjectHideFlags: 0
