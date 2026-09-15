@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5965f71873f0b4202b3e3d43b7a4afd5, type: 3}
+  m_Name: Curse_hoarder
+  m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.CurseData
+  id: curse_hoarder
+  displayName: Hoarder's Burden
+  icon: {fileID: 0}
+  boonText: '+60% XP gained'
+  costText: '-45% pickup radius'
+  boons:
+  - stat: 9
+    op: 1
+    value: 0.6
+  costs:
+  - stat: 8
+    op: 1
+    value: -0.45
+  weight: 1

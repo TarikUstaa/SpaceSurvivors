@@ -17,6 +17,7 @@ namespace SpaceSurvivors.UI
     {
         [SerializeField] private EventDirector _director;
         [SerializeField] private RelicService _relicService;
+        [SerializeField] private UpgradeService _upgrades;
         [SerializeField] private Text _label;
         [SerializeField] private CanvasGroup _group;
         [SerializeField, Min(0.5f)] private float _holdSeconds = 2.4f;
@@ -28,6 +29,7 @@ namespace SpaceSurvivors.UI
         {
             if (_director == null) _director = FindAnyObjectByType<EventDirector>();
             if (_relicService == null) _relicService = FindAnyObjectByType<RelicService>();
+            if (_upgrades == null) _upgrades = FindAnyObjectByType<UpgradeService>();
             if (_group == null) _group = GetComponent<CanvasGroup>();
             if (_group != null) _group.alpha = 0f;
         }
@@ -36,12 +38,14 @@ namespace SpaceSurvivors.UI
         {
             if (_director != null) _director.EventStarted += Show;
             if (_relicService != null) _relicService.RelicGranted += HandleRelicGranted;
+            if (_upgrades != null) _upgrades.CurseTaken += HandleCurseTaken;
         }
 
         private void OnDisable()
         {
             if (_director != null) _director.EventStarted -= Show;
             if (_relicService != null) _relicService.RelicGranted -= HandleRelicGranted;
+            if (_upgrades != null) _upgrades.CurseTaken -= HandleCurseTaken;
         }
 
         private void Show(SpaceEventData data)
@@ -56,6 +60,13 @@ namespace SpaceSurvivors.UI
         {
             if (relic == null) return;
             if (_label != null) _label.text = $"✦ Relic: {relic.displayName}";
+            _showLeft = _holdSeconds + _fadeSeconds;
+        }
+
+        private void HandleCurseTaken(CurseData curse)
+        {
+            if (curse == null) return;
+            if (_label != null) _label.text = $"☠ Curse: {curse.displayName}";
             _showLeft = _holdSeconds + _fadeSeconds;
         }
 

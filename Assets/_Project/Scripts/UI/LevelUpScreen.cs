@@ -32,6 +32,8 @@ namespace SpaceSurvivors.UI
         [SerializeField] private Text[] _choiceLabels;
         [SerializeField] private Color _normalTint = new Color(0.16f, 0.22f, 0.34f);
         [SerializeField] private Color _evolutionTint = new Color(0.62f, 0.45f, 0.12f);
+        [Tooltip("A curse has to be obviously not an ordinary card before it is read, not after.")]
+        [SerializeField] private Color _curseTint = new Color(0.45f, 0.14f, 0.18f);
 
         private int _pendingLevelUps;
         private bool _open;
@@ -86,7 +88,9 @@ namespace SpaceSurvivors.UI
                         : $"{pick.Title}\n<size=22>{pick.Description}</size>";
 
                 if (_choiceButtons[i].targetGraphic is Image img)
-                    img.color = pick.IsEvolution ? _evolutionTint : _normalTint;
+                    img.color = pick.IsCurse ? _curseTint
+                        : pick.IsEvolution ? _evolutionTint
+                        : _normalTint;
 
                 _choiceButtons[i].onClick.RemoveAllListeners();
                 var captured = pick;

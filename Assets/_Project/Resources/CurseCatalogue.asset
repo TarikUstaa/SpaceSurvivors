@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ec1b2ae9466d4a36b6beef431ba5c73, type: 3}
+  m_Name: CurseCatalogue
+  m_EditorClassIdentifier: Assembly-CSharp::SpaceSurvivors.Data.CurseCatalogue
+  curses:
+  - {fileID: 11400000, guid: f11cef02f90b04649be0397d77ee8577, type: 2}
+  - {fileID: 11400000, guid: 60fd57f7d226e44988ae5c724423f3ad, type: 2}
+  - {fileID: 11400000, guid: bdfd96c0d23e04e0793dc7cbe1b0991d, type: 2}
