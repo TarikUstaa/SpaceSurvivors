@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using SpaceSurvivors.Core;
 using SpaceSurvivors.Data;
 using SpaceSurvivors.Enemies;
@@ -21,6 +23,8 @@ namespace SpaceSurvivors.UI
     {
         [SerializeField] private RunController _run;
         [SerializeField] private RunStats _stats;
+        [SerializeField] private RelicService _relics;
+        [SerializeField] private UpgradeService _upgrades;
 
         [Header("Panel")]
         [SerializeField] private GameObject _root;
@@ -40,6 +44,8 @@ namespace SpaceSurvivors.UI
         {
             if (_run == null) _run = FindAnyObjectByType<RunController>();
             if (_stats == null) _stats = FindAnyObjectByType<RunStats>();
+            if (_relics == null) _relics = FindAnyObjectByType<RelicService>();
+            if (_upgrades == null) _upgrades = FindAnyObjectByType<UpgradeService>();
             if (_root != null) _root.SetActive(false);
             if (_replayButton != null) _replayButton.onClick.AddListener(Replay);
             if (_menuButton != null) _menuButton.onClick.AddListener(ToMenu);
@@ -89,6 +95,14 @@ namespace SpaceSurvivors.UI
                 if (!won)
                     text += $"\nDEFEATED BY  {DescribeCause(_run.CauseOfDeath)}";
 
+                // One line each, not one per item: RELICS/CURSES compete for the same tight
+                // vertical budget as TOP DAMAGE (see the run-end overlap fix), and a run-scoped
+                // pickup is worth naming but not worth a whole section.
+                if (_relics != null)
+                    text += Carrying("RELICS", _relics.Owned.Select(r => r.displayName));
+                if (_upgrades != null)
+                    text += Carrying("CURSES", _upgrades.TakenCurses.Select(c => c.displayName));
+
                 var top = _stats.TopWeapons(3);
                 if (top.Count > 0)
                 {
@@ -114,6 +128,29 @@ namespace SpaceSurvivors.UI
             }
 
             if (_root != null) _root.SetActive(true);
+        }
+
+        /// <summary>
+        /// "" when nothing to show, otherwise one line: a label and up to 2 names — capped so a
+        /// bigger catalogue later can't grow this into another overlap bug. The box this feeds
+        /// has no room to spare (see <c>bc2c7d2</c>); a section header and one line per item,
+        /// the way TOP DAMAGE does it, would cost 4-6 lines instead of 1.
+        ///
+        /// <para>2, not 3: measured against the actual Text generator (Unity's own
+        /// <c>preferredHeight</c>), showing all 3 curses on one line needs a wrap that leaves
+        /// the box 0.75px of margin — not a real margin. Capped at 2 the line fits unwrapped
+        /// with ~19px to spare, so growth stays predictable instead of depending on where a
+        /// browser-style line-wrap happens to break.</para>
+        /// </summary>
+        private static string Carrying(string label, IEnumerable<string> names)
+        {
+            var list = names.ToList();
+            if (list.Count == 0) return "";
+
+            const int shown = 2;
+            string joined = string.Join(", ", list.Take(shown));
+            if (list.Count > shown) joined += $" +{list.Count - shown}";
+            return $"\n{label}  {joined}";
         }
 
         private static string Clock(float seconds)

@@ -194,7 +194,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
@@ -2336,7 +2336,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -2344,9 +2344,9 @@ MonoBehaviour:
     m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 0.9
   m_Text: 'KILLS  0
 
     LEVEL  1
@@ -5548,7 +5548,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
@@ -9069,7 +9069,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
@@ -9279,7 +9279,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0ac7013773d4b459484d896097aac25d, type: 2}
   - {fileID: 11400000, guid: af372c28f94344994bc3c8e0891c9a71, type: 2}
   _curseChance: 0.25
-  _curseMinLevel: 4
+  _curseMinLevel: 7
 --- !u!114 &2065986493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9909,6 +9909,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: SpaceSurvivors.UI::SpaceSurvivors.UI.RunEndScreen
   _run: {fileID: 2065986491}
   _stats: {fileID: 2065986495}
+  _relics: {fileID: 0}
+  _upgrades: {fileID: 0}
   _root: {fileID: 417965398}
   _headerImage: {fileID: 216893450}
   _winHeader: {fileID: 21300000, guid: df953df456e8946f890f0cd895e5d12b, type: 3}
