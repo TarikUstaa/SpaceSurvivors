@@ -33,6 +33,9 @@ namespace SpaceSurvivors.UI
         private void Awake()
         {
             EnsureEventSystem();
+            // The server's announcement banner. Added here rather than placed in the scene: it
+            // builds its own canvas and is hidden until there is something to show.
+            if (GetComponent<MenuNotice>() == null) gameObject.AddComponent<MenuNotice>();
             RefreshWallet();
             ProfileService.Changed += RefreshWallet;
 

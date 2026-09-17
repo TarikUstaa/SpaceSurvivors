@@ -128,5 +128,6 @@ namespace SpaceSurvivors.Core
         public static string PlayerUrl      => BaseUrl + "/v1/player";
         public static string LeaderboardUrl => BaseUrl + "/v1/leaderboard";
         public static string TokenUrl       => BaseUrl + "/v1/auth/token";
+        public static string AnnouncementUrl => BaseUrl + "/v1/announcement";
     }
 }
