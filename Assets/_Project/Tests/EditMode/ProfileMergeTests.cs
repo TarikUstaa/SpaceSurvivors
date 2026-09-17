@@ -93,18 +93,19 @@ namespace SpaceSurvivors.Tests
         }
 
         [Test]
-        public void An_adopted_selection_of_a_ship_no_longer_owned_falls_back()
+        public void An_adopted_selection_of_a_ship_no_longer_owned_falls_back_to_the_starter()
         {
-            // An operator can remove the selected hull without clearing the selection.
+            // An operator can remove the selected hull without clearing the selection. Blank is
+            // the starter — not the first hull still owned, which the player never picked.
             var local = Empty();
             var remote = Profile(lifetimeScrap: 0, wallet: 0,
-                                 ships: new List<string> { "starter" });
+                                 ships: new List<string> { "wraith" });
             remote.selectedShipId = "vanguard";
             remote.adminRevision = 1;
 
             ProfileMerge.MergeInto(local, remote);
 
-            Assert.That(local.selectedShipId, Is.EqualTo("starter"));
+            Assert.That(local.selectedShipId, Is.Empty);
         }
 
         // ── the reason this class exists ───────────────────────────────────────────────
@@ -239,22 +240,42 @@ namespace SpaceSurvivors.Tests
         }
 
         [Test]
-        public void A_selected_ship_the_player_does_not_own_falls_back_to_one_they_do()
+        public void A_selected_ship_the_player_does_not_own_falls_back_to_the_starter()
         {
             // The selection travels with the economy block, so a dangling one arrives only from
             // a side that was already inconsistent — e.g. a save written before the ship list.
-            // Left dangling it breaks the hangar.
             var local = Profile(lifetimeScrap: 1, wallet: 0);
 
             var remote = Profile(lifetimeScrap: 9999, wallet: 0,
-                                 ships: new List<string> { "starter" });
+                                 ships: new List<string> { "vanguard" });
             remote.selectedShipId = "ghost";
 
             ProfileMerge.MergeInto(local, remote);
 
-            Assert.That(local.ownedShipIds, Is.EquivalentTo(new[] { "starter" }));
-            Assert.That(local.selectedShipId, Is.EqualTo("starter"),
-                "a selection that is not owned must be repaired, not left dangling");
+            Assert.That(local.ownedShipIds, Is.EquivalentTo(new[] { "vanguard" }));
+            Assert.That(local.selectedShipId, Is.Empty,
+                "a selection that is not owned is cleared to the starter, not swapped for a bought hull");
+        }
+
+        [Test]
+        public void An_explicit_starter_pick_survives_a_sync()
+        {
+            // The starter is owned implicitly — ShipService never writes it to ownedShipIds — so
+            // ShipService.Select(starter) stores an id the merge cannot find in that list. It
+            // used to be "repaired" to ownedShipIds[0], flipping the player back onto vanguard
+            // every time they logged in.
+            var local = Profile(lifetimeScrap: 1000, wallet: 300,
+                                ships: new List<string> { "vanguard" });
+            local.selectedShipId = "starter";
+
+            var remote = Profile(lifetimeScrap: 1000, wallet: 300,
+                                 ships: new List<string> { "vanguard" });
+            remote.selectedShipId = "starter";
+
+            ProfileMerge.MergeInto(local, remote);
+
+            Assert.That(local.selectedShipId, Is.Not.EqualTo("vanguard"));
+            Assert.That(local.selectedShipId, Is.Empty, "blank is how the merge spells the starter");
         }
 
         [Test]

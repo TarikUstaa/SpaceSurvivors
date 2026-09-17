@@ -85,13 +85,7 @@ namespace SpaceSurvivors.Core
                 changed = true;
             }
 
-            // A selected ship we no longer own would break the hangar; fall back to the first.
-            if (!string.IsNullOrEmpty(local.selectedShipId)
-                && !local.ownedShipIds.Contains(local.selectedShipId))
-            {
-                local.selectedShipId = local.ownedShipIds.Count > 0 ? local.ownedShipIds[0] : "";
-                changed = true;
-            }
+            changed |= ClearDanglingShipSelection(local);
 
             return changed;
         }
@@ -123,13 +117,30 @@ namespace SpaceSurvivors.Core
             local.unlockedAchievementIds = new List<string>(remote.unlockedAchievementIds);
             local.selectedMapId = remote.selectedMapId;
 
-            // The same safety net the merge has: never leave the hangar pointing at a hull the
-            // profile does not own. An operator can remove the selected ship without clearing it.
-            if (!string.IsNullOrEmpty(local.selectedShipId)
-                && !local.ownedShipIds.Contains(local.selectedShipId))
-            {
-                local.selectedShipId = local.ownedShipIds.Count > 0 ? local.ownedShipIds[0] : "";
-            }
+            // The same safety net the merge has. An operator can remove the selected ship
+            // without clearing the selection.
+            ClearDanglingShipSelection(local);
+        }
+
+        /// <summary>
+        /// A selection that is not in <see cref="PlayerProfile.ownedShipIds"/> is reset to blank,
+        /// which the hangar reads as "the starter".
+        ///
+        /// <para>Blank, not the first owned hull: the starter (and any free hull) is owned
+        /// implicitly and never written to that list, so a player who owns a bought ship and
+        /// explicitly picks the starter looks exactly like a dangling selection from here.
+        /// Swapping in <c>ownedShipIds[0]</c> would flip that pick back to the bought ship on
+        /// every sync. Core cannot see the ship catalogue to tell the two apart; blank is right
+        /// for both.</para>
+        /// </summary>
+        /// <returns>True if the selection was cleared.</returns>
+        private static bool ClearDanglingShipSelection(PlayerProfile profile)
+        {
+            if (string.IsNullOrEmpty(profile.selectedShipId)
+                || profile.ownedShipIds.Contains(profile.selectedShipId)) return false;
+
+            profile.selectedShipId = "";
+            return true;
         }
 
         /// <summary>

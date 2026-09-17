@@ -1675,16 +1675,40 @@ passed an *empty* selection and expected it filled with the first owned hull. Em
 merge a genuinely dangling id (`"ghost"`), and a new `A_blank_ship_selection_is_left_blank` pins the
 blank case. `MergeInto` and `Adopt` were already consistent (both repair only non-empty) — unchanged.
 
+## Ship fallback no longer flips an explicit starter pick (2026-09-17)
+
+Suite **39 passed, 0 failed** (38 + one regression test).
+
+**Bug.** `ShipService.Select(starter)` stores `"starter"`, but the starter and any free hull
+(`ShipData.IsFree`) are owned implicitly and never written to `ownedShipIds`. `ProfileMerge.MergeInto`
+and `Adopt` "repaired" any non-empty selection missing from that list to `ownedShipIds[0]` — so a
+player who owned `vanguard` and picked the starter was put back in the vanguard on every login/conflict sync.
+
+**Decision: a dangling selection is cleared to `""`, not swapped for the first owned hull.** Both paths
+share one helper, `ClearDanglingShipSelection`. Why:
+- `ProfileMerge` lives in `SpaceSurvivors.Core` (no asmdef references), so it cannot ask `ShipService`
+  which hulls are implicitly owned — it cannot tell "picked the starter" from "dangling".
+- Blank is correct for both: `ShipService.SelectedId` already reads blank (and any unknown/unowned id)
+  as the starter, and every read of the selection goes through it.
+- The backoffice form accepts blank, but refuses `"starter"` unless it is listed as owned (see TODO).
+
+Known limit: a future *free non-starter* hull picked explicitly would also be cleared to the starter by
+a sync. None exists today (only `starter` has cost 0). If one is added, pass the implicitly-owned ids
+into the merge rather than teaching Core about the catalogue.
+
+Tests: the two fallback tests now use a real bought hull (`vanguard`/`wraith`, not `"starter"`, which the
+game never writes to `ownedShipIds`) and expect blank; new `An_explicit_starter_pick_survives_a_sync`.
+
 ## Open Decisions / TODO
 
 *The M1-era setup items (Input System, pooling, layer matrix, git) are all long done.*
 
-- [ ] **Ship fallback flips an explicit starter pick** (found 2026-09-17, not fixed) —
-      `ShipService.Select(starter)` stores `"starter"`, but the starter (and any free hull) is owned
-      implicitly and never written to `ownedShipIds`. `ProfileMerge`'s dangling-selection repair
-      therefore treats it as dangling and swaps it for `ownedShipIds[0]` (e.g. `vanguard`) on the
-      next sync. Likely fix: repair to `""` instead of the first owned hull, or teach the merge
-      about implicit ownership.
+- [x] **Ship fallback flips an explicit starter pick** — fixed 2026-09-17, see the section above.
+- [ ] **Backoffice refuses an explicit starter pick** (found 2026-09-17, backend repo, not fixed) —
+      `AdminProgressService` rejects a `selectedShipId` that is not in `ownedShipIds`, so a save
+      holding `"starter"` (written by `ShipService.Select` before any sync cleared it) cannot be
+      saved from the edit form until the operator blanks the field. Its comment also still says the
+      game "would fall back to the first owned ship" — it now falls back to blank.
 - [ ] **Playtest sign-off** — M14c, M16, M17, M18, M19, M20 and the iter-6b/6c difficulty
       curves are all committed and unplayed by a human. The recurring open question is
       mid/late-game feel: the sim bot kites and never drops below ~90% HP past ~6 min, so
