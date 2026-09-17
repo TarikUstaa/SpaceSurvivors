@@ -11,8 +11,9 @@ namespace SpaceSurvivors.UI
     /// <summary>
     /// Read-out of the player's current build, shown beside the pause menu. Two aligned
     /// columns (labels / values) rebuilt every time the panel is shown. Pure view — it reads
-    /// the <see cref="StatSheet"/>, health, level, run stats and weapon list, changes nothing
-    /// (AI_Guidelines §1).
+    /// the <see cref="StatSheet"/>, health, level, run stats, weapon list and relics, changes
+    /// nothing (AI_Guidelines §1). This is where run-scoped pickups are listed: relics are a
+    /// per-run thing, so they belong next to the run's stats rather than in a HUD widget.
     /// </summary>
     [DisallowMultipleComponent]
     public class StatsPanel : MonoBehaviour
@@ -24,6 +25,7 @@ namespace SpaceSurvivors.UI
         [SerializeField] private LevelSystem _level;
         [SerializeField] private RunStats _runStats;
         [SerializeField] private WeaponController _weapons;
+        [SerializeField] private RelicService _relics;
 
         [SerializeField] private Text _labels;
         [SerializeField] private Text _values;
@@ -36,6 +38,7 @@ namespace SpaceSurvivors.UI
             if (_level == null) _level = FindAnyObjectByType<LevelSystem>();
             if (_runStats == null) _runStats = FindAnyObjectByType<RunStats>();
             if (_weapons == null) _weapons = FindAnyObjectByType<WeaponController>();
+            if (_relics == null) _relics = FindAnyObjectByType<RelicService>();
         }
 
         private void OnEnable() => Rebuild();
@@ -92,6 +95,13 @@ namespace SpaceSurvivors.UI
                 Head("WEAPONS");
                 foreach (var w in _weapons.Weapons)
                     Row(w != null ? w.displayName : "?", "");
+            }
+
+            if (_relics != null && _relics.Owned.Count > 0)
+            {
+                Head("RELICS");
+                foreach (var r in _relics.Owned)
+                    Row(r != null ? r.displayName : "?", "");
             }
 
             _labels.text = l.ToString();

@@ -1582,6 +1582,42 @@ stack documented in its tooltip:
 Making it a `[SerializeField]` rather than another literal means the next widget added to that
 edge can be moved from the Inspector instead of a recompile.
 
+**Same day, second pass — Tarik saw it and changed the design:** "relic barlarını kaldıralım,
+escye bastığımız da relics diye bir stat koyalım", plus the `KILLS` caption sat far from its
+number.
+
+- **`RelicTray` is gone** (component removed, script deleted). Relics are run-scoped, and the
+  pause screen's `StatsPanel` already lists run-scoped things — it now has a `RELICS` section
+  built exactly like `WEAPONS` (name in the label column, empty value). One place to keep in
+  sync instead of two, and the HUD gets a corner back. The earlier "deliberately left out:
+  relics on the pause screen" note in [[spacesurvivors-dev-backlog]] is superseded.
+- **The caption and the number are one label now.** Two right-aligned `Text`s can't stay close:
+  the number is right-anchored and the caption is fixed, so the gap is whatever the number
+  isn't — ~160px at "0", ~20px at "9999". `KillCaption` was deleted and `RunHud` writes
+  `<color=#8c9eb8><size=18>KILLS</size></color>  {n}` into the one right-aligned label, so the
+  pair always moves together.
+- **The stats panel was already overflowing, quietly.** Measured with the probe trick below:
+  34 lines (the worst case — 6 weapons, 3 relics) is **864px** at `lineSpacing` 1.12 and
+  **765px** at 1.0, and the text starts 118px down a column that was only 840 tall. So the
+  pre-relics worst case (29 lines, 737px) was *already* 15px past the panel edge; RELICS would
+  have pushed it to 43px past. Fixed by `lineSpacing` 1.12→1 and growing `StatsColumn`
+  840→940 with `Labels`/`Values` 640→780 — 118+765 = 883 inside 940, with real margin.
+  Font size left at 20; the column had unused screen height (940 of 1080) and readability is
+  worth more than the 100px.
+
+**Probe trick, corrected.** `Text.preferredHeight` is still the cheapest way to size a text box
+without Play Mode, but the pause panel's root is inactive in the scene and **`get_component` by
+name cannot reach inactive objects** — flip `m_IsActive` to 1 in the YAML, reload, measure,
+then restore. And the multi-line probe must be written in *Unity's own* serialization form —
+single-quoted with a blank line per newline:
+
+    m_Text: 'Line01
+
+      Line02'
+
+A double-quoted `"a\nb"` does **not** work: Unity's YAML reader collapses it to one line with a
+space, which silently turns a 34-line measurement into a 1-line one.
+
 **Method note.** The scene edit was hand-written YAML again (the object-reference assignment bug
 in the MCP package), and it exposed a second-order trap worth remembering: after editing both a
 script and the scene that references its new field, `Assets/Refresh` alone is not enough.

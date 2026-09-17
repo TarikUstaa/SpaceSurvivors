@@ -130,7 +130,10 @@ namespace SpaceSurvivors.UI
             if (_killsLabel != null && _runStats != null && _runStats.Kills != _shownKills)
             {
                 _shownKills = _runStats.Kills;
-                _killsLabel.text = _shownKills.ToString("n0");
+                // Caption and number live in one right-aligned label on purpose: two separate
+                // Texts leave a gap that grows as the number shrinks, so "KILLS" would drift
+                // away from a low count.
+                _killsLabel.text = $"<color=#8c9eb8><size=18>KILLS</size></color>  {_shownKills:n0}";
             }
 
             if (_shield != null && _shieldGroup != null)

@@ -2061,7 +2061,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -380, y: 0}
-  m_SizeDelta: {x: 540, y: 840}
+  m_SizeDelta: {x: 540, y: 940}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &382881778
 MonoBehaviour:
@@ -2082,6 +2082,7 @@ MonoBehaviour:
   _level: {fileID: 632278093}
   _runStats: {fileID: 2065986495}
   _weapons: {fileID: 632278091}
+  _relics: {fileID: 0}
   _labels: {fileID: 2120650411}
   _values: {fileID: 627021288}
 --- !u!114 &382881779
@@ -3747,7 +3748,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -50, y: -118}
-  m_SizeDelta: {x: 150, y: 640}
+  m_SizeDelta: {x: 150, y: 780}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &627021288
 MonoBehaviour:
@@ -3781,7 +3782,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
-    m_LineSpacing: 1.12
+    m_LineSpacing: 1
   m_Text: 
 --- !u!222 &627021289
 CanvasRenderer:
@@ -4888,7 +4889,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 771100021}
   - {fileID: 771100031}
   m_Father: {fileID: 281648033}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4897,85 +4897,6 @@ RectTransform:
   m_AnchoredPosition: {x: -34, y: -166}
   m_SizeDelta: {x: 230, y: 50}
   m_Pivot: {x: 1, y: 1}
---- !u!1 &771100020
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 771100021}
-  - component: {fileID: 771100022}
-  - component: {fileID: 771100023}
-  m_Layer: 0
-  m_Name: KillCaption
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &771100021
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 771100020}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 771100011}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 90, y: 26}
-  m_Pivot: {x: 0, y: 0.5}
---- !u!222 &771100022
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 771100020}
-  m_CullTransparentMesh: 1
---- !u!114 &771100023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 771100020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.55, g: 0.62, b: 0.72, a: 1}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 18
-    m_FontStyle: 1
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 3
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 1
-    m_VerticalOverflow: 1
-    m_LineSpacing: 1
-  m_Text: KILLS
 --- !u!1 &771100030
 GameObject:
   m_ObjectHideFlags: 0
@@ -5012,7 +4933,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 130, y: 46}
+  m_SizeDelta: {x: 230, y: 46}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &771100032
 CanvasRenderer:
@@ -9335,7 +9256,6 @@ GameObject:
   - component: {fileID: 2065986497}
   - component: {fileID: 2065986498}
   - component: {fileID: 2065986499}
-  - component: {fileID: 2065986500}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -9654,24 +9574,6 @@ MonoBehaviour:
   _relicService: {fileID: 632278104}
   _relicPickupPrefab: {fileID: 5747322664020243352, guid: 7dd63c48795eb411891654a2c51cb7d8, type: 3}
   _regularDropChance: 0.005
---- !u!114 &2065986500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065986486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57c1f64a6f27f471db2718fa8e969b6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: SpaceSurvivors.UI::SpaceSurvivors.UI.RelicTray
-  _relicService: {fileID: 0}
-  _filledColor: {r: 1, g: 0.85, b: 0.25, a: 1}
-  _emptyColor: {r: 1, g: 1, b: 1, a: 0.12}
-  _slotSize: {x: 26, y: 26}
-  _slotSpacing: 6
-  _corner: {x: -34, y: -228}
 --- !u!1 &2080803189
 GameObject:
   m_ObjectHideFlags: 0
@@ -10026,7 +9928,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50, y: -118}
-  m_SizeDelta: {x: 280, y: 640}
+  m_SizeDelta: {x: 280, y: 780}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2120650411
 MonoBehaviour:
@@ -10060,7 +9962,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
-    m_LineSpacing: 1.12
+    m_LineSpacing: 1
   m_Text: 
 --- !u!222 &2120650412
 CanvasRenderer:
