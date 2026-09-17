@@ -21,6 +21,9 @@ namespace SpaceSurvivors.UI
         [SerializeField] private Color _emptyColor = new(1f, 1f, 1f, 0.12f);
         [SerializeField] private Vector2 _slotSize = new(26f, 26f);
         [SerializeField] private float _slotSpacing = 6f;
+        [Tooltip("Top-right offset in HUD reference units (1920x1080). Must clear the widgets " +
+                 "stacked above it on that edge: ScrapGroup ends at y -158, KillGroup at -216.")]
+        [SerializeField] private Vector2 _corner = new(-34f, -228f);
 
         private Image[] _slots;
 
@@ -50,7 +53,7 @@ namespace SpaceSurvivors.UI
             rowRt.anchorMin = new Vector2(1f, 1f);
             rowRt.anchorMax = new Vector2(1f, 1f);
             rowRt.pivot = new Vector2(1f, 1f);
-            rowRt.anchoredPosition = new Vector2(-24f, -24f);
+            rowRt.anchoredPosition = _corner;
             var layout = rowGo.AddComponent<HorizontalLayoutGroup>();
             layout.spacing = _slotSpacing;
             layout.childAlignment = TextAnchor.UpperRight;

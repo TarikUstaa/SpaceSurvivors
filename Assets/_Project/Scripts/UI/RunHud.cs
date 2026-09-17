@@ -8,7 +8,8 @@ using UnityEngine.UI;
 namespace SpaceSurvivors.UI
 {
     /// <summary>
-    /// In-run HUD — XP bar + level, survival timer, health bar, shield pips, scrap count.
+    /// In-run HUD — XP bar + level, survival timer, health bar, shield pips, scrap count,
+    /// kill count.
     /// Prefab-style: every widget is an Inspector reference, this component only pushes
     /// values into them from events / per-frame reads (AI_Guidelines §1, §7). Built by
     /// <c>M10UiBuilder</c> with the CraftPix kit.
@@ -22,6 +23,7 @@ namespace SpaceSurvivors.UI
         [SerializeField] private HealthComponent _playerHealth;
         [SerializeField] private ShieldComponent _shield;
         [SerializeField] private ScrapCollector _scrap;
+        [SerializeField] private RunStats _runStats;
 
         [Header("Widgets")]
         [SerializeField] private Image _xpFill;
@@ -36,9 +38,13 @@ namespace SpaceSurvivors.UI
         [Tooltip("Shows this run's collected scrap (the wallet is a menu concept — the run-end " +
                  "screen banks this amount).")]
         [SerializeField] private Text _scrapLabel;
+        [Tooltip("Running kill tally for this run — the same number the run-end screen reports.")]
+        [SerializeField] private Text _killsLabel;
 
         private RunController _run;
         private Canvas _canvas;
+        // -1 so the first Update always writes, even on a run that starts at 0 kills.
+        private int _shownKills = -1;
 
         private void Awake()
         {
@@ -47,6 +53,7 @@ namespace SpaceSurvivors.UI
             if (_playerHealth == null && _levelSystem != null) _playerHealth = _levelSystem.GetComponent<HealthComponent>();
             if (_shield == null) _shield = FindAnyObjectByType<ShieldComponent>();
             if (_scrap == null) _scrap = FindAnyObjectByType<ScrapCollector>();
+            if (_runStats == null) _runStats = FindAnyObjectByType<RunStats>();
             _run = FindAnyObjectByType<RunController>();
             // This component usually sits on a manager object, not under the HUD canvas —
             // so fall back to the canvas that actually renders one of our widgets.
@@ -116,6 +123,14 @@ namespace SpaceSurvivors.UI
                 if (_healthFill != null) _healthFill.fillAmount = _playerHealth.Normalized;
                 if (_healthLabel != null)
                     _healthLabel.text = $"{Mathf.CeilToInt(_playerHealth.Current)}/{Mathf.CeilToInt(_playerHealth.Max)}";
+            }
+
+            // RunStats has no change event — it's a passive tally — so poll it here next to
+            // the other per-frame reads and only touch the Text when the number actually moves.
+            if (_killsLabel != null && _runStats != null && _runStats.Kills != _shownKills)
+            {
+                _shownKills = _runStats.Kills;
+                _killsLabel.text = _shownKills.ToString("n0");
             }
 
             if (_shield != null && _shieldGroup != null)

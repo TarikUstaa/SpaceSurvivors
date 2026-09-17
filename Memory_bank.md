@@ -1553,6 +1553,43 @@ in three files, because the next area effect will need it.
 50. Nothing about what the game does was changed — but "nothing changed" here rests on reading
 the defaults of an API, not on a test, which is the standing weakness of this repo.
 
+## HUD kill counter + relic tray moved off the XP bar (2026-09-17)
+
+Tarik, after the curse work: "oyun içinde kill sayısını gösteren bir yer ekleyelim" and the
+relic pips "xp barıyla çakışıyor".
+
+**Kill counter.** `RunStats.Kills` already existed (it feeds the run-end screen) and needed no
+new plumbing — only a label. Added `KillGroup` to `HudCanvas`, built to mirror `ScrapGroup`
+exactly: a 230x50 top-right row with a dim left-aligned `KILLS` caption and a bold
+right-aligned number in the same 28pt / `Outline` treatment the scrap count uses, so the two
+read as one column rather than two unrelated widgets. `RunHud` gained `_runStats` +
+`_killsLabel`; it polls `RunStats.Kills` in `Update` next to the timer/health reads and only
+writes the `Text` when the number actually moves — `RunStats` is a passive tally with no change
+event, and adding one just for the HUD would have put a second subscriber on
+`SpawnDirector.EnemyKilled` for no gain.
+
+**The overlap.** `RelicTray` built its row at a hardcoded `(-24, -24)` from the top-right. The
+XP bar is full-width at the very top (`y -8`, 38 tall), so the pips sat directly on top of it —
+they were never in a free corner, the first version just hadn't been checked against the HUD's
+real geometry. The right edge is a stack, so the offset is now a serialized `_corner` with the
+stack documented in its tooltip:
+
+    XpBar        y  -8 … -46   (full width)
+    ScrapGroup   y -108 … -158
+    KillGroup    y -166 … -216   (new)
+    RelicTray    y -228 … -254
+
+Making it a `[SerializeField]` rather than another literal means the next widget added to that
+edge can be moved from the Inspector instead of a recompile.
+
+**Method note.** The scene edit was hand-written YAML again (the object-reference assignment bug
+in the MCP package), and it exposed a second-order trap worth remembering: after editing both a
+script and the scene that references its new field, `Assets/Refresh` alone is not enough.
+The scene deserialized before the recompiled `RunHud` existed, so `_killsLabel` came back
+**null** even though the fileID was correct in the file — Unity silently drops a YAML key the
+loaded script has no field for. An explicit scene `Load` after the compile finished fixed it.
+**Always re-read the wiring after a script+scene edit; a successful refresh is not proof.**
+
 ## Open Decisions / TODO
 
 *The M1-era setup items (Input System, pooling, layer matrix, git) are all long done.*
