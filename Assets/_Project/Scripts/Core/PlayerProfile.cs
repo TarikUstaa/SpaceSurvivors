@@ -18,7 +18,7 @@ namespace SpaceSurvivors.Core
     [Serializable]
     public class PlayerProfile
     {
-        public const int CurrentSchemaVersion = 5;
+        public const int CurrentSchemaVersion = 6;
 
         public int schemaVersion = CurrentSchemaVersion;
 
@@ -33,6 +33,19 @@ namespace SpaceSurvivors.Core
         /// carries a token, this is only the id.</para>
         /// </summary>
         public string userId = "";
+
+        /// <summary>
+        /// How many times an operator has edited this save from the backoffice. Only the
+        /// <em>server</em> ever raises it; the game carries it along and compares it.
+        ///
+        /// <para>An edit has to beat <see cref="ProfileMerge"/>, whose rules exist to never lose
+        /// progress — so on its own, a lowered best score would be raised back and a removed
+        /// achievement re-added by the next sync. A remote copy with a higher revision than this
+        /// one is therefore taken whole, before any of the merge rules run. Anything done locally
+        /// since the last sync is lost in that one case, which is what an operator's correction
+        /// means.</para>
+        /// </summary>
+        public long adminRevision;
 
         // ---- Currency ----
         /// <summary>Spendable balance (scrap carried out of runs).</summary>

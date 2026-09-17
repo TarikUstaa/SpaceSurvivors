@@ -1634,6 +1634,29 @@ The scene deserialized before the recompiled `RunHud` existed, so `_killsLabel` 
 loaded script has no field for. An explicit scene `Load` after the compile finished fixed it.
 **Always re-read the wiring after a script+scene edit; a successful refresh is not proof.**
 
+## Save schema 6 — `adminRevision`, so a backoffice edit survives the merge (2026-09-17)
+
+The backend's backoffice can now edit a player's save (backend Memory_bank D33). Without a client
+change that edit would not stick: `ProfileMerge` exists to never lose progress, so a lowered best
+score is raised back, a removed achievement re-added, and a raised wallet — lifetime scrap unchanged,
+so a tie, so the local copy wins — overwritten by the old balance on the next sync.
+
+`PlayerProfile.adminRevision` (schema 5 → 6, additive, 0 = never edited) is raised only by the
+server, once per edit. `ProfileMerge.MergeInto` checks it **before every other rule**: a remote copy
+with a higher revision is adopted whole (`Adopt` — every field copied, collections copied rather
+than shared, the dangling-ship fallback still applied). After adoption both sides hold the same
+revision and ordinary merging resumes, so an edit is applied once and does not keep overwriting new
+progress. Four tests in `ProfileMergeTests` pin exactly that.
+
+The cost, accepted on purpose: whatever the player did locally since their last sync is lost in the
+adopting sync. That is what an operator's correction means, and only an operator can trigger it.
+
+**Two EditMode tests were already failing, unrelated to this change**, both from the first test
+commit `58ad231`: `LevelSystemTests.The_cap_stops_the_curve_from_running_away` (expects 500, gets 1)
+and `ProfileMergeTests.A_selected_ship_the_player_does_not_own_falls_back_to_one_they_do` (the
+fallback only repairs a *non-empty* dangling selection; the test hands it an empty one). Result
+after this change: 35 passed, 2 failed — the same two.
+
 ## Open Decisions / TODO
 
 *The M1-era setup items (Input System, pooling, layer matrix, git) are all long done.*

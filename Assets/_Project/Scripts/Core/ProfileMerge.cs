@@ -25,6 +25,10 @@ namespace SpaceSurvivors.Core
     ///
     /// <para>Achievements are unioned rather than blocked with the purchases because they are
     /// earned, not bought — granting one costs nothing.</para>
+    ///
+    /// <para><b>One rule comes before all of these:</b> a remote copy with a higher
+    /// <see cref="PlayerProfile.adminRevision"/> was edited by an operator, and is taken whole.
+    /// Every rule above would otherwise quietly undo the edit — see that field.</para>
     /// </summary>
     public static class ProfileMerge
     {
@@ -41,6 +45,13 @@ namespace SpaceSurvivors.Core
 
             Normalise(local);
             Normalise(remote);
+
+            // ---- an operator's edit: not merged, adopted ----
+            if (remote.adminRevision > local.adminRevision)
+            {
+                Adopt(local, remote);
+                return true;
+            }
 
             // Decide the economy winner BEFORE touching any field, or the comparison would be
             // reading values we have already merged.
@@ -83,6 +94,42 @@ namespace SpaceSurvivors.Core
             }
 
             return changed;
+        }
+
+        /// <summary>
+        /// Replace every field of <paramref name="local"/> with <paramref name="remote"/>'s, in
+        /// place — callers hold the <paramref name="local"/> reference, so swapping the object
+        /// would leave them looking at the old one.
+        ///
+        /// <para>Collections are copied, not shared: the two profiles must not alias one list,
+        /// or a later edit to one would silently change the other.</para>
+        /// </summary>
+        private static void Adopt(PlayerProfile local, PlayerProfile remote)
+        {
+            // schemaVersion stays local's: it describes this client's file format, not the data.
+            local.userId = remote.userId;
+            local.adminRevision = remote.adminRevision;
+            local.wallet = remote.wallet;
+            local.lifetimeScrap = remote.lifetimeScrap;
+            local.runsPlayed = remote.runsPlayed;
+            local.bestKills = remote.bestKills;
+            local.lifetimeKills = remote.lifetimeKills;
+            local.bestSurvivalSeconds = remote.bestSurvivalSeconds;
+            local.bestLevel = remote.bestLevel;
+            local.bossKills = remote.bossKills;
+            local.metaUpgradeLevels = new Dictionary<string, int>(remote.metaUpgradeLevels);
+            local.ownedShipIds = new List<string>(remote.ownedShipIds);
+            local.selectedShipId = remote.selectedShipId;
+            local.unlockedAchievementIds = new List<string>(remote.unlockedAchievementIds);
+            local.selectedMapId = remote.selectedMapId;
+
+            // The same safety net the merge has: never leave the hangar pointing at a hull the
+            // profile does not own. An operator can remove the selected ship without clearing it.
+            if (!string.IsNullOrEmpty(local.selectedShipId)
+                && !local.ownedShipIds.Contains(local.selectedShipId))
+            {
+                local.selectedShipId = local.ownedShipIds.Count > 0 ? local.ownedShipIds[0] : "";
+            }
         }
 
         /// <summary>

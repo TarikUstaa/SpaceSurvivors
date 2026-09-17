@@ -89,6 +89,7 @@ namespace SpaceSurvivors.Core
         {
             // v1 → v2: metaUpgradeLevels added (M14a). v2 → v3: lifetime-stat counters added
             // (M14c). v3 → v4: selectedMapId added (M15). v4 → v5: userId added (backend prep).
+            // v5 → v6: adminRevision added (backoffice save editing) — 0 means "never edited".
             // All additive — numbers default to 0, strings to "". Nothing to translate; only
             // normalise collections so callers never null-check.
             profile.metaUpgradeLevels ??= new Dictionary<string, int>();

@@ -31,6 +31,82 @@ namespace SpaceSurvivors.Tests
             return p;
         }
 
+        // ── an operator's edit from the backoffice ─────────────────────────────────────
+
+        [Test]
+        public void A_higher_admin_revision_is_taken_whole_even_where_merging_would_refuse()
+        {
+            // The backoffice lowered a best score, removed an achievement, and raised the
+            // wallet without touching lifetime scrap. Every one of those is something the merge
+            // rules below would undo — the higher score wins, achievements union, and a lifetime
+            // scrap tie keeps the local wallet.
+            var local = Profile(lifetimeScrap: 1000, wallet: 50);
+            local.bestKills = 83;
+            local.unlockedAchievementIds = new List<string> { "first_blood", "survivor" };
+
+            var remote = Profile(lifetimeScrap: 1000, wallet: 50000);
+            remote.bestKills = 0;
+            remote.unlockedAchievementIds = new List<string> { "survivor" };
+            remote.adminRevision = 1;
+
+            bool changed = ProfileMerge.MergeInto(local, remote);
+
+            Assert.That(changed, Is.True, "an adopted edit must be pushed back and saved");
+            Assert.That(local.wallet, Is.EqualTo(50000));
+            Assert.That(local.bestKills, Is.EqualTo(0), "lowered, and it stays lowered");
+            Assert.That(local.unlockedAchievementIds, Is.EquivalentTo(new[] { "survivor" }));
+            Assert.That(local.adminRevision, Is.EqualTo(1),
+                "remembered, or the same edit would be adopted again on every sync");
+        }
+
+        [Test]
+        public void Once_adopted_the_same_revision_merges_normally_again()
+        {
+            // After adoption both sides hold revision 1. Local then plays a run: the ordinary
+            // rules must apply again, or the edit would keep overwriting new progress forever.
+            var local = Profile(lifetimeScrap: 1200, wallet: 250);
+            local.bestKills = 40;
+            local.adminRevision = 1;
+
+            var remote = Profile(lifetimeScrap: 1000, wallet: 50);
+            remote.bestKills = 0;
+            remote.adminRevision = 1;
+
+            ProfileMerge.MergeInto(local, remote);
+
+            Assert.That(local.bestKills, Is.EqualTo(40));
+            Assert.That(local.wallet, Is.EqualTo(250));
+        }
+
+        [Test]
+        public void An_adopted_profile_does_not_share_lists_with_the_remote_copy()
+        {
+            var local = Empty();
+            var remote = Profile(lifetimeScrap: 0, wallet: 0,
+                                 ships: new List<string> { "starter" });
+            remote.adminRevision = 2;
+
+            ProfileMerge.MergeInto(local, remote);
+            remote.ownedShipIds.Add("vanguard");
+
+            Assert.That(local.ownedShipIds, Is.EquivalentTo(new[] { "starter" }));
+        }
+
+        [Test]
+        public void An_adopted_selection_of_a_ship_no_longer_owned_falls_back()
+        {
+            // An operator can remove the selected hull without clearing the selection.
+            var local = Empty();
+            var remote = Profile(lifetimeScrap: 0, wallet: 0,
+                                 ships: new List<string> { "starter" });
+            remote.selectedShipId = "vanguard";
+            remote.adminRevision = 1;
+
+            ProfileMerge.MergeInto(local, remote);
+
+            Assert.That(local.selectedShipId, Is.EqualTo("starter"));
+        }
+
         // ── the reason this class exists ───────────────────────────────────────────────
 
         [Test]
