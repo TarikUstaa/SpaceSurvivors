@@ -5,8 +5,8 @@ using UnityEngine.UI;
 namespace SpaceSurvivors.UI
 {
     /// <summary>
-    /// A banner across the top of the main menu for messages from the server: the announcement an
-    /// operator published in the backoffice.
+    /// A banner across the top of the main menu for messages from the server: that this account is
+    /// suspended, or else the announcement an operator published in the backoffice.
     ///
     /// <para>Builds its own Canvas in Awake — the <c>TutorialHints</c> pattern — so it needs no scene
     /// wiring: <see cref="MainMenuScreen"/> adds it at runtime. Hidden until there is something to
@@ -34,14 +34,31 @@ namespace SpaceSurvivors.UI
 
         private void Awake() => BuildUi();
 
+        private void OnEnable() => AccountStatus.Changed += ShowSuspensionIfAny;
+
+        private void OnDisable() => AccountStatus.Changed -= ShowSuspensionIfAny;
+
         private void Start()
         {
+            ShowSuspensionIfAny();
             GameContent.FetchAnnouncement(announcement =>
             {
                 // The menu may have been left before a slow reply landed.
                 if (this == null) return;
-                if (announcement != null) Show(announcement.message, announcement.IsWarning);
+                // A suspension outranks any announcement: it is about this player.
+                if (announcement != null && !AccountStatus.IsSuspended)
+                    Show(announcement.message, announcement.IsWarning);
             });
+        }
+
+        private void ShowSuspensionIfAny()
+        {
+            if (this == null || !AccountStatus.IsSuspended) return;
+            var reason = AccountStatus.SuspensionReason;
+            Show(reason == null
+                    ? "Your account is suspended. Cloud sync and the leaderboard are unavailable."
+                    : $"Your account is suspended: {reason}. Cloud sync and the leaderboard are unavailable.",
+                warning: true);
         }
 
         public void Show(string message, bool warning)

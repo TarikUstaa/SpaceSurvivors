@@ -40,6 +40,14 @@ namespace SpaceSurvivors.Core
         /// </summary>
         public static void WithToken(Action<string> onReady)
         {
+            // A suspended account is refused every time; asking again would only repeat the refusal
+            // (and the BCrypt check it costs the server) on every request of the session.
+            if (AccountStatus.IsSuspended)
+            {
+                onReady(null);
+                return;
+            }
+
             if (_token != null && Now < _expiresAt)
             {
                 onReady(_token);
@@ -89,6 +97,13 @@ namespace SpaceSurvivors.Core
                     return;
                 }
             }
+            else if (code == 403 && BackendRequest.Parse<Problem>(body) is { code: "account_suspended" } problem)
+            {
+                // The credential was right and an operator has suspended the account. Not an error
+                // in the game: the menu says so, with the reason, and everything stays local.
+                Debug.LogWarning("[Backend] this account is suspended — cloud sync and the leaderboard are off.");
+                AccountStatus.MarkSuspended(problem.reason);
+            }
             else if (code == 401)
             {
                 // The device id exists but the secret does not match it. Nothing the game can
@@ -136,6 +151,13 @@ namespace SpaceSurvivors.Core
         {
             public string token;
             public long expiresIn;
+        }
+
+        /// <summary>The fields of an RFC 9457 problem document this client acts on.</summary>
+        private sealed class Problem
+        {
+            public string code;
+            public string reason;
         }
     }
 }
