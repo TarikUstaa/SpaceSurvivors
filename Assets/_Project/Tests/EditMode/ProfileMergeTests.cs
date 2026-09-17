@@ -241,20 +241,36 @@ namespace SpaceSurvivors.Tests
         [Test]
         public void A_selected_ship_the_player_does_not_own_falls_back_to_one_they_do()
         {
-            // Reachable when the economy block arrives from a side that never bought the hull
-            // this device had selected. Left dangling it breaks the hangar.
-            var local = Profile(lifetimeScrap: 1, wallet: 0, ships: new List<string> { "ghost" });
-            local.selectedShipId = "ghost";
+            // The selection travels with the economy block, so a dangling one arrives only from
+            // a side that was already inconsistent — e.g. a save written before the ship list.
+            // Left dangling it breaks the hangar.
+            var local = Profile(lifetimeScrap: 1, wallet: 0);
 
             var remote = Profile(lifetimeScrap: 9999, wallet: 0,
                                  ships: new List<string> { "starter" });
-            remote.selectedShipId = "";
+            remote.selectedShipId = "ghost";
 
             ProfileMerge.MergeInto(local, remote);
 
             Assert.That(local.ownedShipIds, Is.EquivalentTo(new[] { "starter" }));
             Assert.That(local.selectedShipId, Is.EqualTo("starter"),
                 "a selection that is not owned must be repaired, not left dangling");
+        }
+
+        [Test]
+        public void A_blank_ship_selection_is_left_blank()
+        {
+            // Blank is not dangling: it means "never picked", and ShipService.SelectedId reads it
+            // as the starter. Filling it with the first bought hull would switch the player's ship.
+            var local = Profile(lifetimeScrap: 1, wallet: 0);
+
+            var remote = Profile(lifetimeScrap: 9999, wallet: 0,
+                                 ships: new List<string> { "vanguard" });
+            remote.selectedShipId = "";
+
+            ProfileMerge.MergeInto(local, remote);
+
+            Assert.That(local.selectedShipId, Is.Empty);
         }
 
         [Test]

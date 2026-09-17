@@ -25,7 +25,10 @@ namespace SpaceSurvivors.Data
             int l = Mathf.Max(1, currentLevel);
             float linear = baseCost + perLevel * (l - 1);
             float cost = linear * Mathf.Pow(softGrowth, l - 1);
-            return Mathf.Clamp(Mathf.RoundToInt(cost), 1, maxCostPerLevel);
+            // Cap while still a float. Past int.MaxValue RoundToInt comes back as int.MinValue,
+            // which an int clamp then lifts to 1 — the cheapest level instead of the dearest.
+            // Mathf.Min also folds +Infinity (and NaN) down to the cap.
+            return Mathf.Clamp(Mathf.RoundToInt(Mathf.Min(cost, maxCostPerLevel)), 1, maxCostPerLevel);
         }
     }
 }

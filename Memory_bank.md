@@ -1657,10 +1657,34 @@ and `ProfileMergeTests.A_selected_ship_the_player_does_not_own_falls_back_to_one
 fallback only repairs a *non-empty* dangling selection; the test hands it an empty one). Result
 after this change: 35 passed, 2 failed — the same two.
 
+## The two red tests from `58ad231` — one real bug, one wrong test (2026-09-17)
+
+Suite now **38 passed, 0 failed** (37 + one new test).
+
+**`The_cap_stops_the_curve_from_running_away` — the code was wrong.** `ProgressionConfig.CostForLevel`
+rounded to int *before* clamping. Once `linear × softGrowth^(L-1)` passes `int.MaxValue`,
+`Mathf.RoundToInt` returns `int.MinValue`, and `Clamp(…, 1, max)` lifts that to **1** — the exact
+"every kill levels you up" failure the cap exists to stop. The fix caps in float space first
+(`Mathf.Min(cost, maxCostPerLevel)`, which also folds +Infinity/NaN to the cap). Reachable in the shipped
+config (5 / 5 / 1.06) around level 250, so only a very long Infinite run — but real.
+
+**`A_selected_ship_the_player_does_not_own_falls_back_to_one_they_do` — the test was wrong.** It
+passed an *empty* selection and expected it filled with the first owned hull. Empty is not dangling:
+`ShipService.SelectedId` reads blank as "the starter", and `PlayerProfile.selectedShipId` defaults to
+`""`. Filling it would silently switch the player onto their first bought ship. The test now hands the
+merge a genuinely dangling id (`"ghost"`), and a new `A_blank_ship_selection_is_left_blank` pins the
+blank case. `MergeInto` and `Adopt` were already consistent (both repair only non-empty) — unchanged.
+
 ## Open Decisions / TODO
 
 *The M1-era setup items (Input System, pooling, layer matrix, git) are all long done.*
 
+- [ ] **Ship fallback flips an explicit starter pick** (found 2026-09-17, not fixed) —
+      `ShipService.Select(starter)` stores `"starter"`, but the starter (and any free hull) is owned
+      implicitly and never written to `ownedShipIds`. `ProfileMerge`'s dangling-selection repair
+      therefore treats it as dangling and swaps it for `ownedShipIds[0]` (e.g. `vanguard`) on the
+      next sync. Likely fix: repair to `""` instead of the first owned hull, or teach the merge
+      about implicit ownership.
 - [ ] **Playtest sign-off** — M14c, M16, M17, M18, M19, M20 and the iter-6b/6c difficulty
       curves are all committed and unplayed by a human. The recurring open question is
       mid/late-game feel: the sim bot kites and never drops below ~90% HP past ~6 min, so
