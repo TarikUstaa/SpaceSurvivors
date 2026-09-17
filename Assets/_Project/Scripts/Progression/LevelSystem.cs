@@ -1,4 +1,5 @@
 using System;
+using SpaceSurvivors.Core;
 using SpaceSurvivors.Data;
 using UnityEngine;
 
@@ -24,11 +25,15 @@ namespace SpaceSurvivors.Progression
         /// <summary>New level number — fired once per level gained (may fire several times in a row).</summary>
         public event Action<int> LeveledUp;
 
+        /// <summary>The backoffice's XP multiplier for this run (RemoteConfig); 1 when not overridden.</summary>
+        private float _xpScale = 1f;
+
         private void Awake()
         {
             if (_config == null)
                 Debug.LogError($"{nameof(LevelSystem)} on '{name}' has no ProgressionConfig assigned.", this);
             XpForNextLevel = _config != null ? _config.CostForLevel(CurrentLevel) : 1;
+            _xpScale = RemoteConfig.Float(RemoteConfig.Keys.XpGainScale, 1f);
         }
 
         private void Start() => XpChanged?.Invoke(XpIntoLevel, XpForNextLevel);
@@ -37,6 +42,10 @@ namespace SpaceSurvivors.Progression
         public void AddXp(int amount)
         {
             if (amount <= 0 || _config == null) return;
+
+            // Never rounds a real gain down to nothing: a scale of 0.25 on a 1-XP pickup is still 1.
+            if (!Mathf.Approximately(_xpScale, 1f))
+                amount = Mathf.Max(1, Mathf.RoundToInt(amount * _xpScale));
 
             XpIntoLevel += amount;
 

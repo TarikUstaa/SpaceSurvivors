@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SpaceSurvivors.Combat;
+using SpaceSurvivors.Core;
 using SpaceSurvivors.Data;
 using SpaceSurvivors.Stats;
 using UnityEngine;
@@ -50,6 +51,11 @@ namespace SpaceSurvivors.Progression
             if (_weapons == null) _weapons = _player.GetComponent<WeaponController>();
             if (_levelSystem == null) _levelSystem = FindAnyObjectByType<LevelSystem>();
             if (_curses == null) _curses = Resources.Load<CurseCatalogue>(CurseCatalogueResource);
+
+            // The backoffice may override both for this run (RemoteConfig). Copied here, once, so a
+            // change never lands between two level-ups of the same run.
+            _curseChance = RemoteConfig.Float(RemoteConfig.Keys.CurseChance, _curseChance);
+            _curseMinLevel = RemoteConfig.Int(RemoteConfig.Keys.CurseMinLevel, _curseMinLevel);
         }
 
         // ---------------------------------------------------------------- drafting

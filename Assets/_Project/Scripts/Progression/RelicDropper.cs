@@ -35,6 +35,7 @@ namespace SpaceSurvivors.Progression
         private void Awake()
         {
             if (_catalogue == null) _catalogue = Resources.Load<RelicCatalogue>(CatalogueResource);
+            _regularDropChance = RemoteConfig.Float(RemoteConfig.Keys.RelicDropChance, _regularDropChance);
             if (_pool == null || _spawnDirector == null || _collector == null || _relicService == null || _relicPickupPrefab == null)
                 Debug.LogError($"{nameof(RelicDropper)} on '{name}' is missing a reference.", this);
         }

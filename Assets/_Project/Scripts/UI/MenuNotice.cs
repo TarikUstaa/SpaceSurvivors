@@ -40,6 +40,9 @@ namespace SpaceSurvivors.UI
 
         private void Start()
         {
+            // Not a banner concern, but the main menu is the one moment between runs: a setting
+            // changed in the backoffice is fetched here and used from the next run.
+            RemoteConfig.Refresh();
             ShowSuspensionIfAny();
             GameContent.FetchAnnouncement(announcement =>
             {

@@ -47,8 +47,14 @@ namespace SpaceSurvivors.Enemies
         private int _bossEntriesSpawned;
         private int _bossesAlive;
 
+        // Remote overrides (RemoteConfig), copied once when the run starts so a change made in the
+        // backoffice never lands mid-run. 1 and the asset's own chance when nothing is overridden.
+        private float _healthScale = 1f;
+        private float _spawnRateScale = 1f;
+        private float _eliteChance;
+
         public int AliveCount => _aliveCount;
-        public float CurrentSpawnRate => _config != null ? _config.SpawnRateAt(Now) : 0f;
+        public float CurrentSpawnRate => _config != null ? _config.SpawnRateAt(Now) * _spawnRateScale : 0f;
 
         /// <summary>How many boss ENEMIES the player has killed this run. One schedule entry can
         /// spawn several, so this is not a stage counter — see <see cref="BossStagesCleared"/>.</summary>
@@ -97,6 +103,11 @@ namespace SpaceSurvivors.Enemies
             // directly in the editor falls back to whatever is wired in the Inspector.
             if (GameSession.SelectedMode != null && GameSession.SelectedMode.difficulty != null)
                 _config = GameSession.SelectedMode.difficulty;
+
+            _healthScale = RemoteConfig.Float(RemoteConfig.Keys.EnemyHealthScale, 1f);
+            _spawnRateScale = RemoteConfig.Float(RemoteConfig.Keys.SpawnRateScale, 1f);
+            _eliteChance = RemoteConfig.Float(RemoteConfig.Keys.EliteChance,
+                                              _config != null ? _config.eliteChance : 0f);
         }
 
         private void Update()
@@ -106,7 +117,7 @@ namespace SpaceSurvivors.Enemies
             float now = Now;
             TrackPlayerHeading();
             CheckBossSchedule(now);
-            _accumulator += _config.SpawnRateAt(now) * Time.deltaTime;
+            _accumulator += _config.SpawnRateAt(now) * _spawnRateScale * Time.deltaTime;
 
             int guard = 0;
             while (_accumulator >= 1f && _aliveCount < _config.maxAliveEnemies && guard++ < 32)
@@ -133,7 +144,7 @@ namespace SpaceSurvivors.Enemies
         /// </summary>
         private EliteModifiers? RollElite()
         {
-            if (Random.value >= _config.eliteChance) return null;
+            if (Random.value >= _eliteChance) return null;
             return new EliteModifiers(true, _config.eliteDamageMultiplier, _config.eliteScrapMultiplier,
                                        _config.eliteScale, _config.eliteTint);
         }
@@ -153,7 +164,7 @@ namespace SpaceSurvivors.Enemies
             if (go == null || !go.TryGetComponent(out EnemyBrain brain)) return null;
 
             float now = Now;
-            float hp = data.baseHealth * _config.HealthMultiplierAt(now);
+            float hp = data.baseHealth * _config.HealthMultiplierAt(now) * _healthScale;
             if (elite.HasValue) hp *= _config.eliteHealthMultiplier;
             float speedMul = _config.SpeedMultiplierAt(now);
 
@@ -200,7 +211,7 @@ namespace SpaceSurvivors.Enemies
             EnemyData data = entry.bossData;
             // Scale the boss's (already large) base HP toward the current time-of-run health
             // multiplier — weighted high so a late boss is a real wall, not just chip damage.
-            float hp = data.baseHealth * Mathf.Lerp(1f, _config.HealthMultiplierAt(scheduledAt), 0.7f);
+            float hp = data.baseHealth * Mathf.Lerp(1f, _config.HealthMultiplierAt(scheduledAt), 0.7f) * _healthScale;
             float speedMul = _config.SpeedMultiplierAt(scheduledAt);
 
             for (int n = 0; n < Mathf.Max(1, entry.count); n++)

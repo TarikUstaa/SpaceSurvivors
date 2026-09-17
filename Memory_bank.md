@@ -1699,6 +1699,30 @@ into the merge rather than teaching Core about the catalogue.
 Tests: the two fallback tests now use a real bought hull (`vanguard`/`wraith`, not `"starter"`, which the
 game never writes to `ownedShipIds`) and expect blank; new `An_explicit_starter_pick_survives_a_sync`.
 
+## Backoffice-driven game features: announcement, suspension, remote settings (2026-09-17)
+
+The backend's backoffice grew eleven features in one pass (backend Memory_bank D35). Three reach the
+game:
+
+- **Announcement banner** — `Core/GameContent` fetches `GET /v1/announcement` (public, no token) and
+  `UI/MenuNotice` draws it across the top of the main menu. `MainMenuScreen` adds `MenuNotice` at
+  runtime; it builds its own canvas (the `TutorialHints` pattern), 1360 wide so it clears the wallet
+  chip, height from `preferredHeight` (not Best Fit — see the run-end screen lesson), hidden when there
+  is nothing to show.
+- **Suspension** — `BackendSession` recognises a 403 whose problem body has
+  `code: "account_suspended"`, calls `AccountStatus.MarkSuspended(reason)` and stops requesting tokens
+  for the session. `MenuNotice` shows the reason as a warning; it outranks any announcement.
+- **Remote settings** — `Core/RemoteConfig`: only overrides travel; every read names the asset's own
+  value as the fallback. Last good answer cached in PlayerPrefs and loaded at boot, refreshed at boot
+  and on every main-menu visit. Read **once per run** in `Awake` by `SpawnDirector` (enemy health ×,
+  spawn rate ×, elite chance), `UpgradeService` (curse chance, curse min level), `RelicDropper` (relic
+  drop chance) and `LevelSystem` (XP ×, never rounding a gain to 0) — so a change applies from the next
+  run, never mid-run. Keys in `RemoteConfig.Keys` must match the backend's `GameTunable`.
+  Returns no overrides outside Play Mode: with domain reload off, a value from an earlier play session
+  would otherwise sit in the static and change EditMode test results.
+
+**All three respect the existing rule: no network call unless cloud sync is on.** EditMode: 39 passed.
+
 ## Open Decisions / TODO
 
 *The M1-era setup items (Input System, pooling, layer matrix, git) are all long done.*
