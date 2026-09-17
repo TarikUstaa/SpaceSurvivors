@@ -1605,6 +1605,14 @@ number.
   Font size left at 20; the column had unused screen height (940 of 1080) and readability is
   worth more than the 100px.
 
+**Third pass, same day:** "kill sayacını yukarıda zaman sayacının hemen sağına koyar mısın" —
+`KillGroup` left the top-right column entirely and now sits on the timer's row, anchored to the
+canvas centre at `(136, -80)` (TimerGroup is centre-anchored, 240 wide, so its right edge is at
++112; 24px gap). The label switched to left alignment at the same time: on the right edge the
+row had to grow leftwards, next to the timer it grows rightwards, and 230px holds five digits
+with room to spare. **The right-edge stack table above is history** — after this pass nothing
+of this feature is on that edge; only `ScrapGroup` remains there.
+
 **Probe trick, corrected.** `Text.preferredHeight` is still the cheapest way to size a text box
 without Play Mode, but the pause panel's root is inactive in the scene and **`get_component` by
 name cannot reach inactive objects** — flip `m_IsActive` to 1 in the YAML, reload, measure,
