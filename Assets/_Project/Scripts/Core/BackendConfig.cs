@@ -11,8 +11,10 @@ namespace SpaceSurvivors.Core
     /// server without a rebuild). The editor menu under <c>SpaceSurvivors/Backend</c> is the
     /// intended way to change it.
     ///
-    /// <para><b>Sync is off by default.</b> The real profile is a live save with hours of
-    /// progress in it; nothing may reach the network until the player opts in.</para>
+    /// <para><b>Sync is on by default</b> (since the first build shared with friends,
+    /// 2026-09-18) — a leaderboard nobody joins unless they find a switch is an empty one. The
+    /// switch in Settings still turns it off, and an install that already chose keeps its
+    /// choice: the default only applies where the key was never written.</para>
     /// </summary>
     public static class BackendConfig
     {
@@ -37,7 +39,7 @@ namespace SpaceSurvivors.Core
         /// <summary>Whether <see cref="BackendBootstrap"/> installs the HTTP stores at startup.</summary>
         public static bool Enabled
         {
-            get => PlayerPrefs.GetInt(EnabledKey, 0) == 1;
+            get => PlayerPrefs.GetInt(EnabledKey, 1) == 1;
             set { PlayerPrefs.SetInt(EnabledKey, value ? 1 : 0); PlayerPrefs.Save(); }
         }
 
